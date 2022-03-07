@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tripmaster.tourguide.gpsUtil.exceptions.CustomNumberFormatException;
+
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
@@ -31,12 +33,19 @@ public class GpsUtilServiceImpl implements IGpsUtilService {
 
 	@Override
 	public List<Attraction> getAttractions() {
+		LOGGER.debug("getAttractions");
 		return gpsUtil.getAttractions();
 	}
 
 	@Override
-	public VisitedLocation getUserLocation(UUID userId) {
-		return gpsUtil.getUserLocation(userId);
+	public VisitedLocation getUserLocation(UUID userId) throws CustomNumberFormatException {
+		LOGGER.debug("getUserLocation: userId=" + userId);
+		try {
+			return gpsUtil.getUserLocation(userId);
+		} catch (NumberFormatException e) {
+			LOGGER.debug("getUserLocation: error=" + e.getMessage());
+			throw new CustomNumberFormatException("Bad number format.");
+		}
 	}
 
 }

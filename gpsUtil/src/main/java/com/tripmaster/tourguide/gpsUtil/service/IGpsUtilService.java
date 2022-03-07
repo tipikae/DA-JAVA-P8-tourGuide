@@ -6,6 +6,8 @@ package com.tripmaster.tourguide.gpsUtil.service;
 import java.util.List;
 import java.util.UUID;
 
+import com.tripmaster.tourguide.gpsUtil.exceptions.CustomNumberFormatException;
+
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
 
@@ -28,5 +30,5 @@ public interface IGpsUtilService {
 	 * @param userId UUID
 	 * @return VisitedLocation
 	 */
-	VisitedLocation getUserLocation(UUID userId);
+	VisitedLocation getUserLocation(UUID userId) throws CustomNumberFormatException;
 }
