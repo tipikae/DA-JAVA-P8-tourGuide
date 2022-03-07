@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -39,6 +40,7 @@ public class TourGuideService {
 	public TourGuideService(GpsUtil gpsUtil, RewardsService rewardsService) {
 		this.gpsUtil = gpsUtil;
 		this.rewardsService = rewardsService;
+		Locale.setDefault(Locale.UK);
 		
 		if(testMode) {
 			logger.info("TestMode enabled");
