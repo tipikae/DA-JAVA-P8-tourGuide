@@ -92,7 +92,7 @@ public class TestTourGuideService {
 	}
 	
 	// Not yet implemented
-	@Test
+	//@Test
 	public void getNearbyAttractions() {
 		GpsUtil gpsUtil = new GpsUtil();
 		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
