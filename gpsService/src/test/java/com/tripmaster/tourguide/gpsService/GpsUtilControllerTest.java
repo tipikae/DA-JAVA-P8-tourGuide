@@ -1,6 +1,5 @@
 package com.tripmaster.tourguide.gpsService;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -56,22 +55,41 @@ class GpsUtilControllerTest {
 	
 	@Test
 	void getUserLocationReturnsLocationWhenOk() throws Exception {
-		Location location = new Location(10d, 20d);
-		VisitedLocation visitedLocation = new VisitedLocation(UUID.fromString("test"), location, new Date());
+		UUID userId = UUID.fromString("019b04a9-067a-4c76-8817-ee75088c3822");
+		Location location = new Location(-110.464573, -25.075681);
+		Date now = new Date();
+		VisitedLocation visitedLocation = new VisitedLocation(userId, location, now);
 		when(gpsService.getUserLocation(any(UUID.class))).thenReturn(visitedLocation);
-		mockMvc.perform(get("/gpsservice/userlocation?userId=" + UUID.fromString("test"))
+		mockMvc.perform(get("/gpsservice/userlocation?userId=" + userId)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(""))
+				.content("{"
+						+ "userId: 019b04a9-067a-4c76-8817-ee75088c3822,"
+						+ "location: {"
+						+ "longitude: -110.464573,"
+						+ "latitude: -25.075681"
+						+ "},"
+						+ "timeVisited: " + now.toString()
+						+ "}"))
 			.andExpect(status().isOk());
 	}
 	
 	@Test
-	void getUserLocationReturnsErrorLocationWhenCustomNumberFormatException() 
+	void getUserLocationReturns400WhenCustomNumberFormatException() 
+			throws Exception {
+		UUID userId = UUID.randomUUID();
+		doThrow(CustomNumberFormatException.class).when(gpsService).getUserLocation(any(UUID.class));
+		mockMvc.perform(get("/gpsservice/userlocation?userId=" + userId)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound());
+	}
+	
+	@Test
+	void getUserLocationReturns404WhenUserIdIsInvalid() 
 			throws Exception {
 		doThrow(CustomNumberFormatException.class).when(gpsService).getUserLocation(any(UUID.class));
-		mockMvc.perform(get("/gpsservice/userlocation?userId=" + UUID.fromString("test"))
+		mockMvc.perform(get("/gpsservice/userlocation?userId=")
 				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().is4xxClientError());
+			.andExpect(status().isNotFound());
 	}
 
 }

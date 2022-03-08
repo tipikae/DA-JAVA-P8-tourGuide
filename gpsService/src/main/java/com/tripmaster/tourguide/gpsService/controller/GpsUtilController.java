@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,7 +46,7 @@ public class GpsUtilController {
 	}
 	
 	@GetMapping("/userlocation")
-	public ResponseEntity<Object> getUserLocation(@RequestParam UUID userId) 
+	public ResponseEntity<Object> getUserLocation(@RequestParam @NonNull UUID userId) 
 			throws CustomNumberFormatException, Exception {
 		LOGGER.info("getUserLocation: userId=" + userId);
 		VisitedLocation visitedLocation = gpsUtilService.getUserLocation(userId);
