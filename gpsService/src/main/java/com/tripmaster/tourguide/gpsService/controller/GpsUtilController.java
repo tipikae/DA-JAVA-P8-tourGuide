@@ -29,7 +29,7 @@ import gpsUtil.location.VisitedLocation;
  *
  */
 @RestController
-@RequestMapping("/gpsutil")
+@RequestMapping("/gpsservice")
 public class GpsUtilController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(GpsUtilController.class);
