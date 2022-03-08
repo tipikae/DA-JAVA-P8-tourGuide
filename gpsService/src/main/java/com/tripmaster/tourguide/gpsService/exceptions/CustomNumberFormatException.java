@@ -9,7 +9,7 @@ package com.tripmaster.tourguide.gpsService.exceptions;
  * @version 1.0
  *
  */
-public class CustomNumberFormatException extends GpsUtilException {
+public class CustomNumberFormatException extends GpsServiceException {
 
 	private static final long serialVersionUID = 1L;
 

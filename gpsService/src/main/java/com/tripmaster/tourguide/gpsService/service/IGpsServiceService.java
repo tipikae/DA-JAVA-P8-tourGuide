@@ -17,7 +17,7 @@ import gpsUtil.location.VisitedLocation;
  * @version 1.0
  *
  */
-public interface IGpsUtilService {
+public interface IGpsServiceService {
 
 	/**
 	 * Get all attractions.

@@ -9,11 +9,11 @@ package com.tripmaster.tourguide.gpsService.exceptions;
  * @version 1.0
  *
  */
-public class GpsUtilException extends Exception {
+public class GpsServiceException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public GpsUtilException(String arg0) {
+	public GpsServiceException(String arg0) {
 		super(arg0);
 	}
 }

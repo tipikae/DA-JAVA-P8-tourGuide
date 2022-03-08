@@ -24,9 +24,9 @@ import gpsUtil.location.VisitedLocation;
  *
  */
 @Service
-public class GpsUtilServiceImpl implements IGpsUtilService {
+public class GpsServiceServiceImpl implements IGpsServiceService {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(GpsUtilServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GpsServiceServiceImpl.class);
 	
 	@Autowired
 	private GpsUtil gpsUtil;

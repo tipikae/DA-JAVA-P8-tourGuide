@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 @SpringBootApplication
-public class GpsUtilApplication {
+public class GpsServiceApplication {
 	
 	@PostConstruct
 	public void init() {
@@ -22,7 +22,7 @@ public class GpsUtilApplication {
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(GpsUtilApplication.class, args);
+		SpringApplication.run(GpsServiceApplication.class, args);
 	}
 
 }

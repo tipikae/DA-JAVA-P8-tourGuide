@@ -18,22 +18,22 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.tripmaster.tourguide.gpsService.controller.GpsUtilController;
+import com.tripmaster.tourguide.gpsService.controller.GpsServiceController;
 import com.tripmaster.tourguide.gpsService.exceptions.CustomNumberFormatException;
-import com.tripmaster.tourguide.gpsService.service.IGpsUtilService;
+import com.tripmaster.tourguide.gpsService.service.IGpsServiceService;
 
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 
-@WebMvcTest(controllers = GpsUtilController.class)
-class GpsUtilControllerTest {
+@WebMvcTest(controllers = GpsServiceController.class)
+class GpsServiceControllerTest {
 	
 	@Autowired
 	private MockMvc mockMvc;
 	
 	@MockBean
-	private IGpsUtilService gpsService;
+	private IGpsServiceService gpsService;
 
 	@Test
 	void getAttractionsReturnsJsonListWhenOk() throws Exception {

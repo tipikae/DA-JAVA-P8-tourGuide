@@ -9,7 +9,7 @@ package com.tripmaster.tourguide.gpsService.exceptions;
  * @version 1.0
  *
  */
-public class UserNotFoundException extends GpsUtilException {
+public class UserNotFoundException extends GpsServiceException {
 
 	private static final long serialVersionUID = 1L;
 

@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.tripmaster.tourguide.gpsService.exceptions.CustomNumberFormatException;
-import com.tripmaster.tourguide.gpsService.service.GpsUtilServiceImpl;
+import com.tripmaster.tourguide.gpsService.service.GpsServiceServiceImpl;
 
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
@@ -24,13 +24,13 @@ import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 
 @ExtendWith(MockitoExtension.class)
-class GpsUtilServiceTest {
+class GpsServiceServiceTest {
 	
 	@Mock
 	private GpsUtil gpsUtil;
 	
 	@InjectMocks
-	private GpsUtilServiceImpl gpsUtilService;
+	private GpsServiceServiceImpl gpsService;
 
 	@Test
 	void getAttractionsReturnsListWhenOk() {
@@ -38,7 +38,7 @@ class GpsUtilServiceTest {
 		List<Attraction> attractions = new ArrayList<>();
 		attractions.add(attraction);
 		when(gpsUtil.getAttractions()).thenReturn(attractions);
-		assertEquals(1, gpsUtilService.getAttractions().size());
+		assertEquals(1, gpsService.getAttractions().size());
 	}
 
 	@Test
@@ -46,13 +46,13 @@ class GpsUtilServiceTest {
 		Location location = new Location(10d, 20d);
 		VisitedLocation visitedLocation = new VisitedLocation(null, location, null);
 		when(gpsUtil.getUserLocation(any(UUID.class))).thenReturn(visitedLocation);
-		assertEquals(10d, gpsUtilService.getUserLocation(UUID.randomUUID()).location.latitude);
+		assertEquals(10d, gpsService.getUserLocation(UUID.randomUUID()).location.latitude);
 	}
 
 	@Test
 	void getUserLocationThrowsCustomNumberFormatExceptionWhenNumberFormatException() {
 		doThrow(NumberFormatException.class).when(gpsUtil).getUserLocation(any(UUID.class));
-		assertThrows(CustomNumberFormatException.class, () -> gpsUtilService.getUserLocation(UUID.randomUUID()));
+		assertThrows(CustomNumberFormatException.class, () -> gpsService.getUserLocation(UUID.randomUUID()));
 	}
 
 }

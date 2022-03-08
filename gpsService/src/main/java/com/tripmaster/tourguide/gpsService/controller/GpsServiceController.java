@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tripmaster.tourguide.gpsService.exceptions.CustomNumberFormatException;
-import com.tripmaster.tourguide.gpsService.service.IGpsUtilService;
+import com.tripmaster.tourguide.gpsService.service.IGpsServiceService;
 
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
@@ -31,12 +31,12 @@ import gpsUtil.location.VisitedLocation;
  */
 @RestController
 @RequestMapping("/gpsservice")
-public class GpsUtilController {
+public class GpsServiceController {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(GpsUtilController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GpsServiceController.class);
 	
 	@Autowired
-	private IGpsUtilService gpsUtilService;
+	private IGpsServiceService gpsUtilService;
 	
 	@GetMapping("/attractions")
 	public ResponseEntity<Object> getAttractions() throws Exception {
