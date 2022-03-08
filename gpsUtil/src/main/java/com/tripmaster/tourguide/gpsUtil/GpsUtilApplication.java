@@ -1,5 +1,9 @@
 package com.tripmaster.tourguide.gpsUtil;
 
+import java.util.Locale;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -11,6 +15,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class GpsUtilApplication {
+	
+	@PostConstruct
+	public void init() {
+		Locale.setDefault(Locale.UK);
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(GpsUtilApplication.class, args);
