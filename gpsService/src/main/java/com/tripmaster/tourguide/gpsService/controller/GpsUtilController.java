@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tripmaster.tourguide.gpsUtil.controller;
+package com.tripmaster.tourguide.gpsService.controller;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tripmaster.tourguide.gpsUtil.exceptions.CustomNumberFormatException;
-import com.tripmaster.tourguide.gpsUtil.service.IGpsUtilService;
+import com.tripmaster.tourguide.gpsService.exceptions.CustomNumberFormatException;
+import com.tripmaster.tourguide.gpsService.service.IGpsUtilService;
 
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;

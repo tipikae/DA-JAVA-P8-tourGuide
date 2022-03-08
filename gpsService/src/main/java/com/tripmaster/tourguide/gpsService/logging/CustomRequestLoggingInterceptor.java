@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tripmaster.tourguide.gpsUtil.logging;
+package com.tripmaster.tourguide.gpsService.logging;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

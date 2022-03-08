@@ -1,4 +1,4 @@
-package com.tripmaster.tourguide.gpsUtil;
+package com.tripmaster.tourguide.gpsService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

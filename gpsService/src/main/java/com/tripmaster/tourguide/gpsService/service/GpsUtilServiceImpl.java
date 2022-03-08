@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tripmaster.tourguide.gpsUtil.service;
+package com.tripmaster.tourguide.gpsService.service;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tripmaster.tourguide.gpsUtil.exceptions.CustomNumberFormatException;
+import com.tripmaster.tourguide.gpsService.exceptions.CustomNumberFormatException;
 
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;

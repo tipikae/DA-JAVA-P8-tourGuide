@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tripmaster.tourguide.gpsUtil.exceptions;
+package com.tripmaster.tourguide.gpsService.exceptions;
 
 /**
  * User not found exception.

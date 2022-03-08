@@ -1,10 +1,10 @@
-package com.tripmaster.tourguide.gpsUtil;
+package com.tripmaster.tourguide.gpsService;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class GpsUtilControllerTest {
+class GpsUtilServiceTest {
 
 	@Test
 	void test() {

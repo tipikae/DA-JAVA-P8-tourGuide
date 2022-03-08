@@ -1,12 +1,12 @@
 /**
  * 
  */
-package com.tripmaster.tourguide.gpsUtil.service;
+package com.tripmaster.tourguide.gpsService.service;
 
 import java.util.List;
 import java.util.UUID;
 
-import com.tripmaster.tourguide.gpsUtil.exceptions.CustomNumberFormatException;
+import com.tripmaster.tourguide.gpsService.exceptions.CustomNumberFormatException;
 
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
