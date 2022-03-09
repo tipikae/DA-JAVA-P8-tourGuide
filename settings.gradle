@@ -1,4 +1,5 @@
 rootProject.name = 'TourGuide'
 include 'discoveryserver'
 include 'gpsService'
+include 'tripPricerService'
 include 'tourGuideGateway'
