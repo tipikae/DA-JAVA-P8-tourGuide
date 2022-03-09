@@ -29,6 +29,7 @@ import tourGuide.user.User;
 import tourGuide.user.UserReward;
 import tripPricer.Provider;
 import tripPricer.TripPricer;
+import tripPricer.TripPricerTask;
 
 @Service
 public class TourGuideService {
