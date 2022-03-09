@@ -30,18 +30,20 @@ public class TripPricerServiceServiceImpl implements ITripPricerServiceService {
 	private TripPricer tripPricer;
 	
 	@Value("${trippricer.apikey}")
-	private String apiKey;
+	private static String apiKey;
 
 	@Override
 	public List<Provider> getPrice(UUID userId, int nbAdults, int nbChildren, 
 			int tripDuration, int rewardPoints) {
-		LOGGER.debug("getPrice");
+		LOGGER.debug("getPrice: userId=" + userId + ", adults=" + nbAdults + ", children=" + nbChildren
+				+ ", duration=" + tripDuration + ", rewardPoints=" + rewardPoints);
 		return tripPricer.getPrice(apiKey, userId, nbAdults, nbChildren, tripDuration, rewardPoints);
 	}
 
 	@Override
 	public String getProviderName(int nbAdults) {
-		LOGGER.debug("getProviderName");
+		LOGGER.debug("getProviderName: adults=" + nbAdults);
+		LOGGER.debug("getProviderName: apiKey=" + apiKey);
 		return tripPricer.getProviderName(apiKey, nbAdults);
 	}
 
