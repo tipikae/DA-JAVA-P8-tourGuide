@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import tripPricer.Provider;
@@ -27,16 +28,19 @@ public class TripPricerServiceServiceImpl implements ITripPricerServiceService {
 	
 	@Autowired
 	private TripPricer tripPricer;
+	
+	@Value("${trippricer.apikey}")
+	private String apiKey;
 
 	@Override
-	public List<Provider> getPrice(String apiKey, UUID userId, int nbAdults, int nbChildren, 
+	public List<Provider> getPrice(UUID userId, int nbAdults, int nbChildren, 
 			int tripDuration, int rewardPoints) {
 		LOGGER.debug("getPrice");
 		return tripPricer.getPrice(apiKey, userId, nbAdults, nbChildren, tripDuration, rewardPoints);
 	}
 
 	@Override
-	public String getProviderName(String apiKey, int nbAdults) {
+	public String getProviderName(int nbAdults) {
 		LOGGER.debug("getProviderName");
 		return tripPricer.getProviderName(apiKey, nbAdults);
 	}

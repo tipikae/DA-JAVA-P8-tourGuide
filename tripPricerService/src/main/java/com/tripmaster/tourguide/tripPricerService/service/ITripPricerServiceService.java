@@ -17,8 +17,7 @@ import tripPricer.Provider;
 public interface ITripPricerServiceService {
 
 	/**
-	 * Get price according user prederences.
-	 * @param apiKey
+	 * Get price according user preferences.
 	 * @param userId
 	 * @param nbAdults
 	 * @param nbChildren
@@ -26,14 +25,13 @@ public interface ITripPricerServiceService {
 	 * @param rewardPoints
 	 * @return List<Provider>
 	 */
-	List<Provider> getPrice(String apiKey, UUID userId, int nbAdults, int nbChildren, 
+	List<Provider> getPrice(UUID userId, int nbAdults, int nbChildren, 
 			int tripDuration, int rewardPoints);
 	
 	/**
 	 * Get provider name.
-	 * @param apiKey
 	 * @param nbAdults
 	 * @return String
 	 */
-	String getProviderName(String apiKey, int nbAdults);
+	String getProviderName(int nbAdults);
 }

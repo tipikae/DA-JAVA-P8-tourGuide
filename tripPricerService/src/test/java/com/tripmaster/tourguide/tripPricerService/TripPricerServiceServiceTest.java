@@ -37,14 +37,14 @@ class TripPricerServiceServiceTest {
 		providers.add(provider);
 		when(tripPricer.getPrice(anyString(), any(UUID.class), anyInt(), anyInt(), anyInt(), anyInt()))
 			.thenReturn(providers);
-		assertEquals(1, tripPricerService.getPrice("", UUID.randomUUID(), 2, 2, 7, 100).size());
+		assertEquals(1, tripPricerService.getPrice(UUID.randomUUID(), 2, 2, 7, 100).size());
 	}
 
 	@Test
 	void getProviderNameReturnsNameWhenOk() {
 		String providerName = "provider1";
 		when(tripPricer.getProviderName(anyString(), anyInt())).thenReturn(providerName);
-		assertEquals(providerName, tripPricerService.getProviderName("", 0));
+		assertEquals(providerName, tripPricerService.getProviderName(0));
 	}
 
 }
