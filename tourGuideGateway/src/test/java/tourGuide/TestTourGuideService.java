@@ -116,8 +116,9 @@ public class TestTourGuideService {
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 		
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+		tourGuideService.addUser(user);
 
-		List<Provider> providers = tourGuideService.getTripDeals(user);
+		List<Provider> providers = tourGuideService.getTripDeals(user.getUserName());
 		
 		tourGuideService.tracker.stopTracking();
 		
