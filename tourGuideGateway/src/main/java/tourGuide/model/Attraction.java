@@ -18,6 +18,10 @@ public class Attraction extends Location {
 	private String city;
 	private String state;
 	
+	public Attraction() {
+		super();
+	}
+	
 	public Attraction(UUID attractionId, String attractionName, String city, String state, 
 			double latitude, double longitude) {
 		super(latitude, longitude);
