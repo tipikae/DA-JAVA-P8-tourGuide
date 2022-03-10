@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,18 +35,20 @@ public class TripPricerServiceController {
 	@GetMapping("/price")
 	public ResponseEntity<Object> getPrice(@RequestParam UUID userId, @RequestParam int nbAdults, 
 			@RequestParam int nbChildren, @RequestParam int tripDuration, 
-			@RequestParam int rewardPoints) {
+			@RequestParam int rewardPoints) throws Exception {
 		LOGGER.info("getPrice: userId=" + userId + ", adults=" + nbAdults + ", children=" + nbChildren
 				+ ", duration=" + tripDuration + ", rewardPoints=" + rewardPoints);
 		
-		return null;
+		return new ResponseEntity<Object>(
+				tripPricerService.getPrice(userId, nbAdults, nbChildren, tripDuration, rewardPoints), 
+				HttpStatus.OK);
 	}
 
 	@GetMapping("/provider")
 	public ResponseEntity<Object> getProviderName(@RequestParam int adults) {
 		LOGGER.info("getProviderName: adults=" + adults);
 		
-		return null;
+		return new ResponseEntity<Object>(tripPricerService.getProviderName(adults), HttpStatus.OK);
 	}
 	
 }

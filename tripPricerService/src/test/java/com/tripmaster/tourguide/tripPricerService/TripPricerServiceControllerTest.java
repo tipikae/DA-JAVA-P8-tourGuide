@@ -1,11 +1,10 @@
 package com.tripmaster.tourguide.tripPricerService;
 
-import static org.hamcrest.CoreMatchers.any;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
@@ -35,15 +34,24 @@ class TripPricerServiceControllerTest {
 
 	@Test
 	void getPriceReturnsListWhenOk() throws Exception {
-		Provider provider = new Provider(UUID.randomUUID(), "provider1", 100.0);
+		UUID tripId = UUID.randomUUID();
+		Provider provider = new Provider(tripId, "provider1", 100.0);
 		List<Provider> providers = new ArrayList<>();
 		providers.add(provider);
 		when(tripPricerService.getPrice(any(), anyInt(), anyInt(), anyInt(), anyInt()))
 			.thenReturn(providers);
 		mockMvc.perform(get("/trippricer/price")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(""))
-			.andExpect(status().isOk());
+				.param("userId", UUID.randomUUID().toString())
+				.param("nbAdults", "1")
+				.param("nbChildren", "1")
+				.param("tripDuration", "1")
+				.param("rewardPoints", "1"))
+			.andExpect(status().isOk())
+			.andExpect(content().json(
+					"[{\"name\":\"provider1\","
+					+ "\"price\":100.0,"
+					+ "\"tripId\":\"" + tripId.toString() + "\"}]"));
 	}
 
 	@Test
@@ -52,8 +60,9 @@ class TripPricerServiceControllerTest {
 		when(tripPricerService.getProviderName(anyInt())).thenReturn(providerName);
 		mockMvc.perform(get("/trippricer/provider")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{" + providerName + "}"))
-			.andExpect(status().isOk());
+				.param("adults", "1"))
+			.andExpect(status().isOk())
+			.andExpect(content().string(providerName));
 	}
 
 }
