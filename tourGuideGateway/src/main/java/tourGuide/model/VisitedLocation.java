@@ -18,6 +18,10 @@ public class VisitedLocation {
 	private Location location;
 	private Date timeVisited;
 	
+	public VisitedLocation() {
+		
+	}
+	
 	public VisitedLocation(UUID userId, Location location, Date timeVisited) {
 		this.userId = userId;
 		this.location = location;

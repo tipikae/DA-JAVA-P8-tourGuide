@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import tourGuide.model.Attraction;
 import tourGuide.model.VisitedLocation;
@@ -35,7 +36,7 @@ public interface IGpsServiceClient {
 	 * @return VisitedLocation
 	 */
 	@RequestMapping(value = "/gpsservice/userlocation", method = RequestMethod.GET)
-	VisitedLocation getUserLocation(UUID userId);
+	VisitedLocation getUserLocation(@RequestParam("userId") UUID userId);
 	
 	
 }

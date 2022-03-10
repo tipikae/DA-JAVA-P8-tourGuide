@@ -10,6 +10,9 @@ sourceCompatibility = '1.8'
 
 repositories {
 	mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 ext {
@@ -17,6 +20,7 @@ ext {
 }
 
 dependencies {
+    implementation(name:'TripPricer', ext:'jar')
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'

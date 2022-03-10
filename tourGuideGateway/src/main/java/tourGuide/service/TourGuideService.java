@@ -23,11 +23,12 @@ import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 import tourGuide.clients.IGpsServiceClient;
+import tourGuide.clients.ITripPricerServiceClient;
 import tourGuide.helper.InternalTestHelper;
+import tourGuide.model.Provider;
 import tourGuide.tracker.Tracker;
 import tourGuide.user.User;
 import tourGuide.user.UserReward;
-import tripPricer.Provider;
 import tripPricer.TripPricer;
 
 @Service
@@ -35,6 +36,9 @@ public class TourGuideService {
 	
 	@Autowired
 	private IGpsServiceClient gpsServiceClient;
+	
+	@Autowired
+	private ITripPricerServiceClient tripServiceClient;
 	
 	private Logger logger = LoggerFactory.getLogger(TourGuideService.class);
 	private final GpsUtil gpsUtil;
@@ -89,7 +93,7 @@ public class TourGuideService {
 	public List<Provider> getTripDeals(String userName) {
 		User user = getUser(userName);
 		int cumulatativeRewardPoints = user.getUserRewards().stream().mapToInt(i -> i.getRewardPoints()).sum();
-		List<Provider> providers = tripPricer.getPrice(tripPricerApiKey, user.getUserId(), 
+		List<Provider> providers = tripServiceClient.getPrice(user.getUserId(), 
 				user.getUserPreferences().getNumberOfAdults(), user.getUserPreferences().getNumberOfChildren(), 
 				user.getUserPreferences().getTripDuration(), cumulatativeRewardPoints);
 		user.setTripDeals(providers);
