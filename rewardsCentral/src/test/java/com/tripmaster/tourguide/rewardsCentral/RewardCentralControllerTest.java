@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.UUID;
@@ -34,7 +34,8 @@ class RewardCentralControllerTest {
 		mockMvc.perform(get("/rewardCentral/points")
 				.param("attractionId", UUID.randomUUID().toString())
 				.param("userId", UUID.randomUUID().toString()))
-			.andExpect(status().isOk());
+			.andExpect(status().isOk())
+			.andExpect(content().string(Integer.toString(ret)));
 	}
 
 }
