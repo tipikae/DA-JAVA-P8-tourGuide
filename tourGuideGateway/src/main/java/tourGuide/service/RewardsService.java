@@ -3,6 +3,8 @@ package tourGuide.service;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 import rewardCentral.RewardCentral;
 import tourGuide.clients.IGpsServiceClient;
+import tourGuide.clients.IRewardCentralClient;
 import tourGuide.user.User;
 import tourGuide.user.UserReward;
 import tourGuide.util.HelperImpl;
@@ -20,11 +23,16 @@ import tourGuide.util.IHelper;
 @Service
 public class RewardsService {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(RewardsService.class);
+	
 	@Autowired
 	private IGpsServiceClient gpsServiceClient;
 	
 	//@Autowired
 	private IHelper helper;
+	
+	@Autowired
+	private IRewardCentralClient rewardCentralClient;
 
 	// proximity in miles
     private int defaultProximityBuffer = 10;
@@ -74,7 +82,9 @@ public class RewardsService {
 	}
 	
 	private int getRewardPoints(Attraction attraction, User user) {
-		return rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId());
+		int points = rewardCentralClient.getAttractionRewardPoints(attraction.attractionId, user.getUserId());
+		LOGGER.debug("getRewardPoints: points=" + points);
+		return points;
 	}
 	
 	private double getDistance(Location location1, Location location2) {
