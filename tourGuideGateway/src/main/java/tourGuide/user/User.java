@@ -7,7 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import gpsUtil.location.VisitedLocation;
-import tripPricer.Provider;
+import tourGuide.model.Provider;
 
 public class User {
 	private final UUID userId;
