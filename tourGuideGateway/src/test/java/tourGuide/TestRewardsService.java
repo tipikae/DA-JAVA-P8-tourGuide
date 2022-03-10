@@ -8,9 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
@@ -22,7 +19,6 @@ import tourGuide.service.TourGuideService;
 import tourGuide.user.User;
 import tourGuide.user.UserReward;
 import tripPricer.TripPricer;
-
 
 public class TestRewardsService {
 
