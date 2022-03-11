@@ -19,7 +19,7 @@ import com.tripmaster.tourguide.userService.entities.VisitedLocation;
 import com.tripmaster.tourguide.userService.repository.IUserServiceRepository;
 
 @SpringBootTest("eureka.client.enabled:false")
-class UserServiceIT {
+class UserServiceRepositoryIT {
 	
 	@Autowired
 	private IUserServiceRepository userRepository;
