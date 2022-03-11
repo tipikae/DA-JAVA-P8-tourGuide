@@ -18,7 +18,7 @@ import com.tripmaster.tourguide.userService.entities.User;
 import com.tripmaster.tourguide.userService.entities.VisitedLocation;
 import com.tripmaster.tourguide.userService.repository.IUserRepository;
 
-@SpringBootTest
+@SpringBootTest("eureka.client.enabled:false")
 class UserServiceIT {
 	
 	@Autowired
