@@ -17,7 +17,7 @@ import com.tripmaster.tourguide.userService.entities.User;
  *
  */
 @Repository
-public interface IUserRepository extends JpaRepository<User, Integer> {
+public interface IUserServiceRepository extends JpaRepository<User, Integer> {
 
 	/**
 	 * Find a user by username.

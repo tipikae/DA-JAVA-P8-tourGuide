@@ -16,13 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tripmaster.tourguide.userService.entities.Reward;
 import com.tripmaster.tourguide.userService.entities.User;
 import com.tripmaster.tourguide.userService.entities.VisitedLocation;
-import com.tripmaster.tourguide.userService.repository.IUserRepository;
+import com.tripmaster.tourguide.userService.repository.IUserServiceRepository;
 
 @SpringBootTest("eureka.client.enabled:false")
 class UserServiceIT {
 	
 	@Autowired
-	private IUserRepository userRepository;
+	private IUserServiceRepository userRepository;
 
 	@Transactional
 	@Test
