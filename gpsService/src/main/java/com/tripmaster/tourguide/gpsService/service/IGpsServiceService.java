@@ -12,7 +12,7 @@ import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
 
 /**
- * Interface for accessing gpsUtil lib.
+ * GpsService service.
  * @author tipikae
  * @version 1.0
  *

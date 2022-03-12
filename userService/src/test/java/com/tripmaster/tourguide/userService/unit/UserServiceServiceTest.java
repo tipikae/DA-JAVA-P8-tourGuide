@@ -56,45 +56,6 @@ class UserServiceServiceTest {
 		user.setTripDuration(7);
 		user.setUserId(UUID.randomUUID().toString());
 	}
-
-	@Test
-	void addUserReturnsUserWhenOk() throws UserAlreadyExistsException {
-		when(userRepository.findByUserName(anyString())).thenReturn(Optional.empty());
-		when(userRepository.save(any(User.class))).thenReturn(user);
-		assertEquals("email", userService.addUser(user).getEmailAddress());
-	}
-
-	@Test
-	void addUserThrowsExceptionWhenUserAlreadyExists() throws UserAlreadyExistsException {
-		when(userRepository.findByUserName(anyString())).thenReturn(Optional.of(user));
-		assertThrows(UserAlreadyExistsException.class, () -> userService.addUser(user));
-	}
-	
-	@Test
-	void getUserByUsernameReturnsUserWhenOk() throws UserNotFoundException {
-		when(userRepository.findByUserName(anyString())).thenReturn(Optional.of(user));
-		assertEquals("user", userService.getUserByUsername("user").getUserName());
-	}
-	
-	@Test
-	void getUserByUsernameThrowsErrorWhenUserNotFound() throws UserNotFoundException {
-		when(userRepository.findByUserName(anyString())).thenReturn(Optional.empty());
-		assertThrows(UserNotFoundException.class, () -> userService.getUserByUsername("user"));
-	}
-	
-	@Test
-	void getAllUsersReturnsNotEmptyListWhenOk() {
-		List<User> users = new ArrayList<>();
-		users.add(user);
-		when(userRepository.findAll()).thenReturn(users);
-		assertEquals(1, userService.getAllUsers().size());
-	}
-	
-	@Test
-	void getAllUsersReturnsEmptyListWhenEmpty() {
-		when(userRepository.findAll()).thenReturn(new ArrayList<>());
-		assertTrue(userService.getAllUsers().isEmpty());
-	}
 	
 	@Test
 	void getRewardsReturnsNotEmptyListWhenOk() throws UserNotFoundException {
@@ -102,30 +63,14 @@ class UserServiceServiceTest {
 		rewards.add(new Reward());
 		user.setRewards(rewards);
 		when(userRepository.findByUserName(anyString())).thenReturn(Optional.of(user));
-		assertEquals(1, userService.getRewards("user").size());
+		assertEquals(1, userService.getUserRewards("user").size());
 		
 	}
 	
 	@Test
 	void getRewardsThrowsErrorWhenUserNotFound() throws UserNotFoundException {
 		when(userRepository.findByUserName(anyString())).thenReturn(Optional.empty());
-		assertThrows(UserNotFoundException.class, () -> userService.getRewards("user"));
-	}
-	
-	@Test
-	void getVisitedLocationsReturnsNotEmptyListWhenOk() throws UserNotFoundException {
-		List<VisitedLocation> visitedLocations = new ArrayList<>();
-		visitedLocations.add(new VisitedLocation());
-		user.setVisitedLocations(visitedLocations);
-		when(userRepository.findByUserName(anyString())).thenReturn(Optional.of(user));
-		assertEquals(1, userService.getVisitedLocations("user").size());
-		
-	}
-	
-	@Test
-	void getVisitedLocationsThrowsErrorWhenUserNotFound() throws UserNotFoundException {
-		when(userRepository.findByUserName(anyString())).thenReturn(Optional.empty());
-		assertThrows(UserNotFoundException.class, () -> userService.getVisitedLocations("user"));
+		assertThrows(UserNotFoundException.class, () -> userService.getUserRewards("user"));
 	}
 	
 	@Test

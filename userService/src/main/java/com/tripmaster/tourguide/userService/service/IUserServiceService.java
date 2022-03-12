@@ -22,42 +22,12 @@ import tripPricer.Provider;
 public interface IUserServiceService {
 
 	/**
-	 * Add a new user.
-	 * @param user
-	 * @return User
-	 * @throws UserAlreadyExistsException
-	 */
-	User addUser(User user) throws UserAlreadyExistsException;
-	
-	/**
-	 * Get a user by his username.
-	 * @param username
-	 * @return User
-	 * @throws UserNotFoundException
-	 */
-	User getUserByUsername(String username) throws UserNotFoundException;
-	
-	/**
-	 * Get all users.
-	 * @return List<User>
-	 */
-	List<User> getAllUsers();
-	
-	/**
 	 * Get a user rewards.
 	 * @param username
 	 * @return List<Reward>
 	 * @throws UserNotFoundException
 	 */
-	List<Reward> getRewards(String username) throws UserNotFoundException;
-	
-	/**
-	 * Get a user visited locations.
-	 * @param username
-	 * @return List<VisitedLocation>
-	 * @throws UserNotFoundException
-	 */
-	List<VisitedLocation> getVisitedLocations(String username) throws UserNotFoundException;
+	List<Reward> getUserRewards(String username) throws UserNotFoundException;
 	
 	/**
 	 * Get trip deals according user preferences.
