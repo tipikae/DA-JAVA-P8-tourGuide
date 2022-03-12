@@ -4,7 +4,7 @@
 package com.tripmaster.tourguide.rewardService.exceptions;
 
 /**
- * Parent exception for all RewardCentral exceptions.
+ * Parent exception for all RewardService exceptions.
  * @author tipikae
  * @version 1.0
  *

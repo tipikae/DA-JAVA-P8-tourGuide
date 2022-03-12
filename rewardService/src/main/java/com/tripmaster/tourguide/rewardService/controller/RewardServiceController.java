@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tripmaster.tourguide.rewardService.service.IRewardServiceService;
 
 /**
- * RewardCentral controller.
+ * RewardService controller.
  * @author tipikae
  * @version 1.0
  *
@@ -32,20 +32,5 @@ public class RewardServiceController {
 	@Autowired
 	private IRewardServiceService rewardService;
 	
-	/**
-	 * Get attraction reward points.
-	 * @param attractionId
-	 * @param userId
-	 * @return ResponseEntity
-	 */
-	@GetMapping("/points")
-	public ResponseEntity<Object> getAttractionRewardPoints(
-			@RequestParam UUID attractionId,
-			@RequestParam UUID userId) {
-		LOGGER.info("getAttractionRewardPoints");
-		return new ResponseEntity<Object>(
-				rewardService.getAttractionRewardPoints(attractionId, userId), 
-				HttpStatus.OK);
-		
-	}
+	
 }

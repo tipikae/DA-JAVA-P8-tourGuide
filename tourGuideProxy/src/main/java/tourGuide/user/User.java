@@ -7,7 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import gpsUtil.location.VisitedLocation;
-import tourGuide.model.Provider;
+import tripPricer.Provider;
 
 public class User {
 	private final UUID userId;
@@ -72,7 +72,11 @@ public class User {
 	}
 	
 	public void addUserReward(UserReward userReward) {
-		userRewards.add(userReward);
+		if(userRewards.stream()
+				.filter(r -> r.attraction.attractionName.equals(userReward.attraction.attractionName))
+				.count() == 0) {
+			userRewards.add(userReward);
+		}
 	}
 	
 	public List<UserReward> getUserRewards() {

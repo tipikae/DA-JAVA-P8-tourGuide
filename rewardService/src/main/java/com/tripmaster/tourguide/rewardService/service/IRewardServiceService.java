@@ -3,21 +3,14 @@
  */
 package com.tripmaster.tourguide.rewardService.service;
 
-import java.util.UUID;
-
 /**
- * RewardCentral service.
+ * RewardService service.
  * @author tipikae
  * @version 1.0
  *
  */
 public interface IRewardServiceService {
 
-	/**
-	 * Get attraction reward points.
-	 * @param attractionId
-	 * @param userId
-	 * @return int
-	 */
-	int getAttractionRewardPoints(UUID attractionId, UUID userId);
+	void calculateRewards(User user);
+	boolean isWithinAttractionProximity(Attraction attraction, Location location);
 }

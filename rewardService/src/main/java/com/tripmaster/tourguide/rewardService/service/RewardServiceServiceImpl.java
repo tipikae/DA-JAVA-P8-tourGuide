@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import rewardCentral.RewardCentral;
 
 /**
- * RewardCentral service implementation.
+ * RewardService service implementation.
  * @author tipikae
  * @version 1.0
  *
@@ -26,11 +26,6 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	@Autowired
 	private RewardCentral rewardCentral;
 
-	@Override
-	public int getAttractionRewardPoints(UUID attractionId, UUID userId) {
-		LOGGER.debug("getAttractionRewardPoints: attractionId=" + attractionId
-				+ ", userId=" + userId);
-		return rewardCentral.getAttractionRewardPoints(attractionId, userId);
-	}
+	
 
 }

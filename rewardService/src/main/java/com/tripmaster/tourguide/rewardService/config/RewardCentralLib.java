@@ -15,7 +15,7 @@ import rewardCentral.RewardCentral;
  *
  */
 @Configuration
-public class RewardServiceLib {
+public class RewardCentralLib {
 
 	@Bean
 	public RewardCentral getRewardCentral() {

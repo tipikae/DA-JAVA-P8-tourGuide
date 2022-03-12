@@ -5,7 +5,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gpsUtil.GpsUtil;
@@ -13,8 +12,6 @@ import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 import rewardCentral.RewardCentral;
-import tourGuide.clients.IGpsServiceClient;
-import tourGuide.clients.IRewardServiceClient;
 import tourGuide.user.User;
 import tourGuide.user.UserReward;
 import tourGuide.util.HelperImpl;
@@ -25,14 +22,8 @@ public class RewardsService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RewardsService.class);
 	
-	@Autowired
-	private IGpsServiceClient gpsServiceClient;
-	
 	//@Autowired
 	private IHelper helper;
-	
-	@Autowired
-	private IRewardServiceClient rewardCentralClient;
 
 	// proximity in miles
     private int defaultProximityBuffer = 10;
@@ -58,7 +49,6 @@ public class RewardsService {
 	public void calculateRewards(User user) {
 		CopyOnWriteArrayList<VisitedLocation> userLocations = user.getVisitedLocations();
 		List<Attraction> attractions = gpsUtil.getAttractions();
-		//List<Attraction> attractions = gpsServiceClient.getAttractions();
 		
 		for(VisitedLocation visitedLocation : userLocations) {
 			for(Attraction attraction : attractions) {
@@ -82,8 +72,7 @@ public class RewardsService {
 	}
 	
 	private int getRewardPoints(Attraction attraction, User user) {
-		int points = rewardCentralClient.getAttractionRewardPoints(attraction.attractionId, user.getUserId());
-		LOGGER.debug("getRewardPoints: points=" + points);
+		int points = rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId());
 		return points;
 	}
 	
