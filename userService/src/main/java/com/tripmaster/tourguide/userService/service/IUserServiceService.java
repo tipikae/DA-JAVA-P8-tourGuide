@@ -8,7 +8,6 @@ import java.util.List;
 import com.tripmaster.tourguide.userService.entities.Reward;
 import com.tripmaster.tourguide.userService.entities.User;
 import com.tripmaster.tourguide.userService.entities.VisitedLocation;
-import com.tripmaster.tourguide.userService.exceptions.BadParametersException;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
 
@@ -45,22 +44,6 @@ public interface IUserServiceService {
 	 * @return List<User>
 	 */
 	List<User> getAllUsers();
-	
-	/**
-	 * Update a user.
-	 * @param username
-	 * @param user
-	 * @throws UserNotFoundException
-	 * @throws BadParametersException 
-	 */
-	void updateUser(String username, User user) throws UserNotFoundException, BadParametersException;
-	
-	/**
-	 * Delete a user.
-	 * @param username
-	 * @throws UserNotFoundException
-	 */
-	void deleteUser(String username) throws UserNotFoundException;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

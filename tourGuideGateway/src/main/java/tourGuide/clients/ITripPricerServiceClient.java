@@ -19,7 +19,7 @@ import tourGuide.model.Provider;
  * @version 1.0
  *
  */
-@FeignClient("TripPricerService")
+@FeignClient("http://localhost:8082")
 public interface ITripPricerServiceClient {
 
 	/**

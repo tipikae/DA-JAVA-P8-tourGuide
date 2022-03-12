@@ -20,7 +20,7 @@ import tourGuide.model.VisitedLocation;
  * @version 1.0
  *
  */
-@FeignClient("GpsService")
+@FeignClient("http://localhost:8081")
 public interface IGpsServiceClient {
 
 	/**

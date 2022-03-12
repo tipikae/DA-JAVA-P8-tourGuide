@@ -2,7 +2,6 @@ package com.tripmaster.tourguide.tripPricerService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * TripPricerService main class.
@@ -11,7 +10,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  *
  */
 @SpringBootApplication
-@EnableDiscoveryClient
 public class TripPricerServiceApplication {
 
 	public static void main(String[] args) {

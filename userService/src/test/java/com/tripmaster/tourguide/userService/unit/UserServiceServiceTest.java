@@ -15,13 +15,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.tripmaster.tourguide.userService.entities.Reward;
 import com.tripmaster.tourguide.userService.entities.User;
 import com.tripmaster.tourguide.userService.entities.VisitedLocation;
-import com.tripmaster.tourguide.userService.exceptions.BadParametersException;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.userService.repository.IUserServiceRepository;
@@ -83,37 +81,6 @@ class UserServiceServiceTest {
 	void getAllUsersReturnsEmptyListWhenEmpty() {
 		when(userRepository.findAll()).thenReturn(new ArrayList<>());
 		assertTrue(userService.getAllUsers().isEmpty());
-	}
-	
-	@Test
-	void updateUserCallSaveOneTimeWhenOk() throws UserNotFoundException, BadParametersException {
-		when(userRepository.findByUserName(anyString())).thenReturn(Optional.of(user));
-		userService.updateUser("user", user);
-		Mockito.verify(userRepository).save(user);
-	}
-	
-	@Test
-	void updateUserThrowsErrorWhenUserNotFound() {
-		when(userRepository.findByUserName(anyString())).thenReturn(Optional.empty());
-		assertThrows(UserNotFoundException.class, () -> userService.updateUser("user", user));
-	}
-	
-	@Test
-	void updateUserThrowsErrorWhenBadParameters() {
-		assertThrows(BadParametersException.class, () -> userService.updateUser("badUsername", user));
-	}
-	
-	@Test
-	void deleteUserCallDeleteOneTimeWhenOk() throws UserNotFoundException {
-		when(userRepository.findByUserName(anyString())).thenReturn(Optional.of(user));
-		userService.deleteUser("user");
-		Mockito.verify(userRepository).delete(any(User.class));
-	}
-	
-	@Test
-	void deleteUserThrowsErrorWhenUserNotFound() {
-		when(userRepository.findByUserName(anyString())).thenReturn(Optional.empty());
-		assertThrows(UserNotFoundException.class, () -> userService.deleteUser("user"));
 	}
 	
 	@Test

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.tripmaster.tourguide.userService.entities.Reward;
 import com.tripmaster.tourguide.userService.entities.User;
 import com.tripmaster.tourguide.userService.entities.VisitedLocation;
-import com.tripmaster.tourguide.userService.exceptions.BadParametersException;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.userService.repository.IUserServiceRepository;
@@ -75,44 +74,6 @@ public class UserServiceServiceImpl implements IUserServiceService {
 
 	/**
 	 * {@inheritDoc}
-	 * @throws BadParametersException 
-	 */
-	@Override
-	public void updateUser(String username, User updatedUser) throws UserNotFoundException, BadParametersException {
-		LOGGER.debug("updateUser: username=" + username);
-		if (!username.equals(updatedUser.getUserName())) {
-			LOGGER.debug("updateUser: error: username=" + username 
-					+ " and user.getUserName()=" + updatedUser.getUserName() + " mismatch.");
-			throw new BadParametersException("username=" + username 
-					+ " and user.getUserName()=" + updatedUser.getUserName() + " mismatch.");
-		}
-		
-		Optional<User> optional = userRepository.findByUserName(username);
-		if (!optional.isPresent()) {
-			LOGGER.debug("updateUser: error: user with username=" + username + " does not exist.");
-			throw new UserNotFoundException("user with username=" + username + " does not exist.");
-		}
-		
-		User user = updateFields(optional.get(), updatedUser);
-		userRepository.save(user);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void deleteUser(String username) throws UserNotFoundException {
-		LOGGER.debug("deleteUser: username=" + username);
-		Optional<User> optional = userRepository.findByUserName(username);
-		if (!optional.isPresent()) {
-			LOGGER.debug("deleteUser: error: user with username=" + username + " does not exist.");
-			throw new UserNotFoundException("user with username=" + username + " does not exist.");
-		} 
-		userRepository.delete(optional.get());
-	}
-
-	/**
-	 * {@inheritDoc}
 	 */
 	@Override
 	public List<Reward> getRewards(String username) throws UserNotFoundException {
@@ -139,23 +100,6 @@ public class UserServiceServiceImpl implements IUserServiceService {
 		}
 		
 		return optional.get().getVisitedLocations();
-	}
-	
-	private User updateFields(User user, User updatedUser) {
-		user.setAttractionProximity(updatedUser.getAttractionProximity());
-		user.setCurrency(updatedUser.getCurrency());
-		user.setHighPricePoint(updatedUser.getHighPricePoint());
-		user.setLatestLocationTimestamp(updatedUser.getLatestLocationTimestamp());
-		user.setLowerPricePoint(updatedUser.getLowerPricePoint());
-		user.setNumberOfAdults(updatedUser.getNumberOfAdults());
-		user.setNumberOfChildren(updatedUser.getNumberOfChildren());
-		user.setPhoneNumber(updatedUser.getPhoneNumber());
-		user.setRewards(updatedUser.getRewards());
-		user.setTicketQuantity(updatedUser.getTicketQuantity());
-		user.setTripDuration(updatedUser.getTripDuration());
-		user.setVisitedLocations(updatedUser.getVisitedLocations());
-		
-		return user;
 	}
 
 }

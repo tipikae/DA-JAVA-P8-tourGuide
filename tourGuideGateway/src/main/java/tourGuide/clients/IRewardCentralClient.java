@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @version 1.0
  *
  */
-@FeignClient("RewardsCentral")
+@FeignClient("http://localhost:8083")
 public interface IRewardCentralClient {
 
 	/**
