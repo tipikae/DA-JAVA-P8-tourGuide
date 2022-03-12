@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tripmaster.tourguide.tripPricerService.config;
+package com.tripmaster.tourguide.userService.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import tripPricer.TripPricer;
 
 /**
- * Trip Picer library.
+ * TripPricer library.
  * @author tipikae
  * @version 1.0
  *

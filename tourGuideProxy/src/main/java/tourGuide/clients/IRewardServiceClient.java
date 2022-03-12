@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * Feign client for GpsService.
+ * Feign client for RewardService.
  * @author tipikae
  * @version 1.0
  *
  */
 @FeignClient(url = "http://localhost:8083")
-public interface IRewardCentralClient {
+public interface IRewardServiceClient {
 
 	/**
 	 * Get attraction reward points.
@@ -25,7 +25,7 @@ public interface IRewardCentralClient {
 	 * @param userId
 	 * @return int
 	 */
-	@RequestMapping(value = "/rewardCentral/points", method = RequestMethod.GET)
+	@RequestMapping(value = "/rewardservice/points", method = RequestMethod.GET)
 	int getAttractionRewardPoints(
 			@RequestParam("attractionId") UUID attractionId, 
 			@RequestParam("userId") UUID userId);

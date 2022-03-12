@@ -14,7 +14,7 @@ import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 import rewardCentral.RewardCentral;
 import tourGuide.clients.IGpsServiceClient;
-import tourGuide.clients.IRewardCentralClient;
+import tourGuide.clients.IRewardServiceClient;
 import tourGuide.user.User;
 import tourGuide.user.UserReward;
 import tourGuide.util.HelperImpl;
@@ -32,7 +32,7 @@ public class RewardsService {
 	private IHelper helper;
 	
 	@Autowired
-	private IRewardCentralClient rewardCentralClient;
+	private IRewardServiceClient rewardCentralClient;
 
 	// proximity in miles
     private int defaultProximityBuffer = 10;

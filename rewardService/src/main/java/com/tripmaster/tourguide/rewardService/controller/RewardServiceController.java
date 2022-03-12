@@ -24,7 +24,7 @@ import com.tripmaster.tourguide.rewardService.service.IRewardServiceService;
  *
  */
 @RestController
-@RequestMapping("/rewardCentral")
+@RequestMapping("/rewardservice")
 public class RewardServiceController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RewardServiceController.class);

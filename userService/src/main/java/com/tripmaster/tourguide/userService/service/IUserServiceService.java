@@ -11,6 +11,8 @@ import com.tripmaster.tourguide.userService.entities.VisitedLocation;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
 
+import tripPricer.Provider;
+
 /**
  * UserService service interface.
  * @author tipikae
@@ -18,10 +20,6 @@ import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
  *
  */
 public interface IUserServiceService {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// CRUD operations
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Add a new user.
@@ -44,11 +42,6 @@ public interface IUserServiceService {
 	 * @return List<User>
 	 */
 	List<User> getAllUsers();
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Others operations
-////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Get a user rewards.
@@ -65,5 +58,12 @@ public interface IUserServiceService {
 	 * @throws UserNotFoundException
 	 */
 	List<VisitedLocation> getVisitedLocations(String username) throws UserNotFoundException;
+	
+	/**
+	 * Get trip deals according user preferences.
+	 * @return List<Provider>
+	 * @throws UserNotFoundException
+	 */
+	List<Provider> getTripDeals(String username) throws UserNotFoundException;
 	
 }
