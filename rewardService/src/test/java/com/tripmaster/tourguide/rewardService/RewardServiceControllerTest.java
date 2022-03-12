@@ -27,15 +27,4 @@ class RewardServiceControllerTest {
 	@MockBean
 	private IRewardServiceService rewardService;
 
-	@Test
-	void getAttractionRewardPointsReturnsIntWhenOk() throws Exception {
-		int ret = 10;
-		when(rewardService.getAttractionRewardPoints(any(UUID.class), any(UUID.class))).thenReturn(ret);
-		mockMvc.perform(get("/rewardCentral/points")
-				.param("attractionId", UUID.randomUUID().toString())
-				.param("userId", UUID.randomUUID().toString()))
-			.andExpect(status().isOk())
-			.andExpect(content().string(Integer.toString(ret)));
-	}
-
 }

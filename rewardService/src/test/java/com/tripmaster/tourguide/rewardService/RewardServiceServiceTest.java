@@ -25,11 +25,4 @@ class RewardServiceServiceTest {
 	@InjectMocks
 	private RewardServiceServiceImpl rewardService;
 
-	@Test
-	void getAttractionRewardPointsReturnsIntWhenOk() {
-		int ret = 10;
-		when(rewardCentral.getAttractionRewardPoints(any(UUID.class), any(UUID.class))).thenReturn(ret);
-		assertEquals(ret, rewardService.getAttractionRewardPoints(UUID.randomUUID(), UUID.randomUUID()));
-	}
-
 }

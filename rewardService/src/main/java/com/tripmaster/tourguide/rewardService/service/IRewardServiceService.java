@@ -11,6 +11,6 @@ package com.tripmaster.tourguide.rewardService.service;
  */
 public interface IRewardServiceService {
 
-	void calculateRewards(User user);
-	boolean isWithinAttractionProximity(Attraction attraction, Location location);
+	/*void calculateRewards(User user);
+	boolean isWithinAttractionProximity(Attraction attraction, Location location);*/
 }
