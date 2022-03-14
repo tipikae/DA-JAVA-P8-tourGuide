@@ -11,10 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.tripmaster.tourguide.gpsService.exceptions.CustomClassCastException;
-import com.tripmaster.tourguide.gpsService.exceptions.CustomIllegalArgumentException;
-import com.tripmaster.tourguide.gpsService.exceptions.FindByUserIdOperationException;
-import com.tripmaster.tourguide.gpsService.exceptions.SaveOperationException;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
 
 import gpsUtil.location.Location;
@@ -27,9 +23,7 @@ class VisitedRepositoryIT {
 	private IVisitedLocationRepository visitedLocationRepository;
 
 	@Test
-	void test() 
-			throws CustomClassCastException, CustomIllegalArgumentException, SaveOperationException, 
-			FindByUserIdOperationException {
+	void test() {
 		UUID userId = UUID.randomUUID();
 		Location location = new Location(10d, 20d);
 		Date timeVisited = new Date();

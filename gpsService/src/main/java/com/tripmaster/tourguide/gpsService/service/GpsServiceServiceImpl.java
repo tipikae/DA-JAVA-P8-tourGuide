@@ -3,8 +3,11 @@
  */
 package com.tripmaster.tourguide.gpsService.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -12,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tripmaster.tourguide.gpsService.exceptions.CustomNumberFormatException;
+import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
 
 import gpsUtil.GpsUtil;
@@ -50,50 +53,76 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public VisitedLocation getUserLocation(UUID userId) throws CustomNumberFormatException {
+	public VisitedLocation getUserLocation(UUID userId) {
 		LOGGER.debug("getUserLocation: userId=" + userId);
-		try {
-			return gpsUtil.getUserLocation(userId);
-		} catch (NumberFormatException e) {
-			LOGGER.debug("getUserLocation: error=" + e.getMessage());
-			throw new CustomNumberFormatException("Bad number format.");
+		return gpsUtil.getUserLocation(userId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Map<UUID, Location> getAllUsersLastLocation() {
+		LOGGER.debug("getAllUsersLastLocation");
+		
+		Map<UUID, Location> allUsersLastLocation = new HashMap<>();
+		for(Entry<UUID, List<VisitedLocation>> entry: visitedLocationRepository.findAll().entrySet()) {
+			UUID userId = entry.getKey();
+			List<VisitedLocation> visitedLocations = entry.getValue();
+			Location location = visitedLocations.get(visitedLocations.size() - 1).location;
+			allUsersLastLocation.put(userId, location);
 		}
+		
+		return allUsersLastLocation;
+	}
+
+	/**
+	 * {@inheritDoc} 
+	 */
+	@Override
+	public List<VisitedLocation> getUserVisitedLocations(UUID userId) throws UserNotFoundException {
+		LOGGER.debug("getUserVisitedLocations: userId=" + userId);
+		
+		Optional<List<VisitedLocation>> optional = visitedLocationRepository.findByUserId(userId);
+		if(!optional.isPresent()) {
+			LOGGER.debug("getUserVisitedLocations: error: user with userId=" + userId + " not found.");
+			throw new UserNotFoundException("User with userId=" + userId + " not found.");
+		}
+		
+		return optional.get();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Map<UUID, Location> getAllUsersLastLocation() throws CustomNumberFormatException {
-		// TODO Auto-generated method stub
-		return null;
+	public VisitedLocation getUserLastVisitedLocation(UUID userId) throws UserNotFoundException {
+		LOGGER.debug("getUserLastVisitedLocation: userId=" + userId);
+		
+		Optional<List<VisitedLocation>> optional = visitedLocationRepository.findByUserId(userId);
+		if(!optional.isPresent()) {
+			LOGGER.debug("getUserVisitedLocations: error: user with userId=" + userId + " not found.");
+			throw new UserNotFoundException("User with userId=" + userId + " not found.");
+		}
+		
+		List<VisitedLocation> visitedLocations = optional.get();
+		VisitedLocation last = visitedLocations.get(visitedLocations.size() - 1);
+		
+		return last;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<VisitedLocation> getUserVisitedLocations(UUID userId) throws CustomNumberFormatException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public VisitedLocation getUserLastVisitedLocation(UUID userId) throws CustomNumberFormatException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public VisitedLocation addUserVisitedLocation(VisitedLocation visitedLocation) throws CustomNumberFormatException {
-		// TODO Auto-generated method stub
-		return null;
+	public VisitedLocation addUserVisitedLocation(VisitedLocation visitedLocation) {
+		LOGGER.debug("addUserVisitedLocation: userId=" + visitedLocation.userId
+				+ ", latitude=" + visitedLocation.location.latitude
+				+ ", longitude=" + visitedLocation.location.longitude);
+		
+		visitedLocationRepository.save(visitedLocation);
+		
+		return visitedLocation;
 	}
 
 }

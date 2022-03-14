@@ -8,11 +8,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.tripmaster.tourguide.gpsService.exceptions.CustomClassCastException;
-import com.tripmaster.tourguide.gpsService.exceptions.CustomIllegalArgumentException;
-import com.tripmaster.tourguide.gpsService.exceptions.FindByUserIdOperationException;
-import com.tripmaster.tourguide.gpsService.exceptions.SaveOperationException;
-
 import gpsUtil.location.VisitedLocation;
 
 /**
@@ -27,22 +22,15 @@ public interface IVisitedLocationRepository {
 	 * Save a visitedLocation.
 	 * @param visitedLocation
 	 * @return VisitedLocation
-	 * @throws CustomClassCastException 
-	 * @throws CustomIllegalArgumentException 
-	 * @throws SaveOperationException 
 	 */
-	VisitedLocation save(VisitedLocation visitedLocation) 
-			throws CustomClassCastException, CustomIllegalArgumentException, SaveOperationException;
+	VisitedLocation save(VisitedLocation visitedLocation);
 	
 	/**
 	 * Find all visitedLocations by userId.
 	 * @param userId
 	 * @return Optional<List<VisitedLocation>>
-	 * @throws CustomClassCastException 
-	 * @throws FindByUserIdOperationException 
 	 */
-	Optional<List<VisitedLocation>> findByUserId(UUID userId) 
-			throws CustomClassCastException, FindByUserIdOperationException;
+	Optional<List<VisitedLocation>> findByUserId(UUID userId);
 	
 	/**
 	 * Find all visitedLocations.

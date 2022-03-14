@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.tripmaster.tourguide.gpsService.exceptions.CustomNumberFormatException;
+import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
@@ -31,32 +31,30 @@ public interface IGpsServiceService {
 	 * Get user current location.
 	 * @param userId UUID
 	 * @return VisitedLocation
-	 * @throws CustomNumberFormatException
 	 */
-	VisitedLocation getUserLocation(UUID userId) throws CustomNumberFormatException;
+	VisitedLocation getUserLocation(UUID userId);
 	
 	/**
 	 * Get all users' last visited location.
 	 * @return Map<UUID, Location>
-	 * @throws CustomNumberFormatException
 	 */
-	Map<UUID, Location> getAllUsersLastLocation() throws CustomNumberFormatException;
+	Map<UUID, Location> getAllUsersLastLocation();
 	
 	/**
 	 * Get a list of user's visited locations.
 	 * @param userId UUID
 	 * @return List<VisitedLocation>
-	 * @throws CustomNumberFormatException
+	 * @throws UserNotFoundException
 	 */
-	List<VisitedLocation> getUserVisitedLocations(UUID userId) throws CustomNumberFormatException;
+	List<VisitedLocation> getUserVisitedLocations(UUID userId) throws UserNotFoundException;
 	
 	/**
 	 * Get the user's last visited location.
 	 * @param userId UUID
 	 * @return VisitedLocation
-	 * @throws CustomNumberFormatException
+	 * @throws UserNotFoundException 
 	 */
-	VisitedLocation getUserLastVisitedLocation(UUID userId) throws CustomNumberFormatException;
+	VisitedLocation getUserLastVisitedLocation(UUID userId) throws UserNotFoundException;
 	
 	/**
 	 * Add a user's visitedLocation;
@@ -64,6 +62,5 @@ public interface IGpsServiceService {
 	 * @return
 	 * @throws CustomNumberFormatException
 	 */
-	VisitedLocation addUserVisitedLocation(VisitedLocation visitedLocation) 
-			throws CustomNumberFormatException;
+	VisitedLocation addUserVisitedLocation(VisitedLocation visitedLocation);
 }

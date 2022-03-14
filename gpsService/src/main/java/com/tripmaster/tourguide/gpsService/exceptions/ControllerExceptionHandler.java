@@ -23,19 +23,6 @@ public class ControllerExceptionHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 	
 	/**
-	 * Handle a CustomNumberFormatException.
-	 * @param e	CustomNumberFormatException
-	 * @return ControllerException
-	 */
-	@ResponseBody
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	@ExceptionHandler(CustomNumberFormatException.class)
-	ControllerException exceptionHandler(CustomNumberFormatException e) {
-		LOGGER.debug("Catching CustomNumberFormatException: " + e.getMessage());
-		return new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage());
-	}
-	
-	/**
 	 * Handle an Exception.
 	 * @param e	Exception
 	 * @return ControllerException

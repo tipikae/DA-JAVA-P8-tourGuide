@@ -2,7 +2,6 @@ package com.tripmaster.tourguide.gpsService;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -21,7 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.tripmaster.tourguide.gpsService.controller.GpsServiceController;
-import com.tripmaster.tourguide.gpsService.exceptions.CustomNumberFormatException;
 import com.tripmaster.tourguide.gpsService.service.IGpsServiceService;
 
 import gpsUtil.location.Attraction;
@@ -61,25 +59,6 @@ class GpsServiceControllerTest {
 				.param("userId", userId.toString()))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.userId", is(userId.toString())));
-	}
-	
-	@Test
-	void getUserLocationReturns400WhenCustomNumberFormatException() 
-			throws Exception {
-		UUID userId = UUID.randomUUID();
-		doThrow(CustomNumberFormatException.class).when(gpsService).getUserLocation(any(UUID.class));
-		mockMvc.perform(get("/gpsservice/userlocation?userId=" + userId)
-				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isNotFound());
-	}
-	
-	@Test
-	void getUserLocationReturns404WhenUserIdIsInvalid() 
-			throws Exception {
-		doThrow(CustomNumberFormatException.class).when(gpsService).getUserLocation(any(UUID.class));
-		mockMvc.perform(get("/gpsservice/userlocation?userId=")
-				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isNotFound());
 	}
 
 }
