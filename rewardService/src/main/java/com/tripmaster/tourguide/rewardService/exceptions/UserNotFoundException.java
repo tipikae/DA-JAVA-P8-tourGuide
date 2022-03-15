@@ -4,16 +4,16 @@
 package com.tripmaster.tourguide.rewardService.exceptions;
 
 /**
- * Parent exception for all RewardService exceptions.
+ * User not found exception.
  * @author tipikae
  * @version 1.0
  *
  */
-public class RewardServiceException extends Exception {
+public class UserNotFoundException extends RewardServiceException {
 
 	private static final long serialVersionUID = 1L;
 
-	public RewardServiceException(String arg0) {
+	public UserNotFoundException(String arg0) {
 		super(arg0);
 	}
 
