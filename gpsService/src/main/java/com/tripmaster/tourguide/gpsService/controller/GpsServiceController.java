@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tripmaster.tourguide.gpsService.dto.NewVisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.service.IGpsServiceService;
 
@@ -55,7 +56,7 @@ public class GpsServiceController {
 	
 	/**
 	 * Get a user's location.
-	 * @param userId UUID
+	 * @param userId - UUID
 	 * @return ResponseEntity<VisitedLocation>
 	 */
 	@GetMapping("/location")
@@ -78,7 +79,7 @@ public class GpsServiceController {
 	
 	/**
 	 * Get a user's all visited locations.
-	 * @param userId UUID
+	 * @param userId - UUID
 	 * @return ResponseEntity<List<VisitedLocation>>
 	 * @throws UserNotFoundException 
 	 */
@@ -92,7 +93,7 @@ public class GpsServiceController {
 	
 	/**
 	 * Get a user's last location.
-	 * @param userId UUID
+	 * @param userId - UUID
 	 * @return ResponseEntity<VisitedLocation>
 	 * @throws UserNotFoundException 
 	 */
@@ -106,13 +107,14 @@ public class GpsServiceController {
 	
 	/**
 	 * Add a users's visitedLocation.
-	 * @param visitedLocation
+	 * @param newVisitedLocationDTO - NewVisitedLocationDTO
 	 * @return ResponseEntity<VisitedLocation>
 	 */
 	@PostMapping(value = "/location", consumes={"application/json"})
-	public ResponseEntity<Object> addUserVisitedLocation(@RequestBody VisitedLocation visitedLocation) {
+	public ResponseEntity<Object> addUserVisitedLocation(
+			@RequestBody NewVisitedLocationDTO newVisitedLocationDTO) {
 		LOGGER.info("addUserVisitedLocation");
-		VisitedLocation response = gpsService.addUserVisitedLocation(visitedLocation);
+		VisitedLocation response = gpsService.addUserVisitedLocation(newVisitedLocationDTO);
 		return new ResponseEntity<Object>(response, HttpStatus.OK);
 	}
 

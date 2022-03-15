@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.tripmaster.tourguide.gpsService.dto.NewVisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 
 import gpsUtil.location.Attraction;
@@ -58,9 +59,9 @@ public interface IGpsServiceService {
 	
 	/**
 	 * Add a user's visitedLocation;
-	 * @param visitedLocation VisitedLocation
+	 * @param newVisitedLocationDTO NewVisitedLocationDTO
 	 * @return
 	 * @throws CustomNumberFormatException
 	 */
-	VisitedLocation addUserVisitedLocation(VisitedLocation visitedLocation);
+	VisitedLocation addUserVisitedLocation(NewVisitedLocationDTO newVisitedLocationDTO);
 }

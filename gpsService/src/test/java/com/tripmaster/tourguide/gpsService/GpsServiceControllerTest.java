@@ -24,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.tripmaster.tourguide.gpsService.controller.GpsServiceController;
+import com.tripmaster.tourguide.gpsService.dto.NewVisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.service.IGpsServiceService;
 
@@ -111,10 +112,12 @@ class GpsServiceControllerTest {
 	
 	@Test
 	void addUserVisitedLocationReturnsVisitedLocationWhenOk() throws Exception {
-		when(gpsService.addUserVisitedLocation(any(VisitedLocation.class))).thenReturn(visitedLocation);
+		when(gpsService.addUserVisitedLocation(any(NewVisitedLocationDTO.class))).thenReturn(visitedLocation);
 		mockMvc.perform(post("/gpsservice/location")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{\"userId\":\"776aae36-5afb-44e8-a357-c4f20242eb41\",\"location\":{\"longitude\":20.0,\"latitude\":10.0},\"timeVisited\":\"2022-03-14T18:01:01.846+00:00\"}"))
+				.content("{\"userId\":\"776aae36-5afb-44e8-a357-c4f20242eb41\","
+						+ "\"location\":{\"longitude\":20.0,\"latitude\":10.0},"
+						+ "\"timeVisited\":\"2022-03-14T18:01:01.846+00:00\"}"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.userId", is(userId.toString())));
 	}

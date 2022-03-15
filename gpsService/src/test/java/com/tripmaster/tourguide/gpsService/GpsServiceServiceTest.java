@@ -12,12 +12,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.tripmaster.tourguide.gpsService.dto.NewLocationDTO;
+import com.tripmaster.tourguide.gpsService.dto.NewVisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
 import com.tripmaster.tourguide.gpsService.service.GpsServiceServiceImpl;
@@ -38,6 +41,22 @@ class GpsServiceServiceTest {
 	
 	@InjectMocks
 	private GpsServiceServiceImpl gpsService;
+	
+	private static UUID userId;
+	private static Location location;
+	private static Date timeVisited;
+	private static VisitedLocation visitedLocation;
+	private static List<VisitedLocation> visitedLocations;
+	
+	@BeforeAll
+	private static void setUp() {
+		userId = UUID.randomUUID();
+		location = new Location(10d, 20d);
+		timeVisited = new Date();
+		visitedLocation = new VisitedLocation(userId, location, timeVisited);
+		visitedLocations = new ArrayList<>();
+		visitedLocations.add(visitedLocation);
+	}
 
 	@Test
 	void getAttractionsReturnsListWhenOk() {
@@ -50,18 +69,12 @@ class GpsServiceServiceTest {
 
 	@Test
 	void getUserLocationReturnsVisitedLocationWhenOk() {
-		Location location = new Location(10d, 20d);
-		VisitedLocation visitedLocation = new VisitedLocation(null, location, null);
 		when(gpsUtil.getUserLocation(any(UUID.class))).thenReturn(visitedLocation);
 		assertEquals(10d, gpsService.getUserLocation(UUID.randomUUID()).location.latitude);
 	}
 	
 	@Test
 	void getAllUsersLastLocationReturnsMapWhenOK() {
-		UUID userId = UUID.randomUUID();
-		VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(10d, 20d), new Date());
-		List<VisitedLocation> visitedLocations = new ArrayList<>();
-		visitedLocations.add(visitedLocation);
 		Map<UUID, List<VisitedLocation>> allUsersVisitedLocations = new HashMap<>();
 		allUsersVisitedLocations.put(userId, visitedLocations);
 		when(visitedLocationRepository.findAll()).thenReturn(allUsersVisitedLocations);
@@ -71,10 +84,6 @@ class GpsServiceServiceTest {
 	
 	@Test
 	void getUserVisitedLocationsReturnsListWhenOk() throws UserNotFoundException {
-		UUID userId = UUID.randomUUID();
-		VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(10d, 20d), new Date());
-		List<VisitedLocation> visitedLocations = new ArrayList<>();
-		visitedLocations.add(visitedLocation);
 		when(visitedLocationRepository.findByUserId(any(UUID.class))).thenReturn(Optional.of(visitedLocations));
 		assertEquals(visitedLocations.get(0).location.longitude, 
 				gpsService.getUserVisitedLocations(userId).get(0).location.longitude);
@@ -82,7 +91,6 @@ class GpsServiceServiceTest {
 	
 	@Test
 	void getUserVisitedLocationsThrowsExceptionWhenUserNotFound() throws UserNotFoundException {
-		UUID userId = UUID.randomUUID();
 		when(visitedLocationRepository.findByUserId(any(UUID.class))).thenReturn(Optional.empty());
 		assertThrows(UserNotFoundException.class, () ->
 				gpsService.getUserVisitedLocations(userId));
@@ -90,10 +98,6 @@ class GpsServiceServiceTest {
 	
 	@Test
 	void getUserLastVisitedLocationReturnsVisitedLocationWhenOk() throws UserNotFoundException {
-		UUID userId = UUID.randomUUID();
-		VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(10d, 20d), new Date());
-		List<VisitedLocation> visitedLocations = new ArrayList<>();
-		visitedLocations.add(visitedLocation);
 		when(visitedLocationRepository.findByUserId(any(UUID.class))).thenReturn(Optional.of(visitedLocations));
 		assertEquals(visitedLocations.get(visitedLocations.size() - 1).location.latitude, 
 				gpsService.getUserLastVisitedLocation(userId).location.latitude);
@@ -101,8 +105,6 @@ class GpsServiceServiceTest {
 	
 	@Test
 	void getUserLastVisitedLocationThrowsExceptionWhenUserNotFound() throws UserNotFoundException {
-		UUID userId = UUID.randomUUID();
-		
 		when(visitedLocationRepository.findByUserId(any(UUID.class))).thenReturn(Optional.empty());
 		assertThrows(UserNotFoundException.class, () ->
 				gpsService.getUserLastVisitedLocation(userId));
@@ -110,10 +112,12 @@ class GpsServiceServiceTest {
 	
 	@Test
 	void addUserVisitedLocationReturnsVisitedLocationWhenOk() {
-		UUID userId = UUID.randomUUID();
-		VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(10d, 20d), new Date());
+		NewLocationDTO newLocationDTO = new NewLocationDTO(location.latitude, location.longitude);
+		NewVisitedLocationDTO newVisitedLocationDTO = 
+				new NewVisitedLocationDTO(userId, newLocationDTO, timeVisited);
 		when(visitedLocationRepository.save(any(VisitedLocation.class))).thenReturn(visitedLocation);
-		assertEquals(visitedLocation.userId, gpsService.addUserVisitedLocation(visitedLocation).userId);
+		assertEquals(newVisitedLocationDTO.getUserId(), 
+				gpsService.addUserVisitedLocation(newVisitedLocationDTO).userId);
 	}
 
 }

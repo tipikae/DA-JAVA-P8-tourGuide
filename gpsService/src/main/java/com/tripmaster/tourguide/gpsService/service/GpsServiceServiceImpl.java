@@ -3,6 +3,7 @@
  */
 package com.tripmaster.tourguide.gpsService.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tripmaster.tourguide.gpsService.dto.NewVisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
 
@@ -115,11 +117,16 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public VisitedLocation addUserVisitedLocation(VisitedLocation visitedLocation) {
-		LOGGER.debug("addUserVisitedLocation: userId=" + visitedLocation.userId
-				+ ", latitude=" + visitedLocation.location.latitude
-				+ ", longitude=" + visitedLocation.location.longitude);
+	public VisitedLocation addUserVisitedLocation(NewVisitedLocationDTO newVisitedLocationDTO) {
+		LOGGER.debug("addUserVisitedLocation: userId=" + newVisitedLocationDTO.getUserId()
+				+ ", latitude=" + newVisitedLocationDTO.getLocation().getLatitude()
+				+ ", longitude=" + newVisitedLocationDTO.getLocation().getLongitude());
 		
+		UUID userId = newVisitedLocationDTO.getUserId();
+		Location location = new Location(newVisitedLocationDTO.getLocation().getLatitude(),
+				newVisitedLocationDTO.getLocation().getLongitude());
+		Date timeVisited = newVisitedLocationDTO.getTimeVisited();
+		VisitedLocation visitedLocation = new VisitedLocation(userId, location, timeVisited);
 		visitedLocationRepository.save(visitedLocation);
 		
 		return visitedLocation;
