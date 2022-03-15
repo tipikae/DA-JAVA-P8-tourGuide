@@ -3,6 +3,10 @@
  */
 package com.tripmaster.tourguide.gpsService.dto;
 
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+
 /**
  * New LocationDTO for add operation.
  * @author tipikae
@@ -11,7 +15,14 @@ package com.tripmaster.tourguide.gpsService.dto;
  */
 public class NewLocationDTO {
 
+	@NotNull
+	@DecimalMax(value = "90.0", message = "Latitude must be less than 90.")
+	@DecimalMin(value = "-90.0", message = "Latitude must be more than -90.")
 	private double latitude;
+	
+	@NotNull
+	@DecimalMax(value = "180.0", message = "Longitude must be less than 180.")
+	@DecimalMin(value = "-180.0", message = "Longitude must be more than -180.")
 	private double longitude;
 	
 	public NewLocationDTO() {

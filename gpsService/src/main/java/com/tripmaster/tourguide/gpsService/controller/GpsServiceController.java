@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,7 +62,7 @@ public class GpsServiceController {
 	 * @return ResponseEntity<VisitedLocation>
 	 */
 	@GetMapping("/location")
-	public ResponseEntity<Object> getUserLocation(@RequestParam @NonNull UUID userId) {
+	public ResponseEntity<Object> getUserLocation(@RequestParam @NotNull UUID userId) {
 		LOGGER.info("getUserLocation: userId=" + userId);
 		VisitedLocation visitedLocation = gpsService.getUserLocation(userId);
 		return new ResponseEntity<Object>(visitedLocation, HttpStatus.OK);
@@ -84,7 +86,7 @@ public class GpsServiceController {
 	 * @throws UserNotFoundException 
 	 */
 	@GetMapping("/locations")
-	public ResponseEntity<Object> getUserVisitedLocations(@RequestParam @NonNull UUID userId) 
+	public ResponseEntity<Object> getUserVisitedLocations(@RequestParam @NotNull UUID userId) 
 			throws UserNotFoundException {
 		LOGGER.info("getUserVisitedLocations: userId=" + userId);
 		List<VisitedLocation> visitedLocations = gpsService.getUserVisitedLocations(userId);
@@ -98,7 +100,7 @@ public class GpsServiceController {
 	 * @throws UserNotFoundException 
 	 */
 	@GetMapping("/lastlocation")
-	public ResponseEntity<Object> getUserLastVisitedLocation(@RequestParam @NonNull UUID userId)
+	public ResponseEntity<Object> getUserLastVisitedLocation(@RequestParam @NotNull UUID userId)
 			throws UserNotFoundException {
 		LOGGER.info("getUserLastVisitedLocation: userId=" + userId);
 		VisitedLocation visitedLocation = gpsService.getUserLastVisitedLocation(userId);
@@ -110,9 +112,9 @@ public class GpsServiceController {
 	 * @param newVisitedLocationDTO - NewVisitedLocationDTO
 	 * @return ResponseEntity<VisitedLocation>
 	 */
-	@PostMapping(value = "/location", consumes={"application/json"})
+	@PostMapping(value = "/location", consumes = {"application/json"})
 	public ResponseEntity<Object> addUserVisitedLocation(
-			@RequestBody NewVisitedLocationDTO newVisitedLocationDTO) {
+			@RequestBody @Valid NewVisitedLocationDTO newVisitedLocationDTO) {
 		LOGGER.info("addUserVisitedLocation");
 		VisitedLocation response = gpsService.addUserVisitedLocation(newVisitedLocationDTO);
 		return new ResponseEntity<Object>(response, HttpStatus.OK);

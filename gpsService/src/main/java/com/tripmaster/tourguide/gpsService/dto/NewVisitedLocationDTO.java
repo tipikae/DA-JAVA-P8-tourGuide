@@ -6,6 +6,9 @@ package com.tripmaster.tourguide.gpsService.dto;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+
 /**
  * VisitedLocation DTO when add operation.
  * @author tipikae
@@ -14,8 +17,14 @@ import java.util.UUID;
  */
 public class NewVisitedLocationDTO {
 
+	@NotNull
 	private UUID userId;
+	
+	@NotNull
 	private NewLocationDTO location;
+	
+	@NotNull
+	@Past(message = "Date must be past.")
 	private Date timeVisited;
 	
 	public NewVisitedLocationDTO() {
