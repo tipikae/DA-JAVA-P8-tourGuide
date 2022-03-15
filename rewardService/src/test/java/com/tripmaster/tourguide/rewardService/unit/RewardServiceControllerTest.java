@@ -1,10 +1,11 @@
-package com.tripmaster.tourguide.rewardService;
+package com.tripmaster.tourguide.rewardService.unit;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
@@ -76,14 +77,56 @@ class RewardServiceControllerTest {
 	}
 	
 	@Test
-	void getUserRewards() throws UserNotFoundException {
+	void getUserRewardsReturnsListWhenOk() throws UserNotFoundException, Exception {
 		when(rewardService.getUserRewards(any(UUID.class))).thenReturn(rewards);
-		//mockMvc.perform(get(root + "/rewards"))
+		mockMvc.perform(get(root + "/rewards")
+				.param("userId", userId.toString()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.[0].attraction.city", is(city)));
 	}
 	
 	@Test
-	void getUserRewardsPoints() {
-		
+	void getUserRewardsReturns404WhenUserNotFound() throws Exception {
+		doThrow(UserNotFoundException.class).when(rewardService).getUserRewards(any(UUID.class));
+		mockMvc.perform(get(root + "/rewards")
+				.param("userId", userId.toString()))
+			.andExpect(status().is(404));
+	}
+	
+	@Test
+	void getUserRewardsPointsReturnsIntWhenOk() throws Exception {
+		when(rewardService.getUserRewardsPoints(any(UUID.class))).thenReturn(points);
+		mockMvc.perform(get(root + "/points")
+				.param("userId", userId.toString()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$", is(points)));
+	}
+	
+	@Test
+	void getUserRewardsPointsReturns404WhenUserNotFound() throws Exception {
+		doThrow(UserNotFoundException.class).when(rewardService).getUserRewardsPoints(any(UUID.class));
+		mockMvc.perform(get(root + "/points")
+				.param("userId", userId.toString()))
+			.andExpect(status().is(404));
+	}
+	
+	@Test
+	void getNearByAttractionsReturnsListWhenOk() throws Exception {
+		List<Attraction> attractions = new ArrayList<>();
+		attractions.add(attraction);
+		when(rewardService.getNearByAttractions(any(UUID.class))).thenReturn(attractions);
+		mockMvc.perform(get(root + "/nearbyattractions")
+				.param("userId", userId.toString()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.[0].attractionId", is(attractionId.toString())));
+	}
+	
+	@Test
+	void getNearByAttractionsReturns404WhenUserNotFound() throws Exception {
+		doThrow(UserNotFoundException.class).when(rewardService).getNearByAttractions(any(UUID.class));
+		mockMvc.perform(get(root + "/nearbyattractions")
+				.param("userId", userId.toString()))
+			.andExpect(status().is(404));
 	}
 
 }
