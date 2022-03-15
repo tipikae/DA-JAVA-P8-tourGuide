@@ -61,9 +61,9 @@ public class VisitedLocationRepositoryImpl implements IVisitedLocationRepository
 		
 		if(internalVisitedLocations.containsKey(userId)) {
 			return Optional.of(internalVisitedLocations.get(userId));
-		} else {
-			return Optional.empty();
 		}
+		
+		return Optional.empty();
 	}
 
 	/**
