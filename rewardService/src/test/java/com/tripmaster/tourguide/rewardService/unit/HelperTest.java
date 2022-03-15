@@ -1,4 +1,4 @@
-package com.tripmaster.tourguide.rewardService;
+package com.tripmaster.tourguide.rewardService.unit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
