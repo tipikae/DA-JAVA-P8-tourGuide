@@ -7,8 +7,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,6 +20,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.tripmaster.tourguide.rewardService.controller.RewardServiceController;
+import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
+import com.tripmaster.tourguide.rewardService.model.Attraction;
+import com.tripmaster.tourguide.rewardService.model.Location;
+import com.tripmaster.tourguide.rewardService.model.Reward;
+import com.tripmaster.tourguide.rewardService.model.VisitedLocation;
 import com.tripmaster.tourguide.rewardService.service.IRewardServiceService;
 
 @WebMvcTest(RewardServiceController.class)
@@ -26,5 +35,55 @@ class RewardServiceControllerTest {
 	
 	@MockBean
 	private IRewardServiceService rewardService;
+	
+	private static String root;
+	private static UUID userId;
+	private static UUID attractionId;
+	private static String attractionName;
+	private static String city;
+	private static String state;
+	private static double latitude;
+	private static double longitude;
+	private static Attraction attraction;
+	private static Location location;
+	private static VisitedLocation visitedLocation;
+	private static int points;
+	private static Reward reward;
+	private static List<Reward> rewards;
+	
+	@BeforeAll
+	private static void setUp() {
+		root = "/rewardservice";
+		userId = UUID.randomUUID();
+		attractionId = UUID.randomUUID();
+		attractionName = "attractionName";
+		city = "city";
+		state = "state";
+		latitude = 10d;
+		longitude = 20d;
+		attraction = new Attraction(attractionId, attractionName, city, state, latitude, longitude);
+		location = new Location(latitude, longitude);
+		visitedLocation = new VisitedLocation(userId, location, new Date());
+		points = 100;
+		reward = new Reward(visitedLocation, attraction, points);
+		rewards = new ArrayList<>();
+		rewards.add(reward);
+	}
+	
+	@Test
+	void calculate() {
+		
+	}
+	
+	@Test
+	void getUserRewards() throws UserNotFoundException {
+		when(rewardService.getUserRewards(any(UUID.class))).thenReturn(rewards);
+		//mockMvc.perform(get(root + "/rewards"))
+	}
+	
+	@Test
+	void getUserRewardsPoints() {
+		
+	}
 
 }

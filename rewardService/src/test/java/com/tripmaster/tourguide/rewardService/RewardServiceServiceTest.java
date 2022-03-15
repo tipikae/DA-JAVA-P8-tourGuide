@@ -24,6 +24,7 @@ import com.tripmaster.tourguide.rewardService.model.Reward;
 import com.tripmaster.tourguide.rewardService.model.VisitedLocation;
 import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
 import com.tripmaster.tourguide.rewardService.service.RewardServiceServiceImpl;
+import com.tripmaster.tourguide.rewardService.util.IHelper;
 
 import rewardCentral.RewardCentral;
 
@@ -35,6 +36,9 @@ class RewardServiceServiceTest {
 	
 	@Mock
 	private RewardCentral rewardCentral;
+	
+	@Mock
+	private IHelper helper;
 	
 	@InjectMocks
 	private RewardServiceServiceImpl rewardService;
@@ -89,12 +93,6 @@ class RewardServiceServiceTest {
 	}
 	
 	@Test
-	void addUserReward() {
-		when(rewardRepository.save(any(Reward.class))).thenReturn(reward);
-		assertEquals(userId, rewardService.addUserReward(reward).getVisitedLocation().getUserId());
-	}
-	
-	@Test
 	void getUserRewardsPointsReturnsSumWhenOk() throws UserNotFoundException {
 		when(rewardRepository.findByUserId(any(UUID.class))).thenReturn(Optional.of(rewards));
 		assertEquals(points, rewardService.getUserRewardsPoints(userId));
@@ -104,6 +102,16 @@ class RewardServiceServiceTest {
 	void getUserRewardsPointsThrowsExceptionWhenUserNotFound() {
 		when(rewardRepository.findByUserId(any(UUID.class))).thenReturn(Optional.empty());
 		assertThrows(UserNotFoundException.class, () -> rewardService.getUserRewardsPoints(userId));
+	}
+	
+	@Test
+	void getNearByAttractionsReturnsListWhenOk() {
+		
+	}
+	
+	@Test
+	void getNearByAttractionsThrowsExceptionWhenUserNotFound() {
+		
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
+import com.tripmaster.tourguide.rewardService.model.Attraction;
 import com.tripmaster.tourguide.rewardService.model.Reward;
 
 /**
@@ -33,17 +34,18 @@ public interface IRewardServiceService {
 	List<Reward> getUserRewards(UUID userId) throws UserNotFoundException;
 	
 	/**
-	 * Add a user's reward.
-	 * @param reward Reward
-	 * @return Reward
-	 */
-	Reward addUserReward(Reward reward);
-	
-	/**
 	 * Get a user's rewards points sum.
 	 * @param userId UUID
 	 * @return int
 	 * @throws UserNotFoundException
 	 */
 	int getUserRewardsPoints(UUID userId) throws UserNotFoundException;
+	
+	/**
+	 * Get nearby attractions.
+	 * @param userId UUID
+	 * @return List<Attraction>
+	 * @throws UserNotFoundException
+	 */
+	List<Attraction> getNearByAttractions(UUID userId) throws UserNotFoundException;
 }
