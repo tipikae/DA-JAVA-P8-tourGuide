@@ -20,16 +20,29 @@ public class ControllerExceptionHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 	
 	/**
+	 * Handle an UserNotFoundException.
+	 * @param e	UserNotFoundException
+	 * @return ControllerException
+	 */
+	@ResponseBody
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler(UserNotFoundException.class)
+	ControllerException exceptionHandler(UserNotFoundException e) {
+		LOGGER.debug("Catching UserNotFoundException: " + e.getMessage());
+		return new ControllerException(HttpStatus.NOT_FOUND.value(), "User not found.");
+	}
+	
+	/**
 	 * Handle an Exception.
 	 * @param e	Exception
 	 * @return ControllerException
 	 */
 	@ResponseBody
-	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(Exception.class)
 	ControllerException exceptionHandler(Exception e) {
 		LOGGER.debug("Catching Exception: " + e.getMessage());
-		return new ControllerException(HttpStatus.NOT_FOUND.value(), e.getMessage());
+		return new ControllerException(HttpStatus.BAD_REQUEST.value(), "An exception occured.");
 	}
 
 }
