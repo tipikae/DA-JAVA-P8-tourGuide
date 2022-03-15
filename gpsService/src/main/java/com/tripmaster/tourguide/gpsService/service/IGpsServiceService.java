@@ -30,7 +30,7 @@ public interface IGpsServiceService {
 	
 	/**
 	 * Get user current location.
-	 * @param userId UUID
+	 * @param userId - UUID
 	 * @return VisitedLocation
 	 */
 	VisitedLocation getUserLocation(UUID userId);
@@ -43,7 +43,7 @@ public interface IGpsServiceService {
 	
 	/**
 	 * Get a list of user's visited locations.
-	 * @param userId UUID
+	 * @param userId - UUID
 	 * @return List<VisitedLocation>
 	 * @throws UserNotFoundException
 	 */
@@ -51,7 +51,7 @@ public interface IGpsServiceService {
 	
 	/**
 	 * Get the user's last visited location.
-	 * @param userId UUID
+	 * @param userId - UUID
 	 * @return VisitedLocation
 	 * @throws UserNotFoundException 
 	 */
@@ -60,8 +60,7 @@ public interface IGpsServiceService {
 	/**
 	 * Add a user's visitedLocation;
 	 * @param newVisitedLocationDTO NewVisitedLocationDTO
-	 * @return
-	 * @throws CustomNumberFormatException
+	 * @return VisitedLocation
 	 */
 	VisitedLocation addUserVisitedLocation(NewVisitedLocationDTO newVisitedLocationDTO);
 }
