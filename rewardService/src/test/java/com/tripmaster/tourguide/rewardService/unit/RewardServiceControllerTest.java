@@ -96,8 +96,7 @@ class RewardServiceControllerTest {
 	@Test
 	void getUserRewardsPointsReturnsIntWhenOk() throws Exception {
 		when(rewardService.getUserRewardsPoints(any(UUID.class))).thenReturn(points);
-		mockMvc.perform(get(root + "/points")
-				.param("userId", userId.toString()))
+		mockMvc.perform(get(root + "/points/" + userId.toString()))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$", is(points)));
 	}
@@ -105,8 +104,7 @@ class RewardServiceControllerTest {
 	@Test
 	void getUserRewardsPointsReturns404WhenUserNotFound() throws Exception {
 		doThrow(UserNotFoundException.class).when(rewardService).getUserRewardsPoints(any(UUID.class));
-		mockMvc.perform(get(root + "/points")
-				.param("userId", userId.toString()))
+		mockMvc.perform(get(root + "/points/" + userId.toString()))
 			.andExpect(status().is(404));
 	}
 	
