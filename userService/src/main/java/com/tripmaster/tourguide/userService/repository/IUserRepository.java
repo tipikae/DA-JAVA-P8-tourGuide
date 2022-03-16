@@ -3,26 +3,36 @@
  */
 package com.tripmaster.tourguide.userService.repository;
 
+import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-import com.tripmaster.tourguide.userService.entities.User;
+import com.tripmaster.tourguide.userService.model.User;
 
 /**
- * User repository.
+ * User repository interface.
  * @author tipikae
  * @version 1.0
  *
  */
-@Repository
-public interface IUserServiceRepository extends JpaRepository<User, Integer> {
+public interface IUserRepository {
+	
+	/**
+	 * Save a user.
+	 * @param user User
+	 * @return User
+	 */
+	User save(User user);
+	
+	/**
+	 * Find all users.
+	 * @return List<User>
+	 */
+	List<User> findAll();
 
 	/**
 	 * Find a user by username.
-	 * @param username
+	 * @param username String
 	 * @return Optional<User>
 	 */
-	Optional<User> findByUserName(String username);
+	Optional<User> findByUsername(String username);
 }
