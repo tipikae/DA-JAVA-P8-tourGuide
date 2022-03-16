@@ -108,7 +108,7 @@ public class UserServiceServiceImpl implements IUserServiceService {
 		
 		User user = optional.get();
 		Preference preference = user.getPreference();
-		int points = rewardClient.getAttractionRewardPoints(user.getUserId());
+		int points = rewardClient.getUserRewardsPoints(user.getUserId());
 		
 		return tripPricer.getPrice(username, user.getUserId(), preference.getNumberOfAdults(), 
 				preference.getNumberOfChildren(), preference.getTripDuration(), points);
