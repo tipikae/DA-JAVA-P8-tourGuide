@@ -18,11 +18,22 @@ import feign.codec.ErrorDecoder;
 public class MyFeignErrorDecoder implements ErrorDecoder {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(MyFeignErrorDecoder.class);
+	
+	private final ErrorDecoder defaultErrorDecoder = new Default();
 
 	@Override
 	public Exception decode(String methodKey, Response response) {
-		LOGGER.debug("decode: error: methodKey=" + methodKey + ", response=" + response);
-		return new HttpClientException("methodKey=" + methodKey + ", response=" + response);
+		LOGGER.debug("decode: error: methodKey=" + methodKey + ", status=" + response.status());
+		
+		if (response.status() >= 400 && response.status() <= 499) {
+            return new HttpClientException(response.status() + ": " + response.reason());
+        }
+		
+        if (response.status() >= 500 && response.status() <= 599) {
+        	return new HttpServerException(response.status() + ": " + response.reason());
+        }
+        
+        return defaultErrorDecoder.decode(methodKey, response);
 	}
 
 }
