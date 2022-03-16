@@ -5,9 +5,11 @@ package com.tripmaster.tourguide.userService.service;
 
 import java.util.List;
 
+import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
+import com.tripmaster.tourguide.userService.dto.NewUserDTO;
+import com.tripmaster.tourguide.userService.exceptions.HttpClientException;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
-import com.tripmaster.tourguide.userService.model.Preference;
 import com.tripmaster.tourguide.userService.model.User;
 
 import tripPricer.Provider;
@@ -22,11 +24,11 @@ public interface IUserServiceService {
 	
 	/**
 	 * Add a user.
-	 * @param user User
+	 * @param user NewUserDTO
 	 * @return User
 	 * @throws UserAlreadyExistsException 
 	 */
-	User addUser(User user) throws UserAlreadyExistsException;
+	User addUser(NewUserDTO user) throws UserAlreadyExistsException;
 	
 	/**
 	 * Get a user by username.
@@ -45,16 +47,17 @@ public interface IUserServiceService {
 	/**
 	 * Update an user's preferences.
 	 * @param userName String
-	 * @param preference Preference
+	 * @param preference NewPreferenceDTO
 	 */
-	void updatePreferences(String userName, Preference preference) throws UserNotFoundException;
+	void updatePreferences(String userName, NewPreferenceDTO preference) throws UserNotFoundException;
 
 	/**
 	 * Get an user's trip deals.
 	 * @param userName String
 	 * @return List<Provider>
 	 * @throws UserNotFoundException
+	 * @throws HttpClientException 
 	 */
-	List<Provider> getTripDeals(String userName) throws UserNotFoundException;
+	List<Provider> getTripDeals(String userName) throws UserNotFoundException, HttpClientException;
 	
 }

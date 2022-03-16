@@ -21,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.tripmaster.tourguide.userService.clients.IRewardServiceClient;
+import com.tripmaster.tourguide.userService.exceptions.HttpClientException;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.userService.model.Preference;
@@ -110,7 +111,7 @@ class UserServiceServiceTest {
 	}
 	
 	@Test
-	void getTripDealsReturnsListWhenOk() throws UserNotFoundException {
+	void getTripDealsReturnsListWhenOk() throws UserNotFoundException, HttpClientException {
 		when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 		when(rewardClient.getUserRewardsPoints(any(UUID.class))).thenReturn(100);
 		when(tripPricer.getPrice(anyString(), any(UUID.class), anyInt(), anyInt(), anyInt(), anyInt()))

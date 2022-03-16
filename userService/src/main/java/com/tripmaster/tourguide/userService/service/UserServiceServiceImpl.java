@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.tripmaster.tourguide.userService.clients.IRewardServiceClient;
+import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
+import com.tripmaster.tourguide.userService.dto.NewUserDTO;
+import com.tripmaster.tourguide.userService.exceptions.HttpClientException;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.userService.model.Preference;
@@ -46,15 +49,21 @@ public class UserServiceServiceImpl implements IUserServiceService {
 	private static String apiKey;
 
 	@Override
-	public User addUser(User user) throws UserAlreadyExistsException {
-		LOGGER.debug("save: username=" + user.getUserName());
+	public User addUser(NewUserDTO newUserDTO) throws UserAlreadyExistsException {
+		LOGGER.debug("save: username=" + newUserDTO.getUserName());
 		
-		Optional<User> optional = userRepository.findByUsername(user.getUserName());
+		Optional<User> optional = userRepository.findByUsername(newUserDTO.getUserName());
 		if(optional.isPresent()) {
-			LOGGER.debug("save: error: user with username=" + user.getUserName() + " already exists.");
+			LOGGER.debug("save: error: user with username=" + newUserDTO.getUserName() + " already exists.");
 			throw new UserAlreadyExistsException(
-					"user with username=" + user.getUserName() + " already exists.");
+					"user with username=" + newUserDTO.getUserName() + " already exists.");
 		}
+		
+		User user = new User();
+		user.setEmailAddress(newUserDTO.getEmailAddress());
+		user.setPhoneNumber(newUserDTO.getPhoneNumber());
+		user.setUserId(newUserDTO.getUserId());
+		user.setUserName(newUserDTO.getUserName());
 		
 		return userRepository.save(user);
 	}
@@ -80,7 +89,7 @@ public class UserServiceServiceImpl implements IUserServiceService {
 	}
 
 	@Override
-	public void updatePreferences(String username, Preference preference) throws UserNotFoundException {
+	public void updatePreferences(String username, NewPreferenceDTO newPreferenceDTO) throws UserNotFoundException {
 		LOGGER.debug("updatePreferences: username=" + username);
 		
 		Optional<User> optional = userRepository.findByUsername(username);
@@ -90,13 +99,23 @@ public class UserServiceServiceImpl implements IUserServiceService {
 					"user with username=" + username + " not found.");
 		}
 		
+		Preference preference = new Preference();
+		preference.setAttractionProximity(newPreferenceDTO.getAttractionProximity());
+		preference.setCurrency(newPreferenceDTO.getCurrency());
+		preference.setHighPricePoint(newPreferenceDTO.getHighPricePoint());
+		preference.setLowerPricePoint(newPreferenceDTO.getLowerPricePoint());
+		preference.setNumberOfAdults(newPreferenceDTO.getNumberOfAdults());
+		preference.setNumberOfChildren(newPreferenceDTO.getNumberOfChildren());
+		preference.setTicketQuantity(newPreferenceDTO.getTicketQuantity());
+		preference.setTripDuration(newPreferenceDTO.getTripDuration());
+		
 		User user = optional.get();
 		user.setPreference(preference);
 		userRepository.save(user);
 	}
 
 	@Override
-	public List<Provider> getTripDeals(String username) throws UserNotFoundException {
+	public List<Provider> getTripDeals(String username) throws UserNotFoundException, HttpClientException {
 		LOGGER.debug("getTripDeals: user,ame=" + username);
 		
 		Optional<User> optional = userRepository.findByUsername(username);
@@ -108,7 +127,14 @@ public class UserServiceServiceImpl implements IUserServiceService {
 		
 		User user = optional.get();
 		Preference preference = user.getPreference();
-		int points = rewardClient.getUserRewardsPoints(user.getUserId());
+		int points = 0;
+		
+		try {
+			points = rewardClient.getUserRewardsPoints(user.getUserId());
+		} catch (Exception e) {
+			LOGGER.debug("getTripDeals: rewardClient error: " + e.getMessage());
+			throw new HttpClientException("rewardClient error: " + e.getMessage());
+		}
 		
 		return tripPricer.getPrice(username, user.getUserId(), preference.getNumberOfAdults(), 
 				preference.getNumberOfChildren(), preference.getTripDuration(), points);
