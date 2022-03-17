@@ -1,6 +1,6 @@
 package tourGuide;
 
-import java.util.List;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +17,9 @@ import com.jsoniter.output.JsonStream;
 
 import gpsUtil.location.VisitedLocation;
 import tourGuide.clients.IUserServiceClient;
+import tourGuide.dto.NewPreferenceDTO;
+import tourGuide.dto.NewUserDTO;
 import tourGuide.service.TourGuideService;
-import tourGuide.user.User;
-import tourGuide.user.UserPreferences;
-import tripPricer.Provider;
 
 @RestController
 public class TourGuideController {
@@ -92,9 +91,9 @@ public class TourGuideController {
      * @return String
      */
     @PostMapping("/addUser")
-    public String addUser(@RequestBody User user) {
+    public String addUser(@RequestBody @Valid NewUserDTO newUserDTO) {
     	LOGGER.info("addUser");
-		return JsonStream.serialize(userClient.addUser(user));
+		return JsonStream.serialize(userClient.addUser(newUserDTO));
     }
     
     /**
@@ -105,9 +104,9 @@ public class TourGuideController {
      */
     @PutMapping("/updateUserPref/{username}")
     public String updateUserPreferences(@PathVariable String username,
-    		@RequestBody UserPreferences preference) {
+    		@RequestBody @Valid NewPreferenceDTO newPreferenceDTO) {
     	LOGGER.info("updateUserPreferences");
-    	userClient.updatePreferences(username, preference);
+    	userClient.updatePreferences(username, newPreferenceDTO);
     	return "";
     }
 
