@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
 import com.tripmaster.tourguide.userService.dto.NewUserDTO;
+import com.tripmaster.tourguide.userService.exceptions.ConverterException;
 import com.tripmaster.tourguide.userService.exceptions.HttpClientException;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
@@ -27,8 +28,9 @@ public interface IUserServiceService {
 	 * @param user NewUserDTO
 	 * @return User
 	 * @throws UserAlreadyExistsException 
+	 * @throws ConverterException 
 	 */
-	User addUser(NewUserDTO user) throws UserAlreadyExistsException;
+	User addUser(NewUserDTO user) throws UserAlreadyExistsException, ConverterException;
 	
 	/**
 	 * Get a user by username.
@@ -48,8 +50,9 @@ public interface IUserServiceService {
 	 * Update an user's preferences.
 	 * @param userName String
 	 * @param preference NewPreferenceDTO
+	 * @throws ConverterException 
 	 */
-	void updatePreferences(String userName, NewPreferenceDTO preference) throws UserNotFoundException;
+	void updatePreferences(String userName, NewPreferenceDTO preference) throws UserNotFoundException, ConverterException;
 
 	/**
 	 * Get an user's trip deals.

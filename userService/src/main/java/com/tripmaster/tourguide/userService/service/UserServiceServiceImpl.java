@@ -13,8 +13,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.tripmaster.tourguide.userService.clients.IRewardServiceClient;
+import com.tripmaster.tourguide.userService.converterDTO.IPreferenceConverterDTO;
+import com.tripmaster.tourguide.userService.converterDTO.IUserConverterDTO;
 import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
 import com.tripmaster.tourguide.userService.dto.NewUserDTO;
+import com.tripmaster.tourguide.userService.exceptions.ConverterException;
 import com.tripmaster.tourguide.userService.exceptions.HttpClientException;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
@@ -45,11 +48,17 @@ public class UserServiceServiceImpl implements IUserServiceService {
 	@Autowired
 	private IRewardServiceClient rewardClient;
 	
+	@Autowired
+	private IUserConverterDTO userDTOConverter;
+	
+	@Autowired
+	private IPreferenceConverterDTO preferenceDTOConverter;
+	
 	@Value("${trippricer.apikey}")
 	private static String apiKey;
 
 	@Override
-	public User addUser(NewUserDTO newUserDTO) throws UserAlreadyExistsException {
+	public User addUser(NewUserDTO newUserDTO) throws UserAlreadyExistsException, ConverterException {
 		LOGGER.debug("save: username=" + newUserDTO.getUserName());
 		
 		Optional<User> optional = userRepository.findByUsername(newUserDTO.getUserName());
@@ -59,11 +68,7 @@ public class UserServiceServiceImpl implements IUserServiceService {
 					"user with username=" + newUserDTO.getUserName() + " already exists.");
 		}
 		
-		User user = new User();
-		user.setEmailAddress(newUserDTO.getEmailAddress());
-		user.setPhoneNumber(newUserDTO.getPhoneNumber());
-		user.setUserId(newUserDTO.getUserId());
-		user.setUserName(newUserDTO.getUserName());
+		User user = userDTOConverter.converterDTOToEntity(newUserDTO);
 		
 		return userRepository.save(user);
 	}
@@ -89,7 +94,8 @@ public class UserServiceServiceImpl implements IUserServiceService {
 	}
 
 	@Override
-	public void updatePreferences(String username, NewPreferenceDTO newPreferenceDTO) throws UserNotFoundException {
+	public void updatePreferences(String username, NewPreferenceDTO newPreferenceDTO) 
+			throws UserNotFoundException, ConverterException {
 		LOGGER.debug("updatePreferences: username=" + username);
 		
 		Optional<User> optional = userRepository.findByUsername(username);
@@ -99,16 +105,7 @@ public class UserServiceServiceImpl implements IUserServiceService {
 					"user with username=" + username + " not found.");
 		}
 		
-		Preference preference = new Preference();
-		preference.setAttractionProximity(newPreferenceDTO.getAttractionProximity());
-		preference.setCurrency(newPreferenceDTO.getCurrency());
-		preference.setHighPricePoint(newPreferenceDTO.getHighPricePoint());
-		preference.setLowerPricePoint(newPreferenceDTO.getLowerPricePoint());
-		preference.setNumberOfAdults(newPreferenceDTO.getNumberOfAdults());
-		preference.setNumberOfChildren(newPreferenceDTO.getNumberOfChildren());
-		preference.setTicketQuantity(newPreferenceDTO.getTicketQuantity());
-		preference.setTripDuration(newPreferenceDTO.getTripDuration());
-		
+		Preference preference = preferenceDTOConverter.converterDTOToEntity(newPreferenceDTO);
 		User user = optional.get();
 		user.setPreference(preference);
 		userRepository.save(user);
