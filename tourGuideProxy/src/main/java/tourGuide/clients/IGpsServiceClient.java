@@ -20,14 +20,14 @@ import tourGuide.model.VisitedLocation;
  * @version 1.0
  *
  */
-@FeignClient(url = "http://localhost:8081")
+@FeignClient(name = "GpsService", url = "http://localhost:8081/gpsservice")
 public interface IGpsServiceClient {
 
 	/**
 	 * Mapping for getAttractions.
 	 * @return List<Attraction>
 	 */
-	@RequestMapping(value = "/gpsservice/attractions", method = RequestMethod.GET)
+	@RequestMapping(value = "/attractions", method = RequestMethod.GET)
 	List<Attraction> getAttractions();
 	
 	/**
@@ -35,7 +35,7 @@ public interface IGpsServiceClient {
 	 * @param userId UUID
 	 * @return VisitedLocation
 	 */
-	@RequestMapping(value = "/gpsservice/userlocation", method = RequestMethod.GET)
+	@RequestMapping(value = "/userlocation", method = RequestMethod.GET)
 	VisitedLocation getUserLocation(@RequestParam("userId") UUID userId);
 	
 	

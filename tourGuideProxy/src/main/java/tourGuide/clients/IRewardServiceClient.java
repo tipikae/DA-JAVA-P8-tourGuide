@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @version 1.0
  *
  */
-@FeignClient(url = "http://localhost:8083")
+@FeignClient(name = "RewardService", url = "http://localhost:8083/rewardservice")
 public interface IRewardServiceClient {
 
 	/**
@@ -25,7 +25,7 @@ public interface IRewardServiceClient {
 	 * @param userId
 	 * @return int
 	 */
-	@RequestMapping(value = "/rewardservice/points", method = RequestMethod.GET)
+	@RequestMapping(value = "/points", method = RequestMethod.GET)
 	int getAttractionRewardPoints(
 			@RequestParam("attractionId") UUID attractionId, 
 			@RequestParam("userId") UUID userId);
