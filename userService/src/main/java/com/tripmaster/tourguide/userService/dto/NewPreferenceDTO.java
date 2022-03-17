@@ -10,6 +10,8 @@ import javax.validation.constraints.Positive;
 
 import org.javamoney.moneta.Money;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * New Preference DTO
  * @author tipikae
@@ -18,9 +20,13 @@ import org.javamoney.moneta.Money;
  */
 public class NewPreferenceDTO {
 
+	@JsonIgnore
 	private int attractionProximity = Integer.MAX_VALUE;
+	@JsonIgnore
 	private CurrencyUnit currency = Monetary.getCurrency("USD");
+	@JsonIgnore
 	private Money lowerPricePoint = Money.of(0, currency);
+	@JsonIgnore
 	private Money highPricePoint = Money.of(Integer.MAX_VALUE, currency);
 	
 	@NotNull

@@ -113,7 +113,7 @@ public class UserServiceServiceImpl implements IUserServiceService {
 
 	@Override
 	public List<Provider> getTripDeals(String username) throws UserNotFoundException, HttpClientException {
-		LOGGER.debug("getTripDeals: user,ame=" + username);
+		LOGGER.debug("getTripDeals: username=" + username);
 		
 		Optional<User> optional = userRepository.findByUsername(username);
 		if(!optional.isPresent()) {
