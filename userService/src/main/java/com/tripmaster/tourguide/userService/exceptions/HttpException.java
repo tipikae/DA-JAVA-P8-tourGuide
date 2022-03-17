@@ -4,16 +4,16 @@
 package com.tripmaster.tourguide.userService.exceptions;
 
 /**
- * Http Client side exception.
+ * Http exception.
  * @author tipikae
  * @version 1.0
  *
  */
-public class HttpClientException extends HttpException {
+public class HttpException extends UserServiceException {
 
 	private static final long serialVersionUID = 1L;
 
-	public HttpClientException(String arg0) {
+	public HttpException(String arg0) {
 		super(arg0);
 	}
 

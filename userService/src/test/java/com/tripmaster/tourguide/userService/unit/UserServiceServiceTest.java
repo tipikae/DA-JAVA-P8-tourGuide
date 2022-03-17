@@ -27,7 +27,7 @@ import com.tripmaster.tourguide.userService.converterDTO.IUserConverterDTO;
 import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
 import com.tripmaster.tourguide.userService.dto.NewUserDTO;
 import com.tripmaster.tourguide.userService.exceptions.ConverterException;
-import com.tripmaster.tourguide.userService.exceptions.HttpClientException;
+import com.tripmaster.tourguide.userService.exceptions.HttpException;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.userService.model.Preference;
@@ -144,7 +144,7 @@ class UserServiceServiceTest {
 	}
 	
 	@Test
-	void getTripDealsReturnsListWhenOk() throws UserNotFoundException, HttpClientException {
+	void getTripDealsReturnsListWhenOk() throws UserNotFoundException, HttpException {
 		when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 		when(rewardClient.getUserRewardsPoints(any(UUID.class))).thenReturn(100);
 		when(tripPricer.getPrice(anyString(), any(UUID.class), anyInt(), anyInt(), anyInt(), anyInt()))

@@ -18,7 +18,7 @@ import com.tripmaster.tourguide.userService.converterDTO.IUserConverterDTO;
 import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
 import com.tripmaster.tourguide.userService.dto.NewUserDTO;
 import com.tripmaster.tourguide.userService.exceptions.ConverterException;
-import com.tripmaster.tourguide.userService.exceptions.HttpClientException;
+import com.tripmaster.tourguide.userService.exceptions.HttpException;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.userService.model.Preference;
@@ -112,7 +112,7 @@ public class UserServiceServiceImpl implements IUserServiceService {
 	}
 
 	@Override
-	public List<Provider> getTripDeals(String username) throws UserNotFoundException, HttpClientException {
+	public List<Provider> getTripDeals(String username) throws UserNotFoundException, HttpException {
 		LOGGER.debug("getTripDeals: username=" + username);
 		
 		Optional<User> optional = userRepository.findByUsername(username);
@@ -129,8 +129,9 @@ public class UserServiceServiceImpl implements IUserServiceService {
 		try {
 			points = rewardClient.getUserRewardsPoints(user.getUserId());
 		} catch (Exception e) {
-			LOGGER.debug("getTripDeals: rewardClient error: " + e.getMessage());
-			throw new HttpClientException("rewardClient error: " + e.getMessage());
+			LOGGER.debug("getTripDeals: rewardClient error: " + e.getClass().getSimpleName() 
+					+ ": " + e.getMessage());
+			throw new HttpException(e.getClass().getSimpleName() + ": " + e.getMessage());
 		}
 		
 		return tripPricer.getPrice(username, user.getUserId(), preference.getNumberOfAdults(), 

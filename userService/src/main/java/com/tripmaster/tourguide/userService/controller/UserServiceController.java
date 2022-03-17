@@ -25,6 +25,7 @@ import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
 import com.tripmaster.tourguide.userService.dto.NewUserDTO;
 import com.tripmaster.tourguide.userService.exceptions.ConverterException;
 import com.tripmaster.tourguide.userService.exceptions.HttpClientException;
+import com.tripmaster.tourguide.userService.exceptions.HttpException;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.userService.model.User;
@@ -114,7 +115,7 @@ public class UserServiceController {
 	 */
 	@GetMapping("/trips/{username}")
 	public ResponseEntity<Object> getTripDeals(@PathVariable("username") @NotNull String username) 
-			throws UserNotFoundException, HttpClientException {
+			throws UserNotFoundException, HttpException {
 		LOGGER.info("getTripDeals");
 		List<Provider> tripDeals = userService.getTripDeals(username);
 		return new ResponseEntity<Object>(tripDeals, HttpStatus.OK);
