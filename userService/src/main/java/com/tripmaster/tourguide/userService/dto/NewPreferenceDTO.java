@@ -5,6 +5,8 @@ package com.tripmaster.tourguide.userService.dto;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 import org.javamoney.moneta.Money;
 
@@ -20,9 +22,21 @@ public class NewPreferenceDTO {
 	private CurrencyUnit currency = Monetary.getCurrency("USD");
 	private Money lowerPricePoint = Money.of(0, currency);
 	private Money highPricePoint = Money.of(Integer.MAX_VALUE, currency);
+	
+	@NotNull
+	@Positive
 	private int tripDuration = 1;
+	
+	@NotNull
+	@Positive
 	private int ticketQuantity = 1;
+	
+	@NotNull
+	@Positive
 	private int numberOfAdults = 1;
+	
+	@NotNull
+	@Positive
 	private int numberOfChildren = 0;
 	
 	public NewPreferenceDTO() {

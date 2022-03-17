@@ -12,7 +12,7 @@ import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
 import com.tripmaster.tourguide.userService.exceptions.ConverterException;
 
 @ExtendWith(MockitoExtension.class)
-class PreferenceCOnverterDTOTest {
+class PreferenceConverterDTOTest {
 	
 	private IPreferenceConverterDTO preferenceConverterDTO = new PreferenceConverterDTOImpl();
 
