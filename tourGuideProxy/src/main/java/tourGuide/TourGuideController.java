@@ -2,7 +2,13 @@ package tourGuide;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,14 +16,22 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jsoniter.output.JsonStream;
 
 import gpsUtil.location.VisitedLocation;
+import tourGuide.clients.IUserServiceClient;
 import tourGuide.service.TourGuideService;
+import tourGuide.user.User;
+import tourGuide.user.UserPreferences;
 import tripPricer.Provider;
 
 @RestController
 public class TourGuideController {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(TourGuideController.class);
 
 	@Autowired
 	TourGuideService tourGuideService;
+	
+	@Autowired
+	private IUserServiceClient userClient;
 	
     @RequestMapping("/")
     public String index() {
@@ -67,8 +81,34 @@ public class TourGuideController {
     
     @RequestMapping("/getTripDeals")
     public String getTripDeals(@RequestParam String userName) {
-    	List<Provider> providers = tourGuideService.getTripDeals(userName);
-    	return JsonStream.serialize(providers);
+    	LOGGER.info("getTripDeals");
+    	//List<Provider> providers = tourGuideService.getTripDeals(userName);
+    	return JsonStream.serialize(userClient.getTripDeals(userName));
+    }
+    
+    /**
+     * Add a user.
+     * @param user User
+     * @return String
+     */
+    @PostMapping("/addUser")
+    public String addUser(@RequestBody User user) {
+    	LOGGER.info("addUser");
+		return JsonStream.serialize(userClient.addUser(user));
+    }
+    
+    /**
+     * Update an user's preferences.
+     * @param username String
+     * @param preference UserPreference
+     * @return String
+     */
+    @PutMapping("/updateUserPref/{username}")
+    public String updateUserPreferences(@PathVariable String username,
+    		@RequestBody UserPreferences preference) {
+    	LOGGER.info("updateUserPreferences");
+    	userClient.updatePreferences(username, preference);
+    	return "";
     }
 
 }
