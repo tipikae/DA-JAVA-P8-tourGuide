@@ -3,7 +3,6 @@
  */
 package com.tripmaster.tourguide.gpsService.service;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tripmaster.tourguide.gpsService.dto.NewVisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
 
@@ -55,9 +53,10 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public VisitedLocation getUserLocation(UUID userId) {
-		LOGGER.debug("getUserLocation: userId=" + userId);
-		return gpsUtil.getUserLocation(userId);
+	public VisitedLocation getUserLocation(String userName) {
+		LOGGER.debug("getUserLocation: userName=" + userName);
+		//return gpsUtil.getUserLocation(userId);
+		return null;
 	}
 
 	/**
@@ -94,42 +93,10 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 		return optional.get();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public VisitedLocation getUserLastVisitedLocation(UUID userId) throws UserNotFoundException {
-		LOGGER.debug("getUserLastVisitedLocation: userId=" + userId);
-		
-		Optional<List<VisitedLocation>> optional = visitedLocationRepository.findByUserId(userId);
-		if(!optional.isPresent()) {
-			LOGGER.debug("getUserVisitedLocations: error: user with userId=" + userId + " not found.");
-			throw new UserNotFoundException("User with userId=" + userId + " not found.");
-		}
-		
-		List<VisitedLocation> visitedLocations = optional.get();
-		VisitedLocation last = visitedLocations.get(visitedLocations.size() - 1);
-		
-		return last;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public VisitedLocation addUserVisitedLocation(NewVisitedLocationDTO newVisitedLocationDTO) {
-		LOGGER.debug("addUserVisitedLocation: userId=" + newVisitedLocationDTO.getUserId()
-				+ ", latitude=" + newVisitedLocationDTO.getLocation().getLatitude()
-				+ ", longitude=" + newVisitedLocationDTO.getLocation().getLongitude());
-		
-		UUID userId = newVisitedLocationDTO.getUserId();
-		Location location = new Location(newVisitedLocationDTO.getLocation().getLatitude(),
-				newVisitedLocationDTO.getLocation().getLongitude());
-		Date timeVisited = newVisitedLocationDTO.getTimeVisited();
-		VisitedLocation visitedLocation = new VisitedLocation(userId, location, timeVisited);
-		visitedLocationRepository.save(visitedLocation);
-		
-		return visitedLocation;
+	public List<Attraction> getNearByAttractions(String username) throws UserNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

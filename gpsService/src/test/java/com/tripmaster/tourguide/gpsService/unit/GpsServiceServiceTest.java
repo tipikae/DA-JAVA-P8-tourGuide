@@ -1,4 +1,4 @@
-package com.tripmaster.tourguide.gpsService;
+package com.tripmaster.tourguide.gpsService.unit;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -19,8 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.tripmaster.tourguide.gpsService.dto.NewLocationDTO;
-import com.tripmaster.tourguide.gpsService.dto.NewVisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
 import com.tripmaster.tourguide.gpsService.service.GpsServiceServiceImpl;
@@ -42,36 +40,46 @@ class GpsServiceServiceTest {
 	@InjectMocks
 	private GpsServiceServiceImpl gpsService;
 	
+	private static String userName;
 	private static UUID userId;
 	private static Location location;
 	private static Date timeVisited;
 	private static VisitedLocation visitedLocation;
 	private static List<VisitedLocation> visitedLocations;
+	private static Attraction attraction;
+	private static List<Attraction> attractions;
 	
 	@BeforeAll
 	private static void setUp() {
+		userName = "userName";
 		userId = UUID.randomUUID();
 		location = new Location(10d, 20d);
 		timeVisited = new Date();
 		visitedLocation = new VisitedLocation(userId, location, timeVisited);
 		visitedLocations = new ArrayList<>();
 		visitedLocations.add(visitedLocation);
+		attraction = new Attraction("name", "city", "state", 10d, 20d);
+		attractions = new ArrayList<>();
+		attractions.add(attraction);
 	}
 
 	@Test
 	void getAttractionsReturnsListWhenOk() {
-		Attraction attraction = new Attraction(null, null, null, 0, 0);
-		List<Attraction> attractions = new ArrayList<>();
-		attractions.add(attraction);
 		when(gpsUtil.getAttractions()).thenReturn(attractions);
 		assertEquals(1, gpsService.getAttractions().size());
 	}
 
-	@Test
+	/*@Test
 	void getUserLocationReturnsVisitedLocationWhenOk() {
 		when(gpsUtil.getUserLocation(any(UUID.class))).thenReturn(visitedLocation);
-		assertEquals(10d, gpsService.getUserLocation(UUID.randomUUID()).location.latitude);
+		assertEquals(10d, gpsService.getUserLocation(userName).location.latitude);
 	}
+
+	@Test
+	void getUserLocationThrowsExceptionWhenUserNotFound() {
+		when(gpsUtil.getUserLocation(any(UUID.class))).thenReturn(visitedLocation);
+		assertEquals(10d, gpsService.getUserLocation(userName).location.latitude);
+	}*/
 	
 	@Test
 	void getAllUsersLastLocationReturnsMapWhenOK() {
@@ -97,27 +105,14 @@ class GpsServiceServiceTest {
 	}
 	
 	@Test
-	void getUserLastVisitedLocationReturnsVisitedLocationWhenOk() throws UserNotFoundException {
-		when(visitedLocationRepository.findByUserId(any(UUID.class))).thenReturn(Optional.of(visitedLocations));
-		assertEquals(visitedLocations.get(visitedLocations.size() - 1).location.latitude, 
-				gpsService.getUserLastVisitedLocation(userId).location.latitude);
+	void getNearbyAttractionsReturnsListWhenOk() throws UserNotFoundException {
+		when(gpsUtil.getAttractions()).thenReturn(attractions);
+		assertFalse(gpsService.getNearByAttractions(userName).isEmpty());
 	}
 	
 	@Test
-	void getUserLastVisitedLocationThrowsExceptionWhenUserNotFound() throws UserNotFoundException {
-		when(visitedLocationRepository.findByUserId(any(UUID.class))).thenReturn(Optional.empty());
-		assertThrows(UserNotFoundException.class, () ->
-				gpsService.getUserLastVisitedLocation(userId));
-	}
-	
-	@Test
-	void addUserVisitedLocationReturnsVisitedLocationWhenOk() {
-		NewLocationDTO newLocationDTO = new NewLocationDTO(location.latitude, location.longitude);
-		NewVisitedLocationDTO newVisitedLocationDTO = 
-				new NewVisitedLocationDTO(userId, newLocationDTO, timeVisited);
-		when(visitedLocationRepository.save(any(VisitedLocation.class))).thenReturn(visitedLocation);
-		assertEquals(newVisitedLocationDTO.getUserId(), 
-				gpsService.addUserVisitedLocation(newVisitedLocationDTO).userId);
+	void getNearbyAttractionsThrowsExceptionWhenUserNotFound() {
+		
 	}
 
 }

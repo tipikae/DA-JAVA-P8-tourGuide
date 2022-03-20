@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.slf4j.Logger;
@@ -15,14 +15,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tripmaster.tourguide.gpsService.dto.NewVisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.service.IGpsServiceService;
 
@@ -31,13 +29,14 @@ import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 
 /**
- * GpsUtil rest controller.
+ * GpsService rest controller.
  * @author tipikae
  * @version 1.0
  *
  */
 @RestController
 @RequestMapping("/gpsservice")
+@Validated
 public class GpsServiceController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(GpsServiceController.class);
@@ -58,13 +57,15 @@ public class GpsServiceController {
 	
 	/**
 	 * Get a user's location.
-	 * @param userId - UUID
+	 * @param userName String
 	 * @return ResponseEntity<VisitedLocation>
+	 * @throws UserNotFoundException 
 	 */
-	@GetMapping("/location")
-	public ResponseEntity<Object> getUserLocation(@RequestParam @NotNull UUID userId) {
-		LOGGER.info("getUserLocation: userId=" + userId);
-		VisitedLocation visitedLocation = gpsService.getUserLocation(userId);
+	@GetMapping("/location/{userName}")
+	public ResponseEntity<Object> getUserLocation(@PathVariable("userName") @NotBlank String userName) 
+			throws UserNotFoundException {
+		LOGGER.info("getUserLocation: userName=" + userName);
+		VisitedLocation visitedLocation = gpsService.getUserLocation(userName);
 		return new ResponseEntity<Object>(visitedLocation, HttpStatus.OK);
 	}
 	
@@ -85,8 +86,8 @@ public class GpsServiceController {
 	 * @return ResponseEntity<List<VisitedLocation>>
 	 * @throws UserNotFoundException 
 	 */
-	@GetMapping("/locations")
-	public ResponseEntity<Object> getUserVisitedLocations(@RequestParam @NotNull UUID userId) 
+	@GetMapping("/locations/{userId}")
+	public ResponseEntity<Object> getUserVisitedLocations(@PathVariable("userId") @NotNull UUID userId) 
 			throws UserNotFoundException {
 		LOGGER.info("getUserVisitedLocations: userId=" + userId);
 		List<VisitedLocation> visitedLocations = gpsService.getUserVisitedLocations(userId);
@@ -94,30 +95,17 @@ public class GpsServiceController {
 	}
 	
 	/**
-	 * Get a user's last location.
-	 * @param userId - UUID
-	 * @return ResponseEntity<VisitedLocation>
+	 * Get nearby attractions.
+	 * @param userId UUID
+	 * @return ResponseEntity<Object>
 	 * @throws UserNotFoundException 
 	 */
-	@GetMapping("/lastlocation")
-	public ResponseEntity<Object> getUserLastVisitedLocation(@RequestParam @NotNull UUID userId)
+	@GetMapping("/nearbyattractions/{userName}")
+	public ResponseEntity<Object> getNearByAttractions(@PathVariable("userName") @NotBlank String userName) 
 			throws UserNotFoundException {
-		LOGGER.info("getUserLastVisitedLocation: userId=" + userId);
-		VisitedLocation visitedLocation = gpsService.getUserLastVisitedLocation(userId);
-		return new ResponseEntity<Object>(visitedLocation, HttpStatus.OK);
-	}
-	
-	/**
-	 * Add a users's visitedLocation.
-	 * @param newVisitedLocationDTO - NewVisitedLocationDTO
-	 * @return ResponseEntity<VisitedLocation>
-	 */
-	@PostMapping(value = "/location", consumes = {"application/json"})
-	public ResponseEntity<Object> addUserVisitedLocation(
-			@RequestBody @Valid NewVisitedLocationDTO newVisitedLocationDTO) {
-		LOGGER.info("addUserVisitedLocation");
-		VisitedLocation response = gpsService.addUserVisitedLocation(newVisitedLocationDTO);
-		return new ResponseEntity<Object>(response, HttpStatus.OK);
+		LOGGER.info("getNearByAttractions: userName=" + userName);
+		List<Attraction> attractions = gpsService.getNearByAttractions(userName);
+		return new ResponseEntity<Object>(attractions, HttpStatus.OK);
 	}
 
 }

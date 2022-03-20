@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.tripmaster.tourguide.gpsService.dto.NewVisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 
 import gpsUtil.location.Attraction;
@@ -30,10 +29,10 @@ public interface IGpsServiceService {
 	
 	/**
 	 * Get user current location.
-	 * @param userId - UUID
+	 * @param username String
 	 * @return VisitedLocation
 	 */
-	VisitedLocation getUserLocation(UUID userId);
+	VisitedLocation getUserLocation(String username) throws UserNotFoundException;
 	
 	/**
 	 * Get all users' last visited location.
@@ -50,17 +49,10 @@ public interface IGpsServiceService {
 	List<VisitedLocation> getUserVisitedLocations(UUID userId) throws UserNotFoundException;
 	
 	/**
-	 * Get the user's last visited location.
-	 * @param userId - UUID
-	 * @return VisitedLocation
-	 * @throws UserNotFoundException 
+	 * Get an users's nearby attractions.
+	 * @param username String
+	 * @return List<Attraction>
+	 * @throws UserNotFoundException
 	 */
-	VisitedLocation getUserLastVisitedLocation(UUID userId) throws UserNotFoundException;
-	
-	/**
-	 * Add a user's visitedLocation;
-	 * @param newVisitedLocationDTO NewVisitedLocationDTO
-	 * @return VisitedLocation
-	 */
-	VisitedLocation addUserVisitedLocation(NewVisitedLocationDTO newVisitedLocationDTO);
+	List<Attraction> getNearByAttractions(String username) throws UserNotFoundException;
 }

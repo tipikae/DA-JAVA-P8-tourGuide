@@ -107,24 +107,5 @@ class RewardServiceControllerTest {
 		mockMvc.perform(get(root + "/points/" + userId.toString()))
 			.andExpect(status().is(404));
 	}
-	
-	@Test
-	void getNearByAttractionsReturnsListWhenOk() throws Exception {
-		List<Attraction> attractions = new ArrayList<>();
-		attractions.add(attraction);
-		when(rewardService.getNearByAttractions(any(UUID.class))).thenReturn(attractions);
-		mockMvc.perform(get(root + "/nearbyattractions")
-				.param("userId", userId.toString()))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.[0].attractionId", is(attractionId.toString())));
-	}
-	
-	@Test
-	void getNearByAttractionsReturns404WhenUserNotFound() throws Exception {
-		doThrow(UserNotFoundException.class).when(rewardService).getNearByAttractions(any(UUID.class));
-		mockMvc.perform(get(root + "/nearbyattractions")
-				.param("userId", userId.toString()))
-			.andExpect(status().is(404));
-	}
 
 }

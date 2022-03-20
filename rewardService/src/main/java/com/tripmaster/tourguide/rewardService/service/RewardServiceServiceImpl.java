@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
-import com.tripmaster.tourguide.rewardService.model.Attraction;
 import com.tripmaster.tourguide.rewardService.model.Reward;
 import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
 import com.tripmaster.tourguide.rewardService.util.IHelper;
@@ -77,13 +76,4 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 		
 		return sum;
 	}
-
-	@Override
-	public List<Attraction> getNearByAttractions(UUID userId) throws UserNotFoundException {
-		
-		return null;
-	}
-
-	
-
 }

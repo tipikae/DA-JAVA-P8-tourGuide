@@ -1,10 +1,11 @@
-package com.tripmaster.tourguide.gpsService;
+package com.tripmaster.tourguide.gpsService.unit;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,11 +21,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.tripmaster.tourguide.gpsService.controller.GpsServiceController;
-import com.tripmaster.tourguide.gpsService.dto.NewVisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.service.IGpsServiceService;
 
@@ -41,14 +40,20 @@ class GpsServiceControllerTest {
 	@MockBean
 	private IGpsServiceService gpsService;
 	
+	private static String root;
+	private static String userName;
 	private static UUID userId;
 	private static Location location;
 	private static VisitedLocation visitedLocation;
 	private static List<VisitedLocation> visitedLocations;
 	private static Map<UUID, List<VisitedLocation>> map;
+	private static Attraction attraction;
+	private static List<Attraction> attractions;
 	
 	@BeforeAll
 	private static void setUp() {
+		root = "/gpsservice";
+		userName = "username";
 		userId = UUID.randomUUID();
 		location = new Location(10d, 20d);
 		visitedLocation = new VisitedLocation(userId, location, new Date());
@@ -56,28 +61,39 @@ class GpsServiceControllerTest {
 		visitedLocations.add(visitedLocation);
 		map = new HashMap<>();
 		map.put(userId, visitedLocations);
+		attraction = new Attraction("name", "city", "state", 10d, 20d);
+		attractions = new ArrayList<>();
+		attractions.add(attraction);
 	}
 
 	@Test
 	void getAttractionsReturnsJsonListWhenOk() throws Exception {
-		Attraction attraction = new Attraction("Disneyland", "Anaheim", "CA", 33.817595, -117.922008);
-		List<Attraction> attractions = new ArrayList<>();
-		attractions.add(attraction);
 		when(gpsService.getAttractions()).thenReturn(attractions);
-		mockMvc.perform(get("/gpsservice/attractions"))
+		mockMvc.perform(get(root + "/attractions"))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.[0].city", is("Anaheim")));
+			.andExpect(jsonPath("$.[0].city", is("city")));
 			
 	}
 	
 	@Test
 	void getUserLocationReturnsLocationWhenOk() throws Exception {
-		when(gpsService.getUserLocation(any(UUID.class))).thenReturn(visitedLocation);
-		mockMvc.perform(get("/gpsservice/location")
-				.contentType(MediaType.APPLICATION_JSON)
-				.param("userId", userId.toString()))
+		when(gpsService.getUserLocation(anyString())).thenReturn(visitedLocation);
+		mockMvc.perform(get(root + "/location/" + userName))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.userId", is(userId.toString())));
+	}
+	
+	@Test
+	void getUserLocationThrowsExceptionWhenUserNotFound() throws Exception {
+		doThrow(UserNotFoundException.class).when(gpsService).getUserLocation(anyString());
+		mockMvc.perform(get(root + "/location/" + userName))
+			.andExpect(status().is(404));
+	}
+	
+	@Test
+	void getUserLocationThrowsExceptionWhenArgInvalid() throws Exception {
+		mockMvc.perform(get(root + "/location/ "))
+			.andExpect(status().is(400));
 	}
 	
 	@Test
@@ -85,7 +101,7 @@ class GpsServiceControllerTest {
 		Map<UUID, Location> res = new HashMap<>();
 		res.put(userId, location);
 		when(gpsService.getAllUsersLastLocation()).thenReturn(res);
-		mockMvc.perform(get("/gpsservice/lastlocations"))
+		mockMvc.perform(get(root + "/lastlocations"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$." + userId.toString() + ".latitude", is(10d)));
 	}
@@ -93,33 +109,44 @@ class GpsServiceControllerTest {
 	@Test
 	void getUserVisitedLocationsReturnsListWhenOk() throws UserNotFoundException, Exception {
 		when(gpsService.getUserVisitedLocations(any(UUID.class))).thenReturn(visitedLocations);
-		mockMvc.perform(get("/gpsservice/locations")
-				.contentType(MediaType.APPLICATION_JSON)
-				.param("userId", userId.toString()))
+		mockMvc.perform(get(root + "/locations/" + userId))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.[0].location.longitude", is(20d)));
 	}
 	
 	@Test
-	void getUserLastVisitedLocationReturnsVisitedLocationWhenOk() throws UserNotFoundException, Exception {
-		when(gpsService.getUserLastVisitedLocation(any(UUID.class))).thenReturn(visitedLocation);
-		mockMvc.perform(get("/gpsservice/lastlocation")
-				.contentType(MediaType.APPLICATION_JSON)
-				.param("userId", userId.toString()))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.userId", is(userId.toString())));
+	void getUserVisitedLocationsThrowsExceptionWhenUserNotFound() throws UserNotFoundException, Exception {
+		doThrow(UserNotFoundException.class).when(gpsService).getUserVisitedLocations(any(UUID.class));
+		mockMvc.perform(get(root + "/locations/" + userId))
+			.andExpect(status().is(404));
 	}
 	
 	@Test
-	void addUserVisitedLocationReturnsVisitedLocationWhenOk() throws Exception {
-		when(gpsService.addUserVisitedLocation(any(NewVisitedLocationDTO.class))).thenReturn(visitedLocation);
-		mockMvc.perform(post("/gpsservice/location")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content("{\"userId\":\"776aae36-5afb-44e8-a357-c4f20242eb41\","
-						+ "\"location\":{\"longitude\":20.0,\"latitude\":10.0},"
-						+ "\"timeVisited\":\"2022-03-14T18:01:01.846+00:00\"}"))
+	void getUserVisitedLocationsThrowsExceptionWhenArgInvalid() throws Exception {
+		mockMvc.perform(get(root + "/locations/ "))
+			.andExpect(status().is(400));
+	}
+	
+	@Test
+	void getNearByAttractionsReturnsListWhenOk() throws Exception {
+		when(gpsService.getNearByAttractions(anyString())).thenReturn(attractions);
+		mockMvc.perform(get(root + "/nearbyattractions/" + userName))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.userId", is(userId.toString())));
+			.andExpect(jsonPath("$.[0].city", is("city")));
+		
+	}
+	
+	@Test
+	void getNearByAttractionsThrowsExceptionWhenUserNotFound() throws Exception {
+		doThrow(UserNotFoundException.class).when(gpsService).getNearByAttractions(anyString());
+		mockMvc.perform(get(root + "/nearbyattractions/" + userName))
+			.andExpect(status().is(404));
+	}
+	
+	@Test
+	void getNearByAttractionsThrowsExceptionWhenArgInvalid() throws Exception {
+		mockMvc.perform(get(root + "/nearbyattractions/ "))
+			.andExpect(status().is(400));
 	}
 
 }

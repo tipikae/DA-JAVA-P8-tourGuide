@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
-import com.tripmaster.tourguide.rewardService.model.Attraction;
 import com.tripmaster.tourguide.rewardService.model.Reward;
 import com.tripmaster.tourguide.rewardService.service.IRewardServiceService;
 
@@ -79,20 +78,6 @@ public class RewardServiceController {
 		LOGGER.info("getUserRewardsPoints");
 		int points = rewardService.getUserRewardsPoints(userId);
 		return new ResponseEntity<Object>(points, HttpStatus.OK);
-	}
-	
-	/**
-	 * Get nearby attractions.
-	 * @param userId UUID
-	 * @return ResponseEntity<Object>
-	 * @throws UserNotFoundException 
-	 */
-	@GetMapping("/nearbyattractions")
-	public ResponseEntity<Object> getNearByAttractions(@RequestParam @NotNull UUID userId) 
-			throws UserNotFoundException {
-		LOGGER.info("getNearByAttractions");
-		List<Attraction> attractions = rewardService.getNearByAttractions(userId);
-		return new ResponseEntity<Object>(attractions, HttpStatus.OK);
 	}
 	
 }

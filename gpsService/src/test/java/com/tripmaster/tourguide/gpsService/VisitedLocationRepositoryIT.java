@@ -17,7 +17,7 @@ import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 
 @SpringBootTest
-class VisitedRepositoryIT {
+class VisitedLocationRepositoryIT {
 	
 	@Autowired
 	private IVisitedLocationRepository visitedLocationRepository;

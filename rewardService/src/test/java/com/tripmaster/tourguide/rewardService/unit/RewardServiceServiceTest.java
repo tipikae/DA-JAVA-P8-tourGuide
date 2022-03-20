@@ -103,15 +103,5 @@ class RewardServiceServiceTest {
 		when(rewardRepository.findByUserId(any(UUID.class))).thenReturn(Optional.empty());
 		assertThrows(UserNotFoundException.class, () -> rewardService.getUserRewardsPoints(userId));
 	}
-	
-	@Test
-	void getNearByAttractionsReturnsListWhenOk() {
-		
-	}
-	
-	@Test
-	void getNearByAttractionsThrowsExceptionWhenUserNotFound() {
-		
-	}
 
 }
