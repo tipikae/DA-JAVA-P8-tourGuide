@@ -2,6 +2,9 @@ package com.tripmaster.tourguide.rewardService.unit;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -17,15 +20,21 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.tripmaster.tourguide.rewardService.clients.IUserServiceClient;
+import com.tripmaster.tourguide.rewardService.converterDTO.IRewardConverterDTO;
+import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
+import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
+import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.rewardService.model.Attraction;
 import com.tripmaster.tourguide.rewardService.model.Location;
 import com.tripmaster.tourguide.rewardService.model.Reward;
+import com.tripmaster.tourguide.rewardService.model.User;
 import com.tripmaster.tourguide.rewardService.model.VisitedLocation;
 import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
 import com.tripmaster.tourguide.rewardService.service.RewardServiceServiceImpl;
-import com.tripmaster.tourguide.rewardService.util.IHelper;
 
+import feign.FeignException;
 import rewardCentral.RewardCentral;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,11 +47,15 @@ class RewardServiceServiceTest {
 	private RewardCentral rewardCentral;
 	
 	@Mock
-	private IHelper helper;
+	private IRewardConverterDTO rewardConverter;
+	
+	@Mock
+	private IUserServiceClient userclient;
 	
 	@InjectMocks
 	private RewardServiceServiceImpl rewardService;
 	
+	private static String userName;
 	private static UUID userId;
 	private static UUID attractionId;
 	private static String attractionName;
@@ -59,6 +72,7 @@ class RewardServiceServiceTest {
 	
 	@BeforeAll
 	private static void setUp() {
+		userName = "username";
 		userId = UUID.randomUUID();
 		attractionId = UUID.randomUUID();
 		attractionName = "attractionName";
@@ -81,15 +95,32 @@ class RewardServiceServiceTest {
 	}
 	
 	@Test
-	void getUserRewardsReturnsListWhenOk() throws UserNotFoundException {
+	void getUserRewardsReturnsListWhenOk() throws UserNotFoundException, ConverterException, HttpException {
+		User user = new User();
+		user.setUserId(userId);
+		user.setUserName(userName);
+		List<RewardDTO> rewardDTOs = new ArrayList<>();
+		rewardDTOs.add(new RewardDTO());
+		when(userclient.getUser(anyString())).thenReturn(user);
 		when(rewardRepository.findByUserId(any(UUID.class))).thenReturn(Optional.of(rewards));
-		assertEquals(1, rewardService.getUserRewards(userId).size());
+		when(rewardConverter.converterRewardsToDTOs(anyList())).thenReturn(rewardDTOs);
+		assertEquals(1, rewardService.getUserRewards(userName).size());
 	}
 	
 	@Test
 	void getUserRewardsThrowsExceptionWhenUserNotFound() {
+		User user = new User();
+		user.setUserId(userId);
+		user.setUserName(userName);
+		when(userclient.getUser(anyString())).thenReturn(user);
 		when(rewardRepository.findByUserId(any(UUID.class))).thenReturn(Optional.empty());
-		assertThrows(UserNotFoundException.class, () -> rewardService.getUserRewards(userId));
+		assertThrows(UserNotFoundException.class, () -> rewardService.getUserRewards(userName));
+	}
+	
+	@Test
+	void getUserRewardsThrowsExceptionWhenClientError() {
+		doThrow(FeignException.class).when(userclient).getUser(anyString());
+		assertThrows(HttpException.class, () -> rewardService.getUserRewards(userName));
 	}
 	
 	@Test

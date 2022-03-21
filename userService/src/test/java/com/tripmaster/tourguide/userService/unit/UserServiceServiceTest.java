@@ -36,6 +36,7 @@ import com.tripmaster.tourguide.userService.model.User;
 import com.tripmaster.tourguide.userService.repository.IUserRepository;
 import com.tripmaster.tourguide.userService.service.UserServiceServiceImpl;
 
+import feign.FeignException;
 import tripPricer.Provider;
 import tripPricer.TripPricer;
 
@@ -168,6 +169,13 @@ class UserServiceServiceTest {
 	void getTripDealsThrowsExceptionWhenUserNotFound() {
 		when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
 		assertThrows(UserNotFoundException.class, () -> userService.getTripDeals(username));
+	}
+	
+	@Test
+	void getTripDealsThrowsExceptionWhenClientError() {
+		when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+		doThrow(FeignException.class).when(rewardClient).getUserRewardsPoints(any(UUID.class));
+		assertThrows(HttpException.class, () -> userService.getTripDeals(username));
 	}
 
 }

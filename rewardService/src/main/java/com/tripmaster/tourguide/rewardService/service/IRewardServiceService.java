@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.UUID;
 
 import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
+import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
+import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
 
 /**
@@ -29,8 +31,11 @@ public interface IRewardServiceService {
 	 * @param userName String
 	 * @return List<RewardDTO>
 	 * @throws UserNotFoundException
+	 * @throws HttpException 
+	 * @throws ConverterException 
 	 */
-	List<RewardDTO> getUserRewards(String userName) throws UserNotFoundException;
+	List<RewardDTO> getUserRewards(String userName) 
+			throws UserNotFoundException, HttpException, ConverterException;
 	
 	/**
 	 * Get a user's rewards points sum.

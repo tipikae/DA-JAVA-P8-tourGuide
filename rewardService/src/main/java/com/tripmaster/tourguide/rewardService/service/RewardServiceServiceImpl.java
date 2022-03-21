@@ -12,11 +12,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tripmaster.tourguide.rewardService.clients.IUserServiceClient;
+import com.tripmaster.tourguide.rewardService.converterDTO.IRewardConverterDTO;
 import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
+import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
+import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.rewardService.model.Reward;
+import com.tripmaster.tourguide.rewardService.model.User;
 import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
-import com.tripmaster.tourguide.rewardService.util.IHelper;
 
 import rewardCentral.RewardCentral;
 
@@ -36,6 +40,12 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	
 	@Autowired
 	private RewardCentral rewardCentral;
+	
+	@Autowired
+	private IUserServiceClient userClient;
+	
+	@Autowired
+	private IRewardConverterDTO rewardConverter;
 
 	/**
 	 * {@inheritDoc}
@@ -50,16 +60,27 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<RewardDTO> getUserRewards(String userName) throws UserNotFoundException {
+	public List<RewardDTO> getUserRewards(String userName) 
+			throws UserNotFoundException, HttpException, ConverterException {
 		LOGGER.debug("getUserRewards: userName=" + userName);
 		
+		User user = null;
+		try {
+			user = userClient.getUser(userName);
+		} catch (Exception e) {
+			LOGGER.debug("getUserRewards: userClient error: " + e.getClass().getSimpleName() 
+					+ ": " + e.getMessage());
+			throw new HttpException(e.getClass().getSimpleName() + ": " + e.getMessage());
+		}
+		
+		UUID userId = user.getUserId();
 		Optional<List<Reward>> optional = rewardRepository.findByUserId(userId);
 		if(!optional.isPresent()) {
 			LOGGER.debug("getUserRewards: error: user with userId=" + userId + " not found.");
 			throw new UserNotFoundException("user with userId=" + userId + " not found.");
 		}
 		
-		return optional.get();
+		return rewardConverter.converterRewardsToDTOs(optional.get());
 	}
 
 	/**

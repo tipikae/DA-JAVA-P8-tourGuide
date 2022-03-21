@@ -2,6 +2,7 @@ package com.tripmaster.tourguide.rewardService.unit;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -9,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,11 +21,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.tripmaster.tourguide.rewardService.controller.RewardServiceController;
+import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
-import com.tripmaster.tourguide.rewardService.model.Attraction;
-import com.tripmaster.tourguide.rewardService.model.Location;
-import com.tripmaster.tourguide.rewardService.model.Reward;
-import com.tripmaster.tourguide.rewardService.model.VisitedLocation;
 import com.tripmaster.tourguide.rewardService.service.IRewardServiceService;
 
 @WebMvcTest(RewardServiceController.class)
@@ -39,36 +36,19 @@ class RewardServiceControllerTest {
 	
 	private static String root;
 	private static UUID userId;
-	private static UUID attractionId;
-	private static String attractionName;
-	private static String city;
-	private static String state;
-	private static double latitude;
-	private static double longitude;
-	private static Attraction attraction;
-	private static Location location;
-	private static VisitedLocation visitedLocation;
 	private static int points;
-	private static Reward reward;
-	private static List<Reward> rewards;
+	private static RewardDTO rewardDTO;
+	private static List<RewardDTO> rewardDTOs;
 	
 	@BeforeAll
 	private static void setUp() {
 		root = "/rewardservice";
-		userId = UUID.randomUUID();
-		attractionId = UUID.randomUUID();
-		attractionName = "attractionName";
-		city = "city";
-		state = "state";
-		latitude = 10d;
-		longitude = 20d;
-		attraction = new Attraction(attractionId, attractionName, city, state, latitude, longitude);
-		location = new Location(latitude, longitude);
-		visitedLocation = new VisitedLocation(userId, location, new Date());
 		points = 100;
-		reward = new Reward(visitedLocation, attraction, points);
-		rewards = new ArrayList<>();
-		rewards.add(reward);
+		userId = UUID.randomUUID();
+		rewardDTO = new RewardDTO();
+		rewardDTO.setRewardPoints(points);
+		rewardDTOs = new ArrayList<>();
+		rewardDTOs.add(rewardDTO);
 	}
 	
 	@Test
@@ -78,19 +58,23 @@ class RewardServiceControllerTest {
 	
 	@Test
 	void getUserRewardsReturnsListWhenOk() throws UserNotFoundException, Exception {
-		when(rewardService.getUserRewards(any(UUID.class))).thenReturn(rewards);
-		mockMvc.perform(get(root + "/rewards")
-				.param("userId", userId.toString()))
+		when(rewardService.getUserRewards(anyString())).thenReturn(rewardDTOs);
+		mockMvc.perform(get(root + "/rewards/" + userId.toString()))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.[0].attraction.city", is(city)));
+			.andExpect(jsonPath("$.[0].rewardPoints", is(points)));
 	}
 	
 	@Test
 	void getUserRewardsReturns404WhenUserNotFound() throws Exception {
-		doThrow(UserNotFoundException.class).when(rewardService).getUserRewards(any(UUID.class));
-		mockMvc.perform(get(root + "/rewards")
-				.param("userId", userId.toString()))
+		doThrow(UserNotFoundException.class).when(rewardService).getUserRewards(anyString());
+		mockMvc.perform(get(root + "/rewards/" + userId.toString()))
 			.andExpect(status().is(404));
+	}
+	
+	@Test
+	void getUserRewardsReturns400WhenArgInvalid() throws Exception {
+		mockMvc.perform(get(root + "/rewards/ "))
+			.andExpect(status().is(400));
 	}
 	
 	@Test
@@ -106,6 +90,12 @@ class RewardServiceControllerTest {
 		doThrow(UserNotFoundException.class).when(rewardService).getUserRewardsPoints(any(UUID.class));
 		mockMvc.perform(get(root + "/points/" + userId.toString()))
 			.andExpect(status().is(404));
+	}
+	
+	@Test
+	void getUserRewardsPointsReturns400WhenArgInvalid() throws Exception {
+		mockMvc.perform(get(root + "/points/ "))
+			.andExpect(status().is(400));
 	}
 
 }

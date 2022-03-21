@@ -1,4 +1,4 @@
-package com.tripmaster.tourguide.rewardService.unit;
+package com.tripmaster.tourguide.rewardService.unit.converter;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

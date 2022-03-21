@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
+import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
+import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.rewardService.service.IRewardServiceService;
 
@@ -32,6 +35,7 @@ import com.tripmaster.tourguide.rewardService.service.IRewardServiceService;
  */
 @RestController
 @RequestMapping("/rewardservice")
+@Validated
 public class RewardServiceController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RewardServiceController.class);
@@ -58,10 +62,12 @@ public class RewardServiceController {
 	 * @param userName String
 	 * @return ResponseEntity<Object>
 	 * @throws UserNotFoundException 
+	 * @throws ConverterException 
+	 * @throws HttpException 
 	 */
 	@GetMapping("/rewards/{userName}")
 	public ResponseEntity<Object> getUserRewards(@PathVariable("userName") @NotBlank String userName) 
-			throws UserNotFoundException {
+			throws UserNotFoundException, HttpException, ConverterException {
 		LOGGER.info("getUserRewards");
 		List<RewardDTO> rewards = rewardService.getUserRewards(userName);
 		return new ResponseEntity<Object>(rewards, HttpStatus.OK);
