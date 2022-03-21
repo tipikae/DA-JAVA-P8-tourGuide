@@ -6,6 +6,7 @@ package com.tripmaster.tourguide.rewardService.controller;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.slf4j.Logger;
@@ -19,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
-import com.tripmaster.tourguide.rewardService.model.Reward;
 import com.tripmaster.tourguide.rewardService.service.IRewardServiceService;
 
 /**
@@ -54,15 +55,15 @@ public class RewardServiceController {
 	
 	/**
 	 * Get an user's rewards.
-	 * @param userId UUID
+	 * @param userName String
 	 * @return ResponseEntity<Object>
 	 * @throws UserNotFoundException 
 	 */
-	@GetMapping("/rewards")
-	public ResponseEntity<Object> getUserRewards(@RequestParam @NotNull UUID userId) 
+	@GetMapping("/rewards/{userName}")
+	public ResponseEntity<Object> getUserRewards(@PathVariable("userName") @NotBlank String userName) 
 			throws UserNotFoundException {
 		LOGGER.info("getUserRewards");
-		List<Reward> rewards = rewardService.getUserRewards(userId);
+		List<RewardDTO> rewards = rewardService.getUserRewards(userName);
 		return new ResponseEntity<Object>(rewards, HttpStatus.OK);
 	}
 	

@@ -6,8 +6,8 @@ package com.tripmaster.tourguide.rewardService.service;
 import java.util.List;
 import java.util.UUID;
 
+import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
-import com.tripmaster.tourguide.rewardService.model.Reward;
 
 /**
  * RewardService service.
@@ -26,11 +26,11 @@ public interface IRewardServiceService {
 	
 	/**
 	 * Get a user's rewards.
-	 * @param userId UUID
-	 * @return List<Reward>
+	 * @param userName String
+	 * @return List<RewardDTO>
 	 * @throws UserNotFoundException
 	 */
-	List<Reward> getUserRewards(UUID userId) throws UserNotFoundException;
+	List<RewardDTO> getUserRewards(String userName) throws UserNotFoundException;
 	
 	/**
 	 * Get a user's rewards points sum.

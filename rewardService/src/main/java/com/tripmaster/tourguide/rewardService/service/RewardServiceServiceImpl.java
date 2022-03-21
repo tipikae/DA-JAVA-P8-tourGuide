@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.rewardService.model.Reward;
 import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
@@ -35,19 +36,22 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	
 	@Autowired
 	private RewardCentral rewardCentral;
-	
-	@Autowired
-	private IHelper helper;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void calculateRewards(UUID userId) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public List<Reward> getUserRewards(UUID userId) throws UserNotFoundException {
-		LOGGER.debug("getUserRewards: userId=" + userId);
+	public List<RewardDTO> getUserRewards(String userName) throws UserNotFoundException {
+		LOGGER.debug("getUserRewards: userName=" + userName);
 		
 		Optional<List<Reward>> optional = rewardRepository.findByUserId(userId);
 		if(!optional.isPresent()) {
@@ -58,6 +62,9 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 		return optional.get();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int getUserRewardsPoints(UUID userId) throws UserNotFoundException {
 		LOGGER.debug("getUserRewardsPoints: userId=" + userId);
