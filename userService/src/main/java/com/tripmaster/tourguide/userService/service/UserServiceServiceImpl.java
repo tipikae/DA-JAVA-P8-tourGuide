@@ -17,6 +17,7 @@ import com.tripmaster.tourguide.userService.converterDTO.IPreferenceConverterDTO
 import com.tripmaster.tourguide.userService.converterDTO.IUserConverterDTO;
 import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
 import com.tripmaster.tourguide.userService.dto.NewUserDTO;
+import com.tripmaster.tourguide.userService.dto.UserDTO;
 import com.tripmaster.tourguide.userService.exceptions.ConverterException;
 import com.tripmaster.tourguide.userService.exceptions.HttpException;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
@@ -49,16 +50,19 @@ public class UserServiceServiceImpl implements IUserServiceService {
 	private IRewardServiceClient rewardClient;
 	
 	@Autowired
-	private IUserConverterDTO userDTOConverter;
+	private IUserConverterDTO userConverter;
 	
 	@Autowired
-	private IPreferenceConverterDTO preferenceDTOConverter;
+	private IPreferenceConverterDTO preferenceConverter;
 	
 	@Value("${trippricer.apikey}")
 	private static String apiKey;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public User addUser(NewUserDTO newUserDTO) throws UserAlreadyExistsException, ConverterException {
+	public UserDTO addUser(NewUserDTO newUserDTO) throws UserAlreadyExistsException, ConverterException {
 		LOGGER.debug("save: username=" + newUserDTO.getUserName());
 		
 		Optional<User> optional = userRepository.findByUsername(newUserDTO.getUserName());
@@ -68,13 +72,16 @@ public class UserServiceServiceImpl implements IUserServiceService {
 					"user with username=" + newUserDTO.getUserName() + " already exists.");
 		}
 		
-		User user = userDTOConverter.converterDTOToEntity(newUserDTO);
+		User user = userConverter.converterDTOToEntity(newUserDTO);
 		
-		return userRepository.save(user);
+		return userConverter.converterEntityToDTO(userRepository.save(user));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public User getUser(String username) throws UserNotFoundException {
+	public UserDTO getUser(String username) throws UserNotFoundException, ConverterException {
 		LOGGER.debug("getUser: username=" + username);
 		
 		Optional<User> optional = userRepository.findByUsername(username);
@@ -84,15 +91,21 @@ public class UserServiceServiceImpl implements IUserServiceService {
 					"user with username=" + username + " not found.");
 		}
 		
-		return optional.get();
+		return userConverter.converterEntityToDTO(optional.get());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public List<User> getAllUsers() {
+	public List<UserDTO> getAllUsers() throws ConverterException {
 		LOGGER.debug("getAllUsers");
-		return userRepository.findAll();
+		return userConverter.converterEntitiesToDTOs(userRepository.findAll());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void updatePreferences(String username, NewPreferenceDTO newPreferenceDTO) 
 			throws UserNotFoundException, ConverterException {
@@ -105,12 +118,15 @@ public class UserServiceServiceImpl implements IUserServiceService {
 					"user with username=" + username + " not found.");
 		}
 		
-		Preference preference = preferenceDTOConverter.converterDTOToEntity(newPreferenceDTO);
+		Preference preference = preferenceConverter.converterDTOToEntity(newPreferenceDTO);
 		User user = optional.get();
 		user.setPreference(preference);
 		userRepository.save(user);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Provider> getTripDeals(String username) throws UserNotFoundException, HttpException {
 		LOGGER.debug("getTripDeals: username=" + username);

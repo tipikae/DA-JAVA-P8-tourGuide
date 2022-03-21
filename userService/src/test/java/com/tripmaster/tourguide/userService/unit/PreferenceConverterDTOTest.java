@@ -10,17 +10,26 @@ import com.tripmaster.tourguide.userService.converterDTO.IPreferenceConverterDTO
 import com.tripmaster.tourguide.userService.converterDTO.PreferenceConverterDTOImpl;
 import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
 import com.tripmaster.tourguide.userService.exceptions.ConverterException;
+import com.tripmaster.tourguide.userService.model.Preference;
 
 @ExtendWith(MockitoExtension.class)
 class PreferenceConverterDTOTest {
 	
-	private IPreferenceConverterDTO preferenceConverterDTO = new PreferenceConverterDTOImpl();
+	private IPreferenceConverterDTO preferenceConverter = new PreferenceConverterDTOImpl();
 
 	@Test
 	void DTOconverterToEntityReturnsEntityWhenOk() throws ConverterException {
 		NewPreferenceDTO newPreferenceDTO = new NewPreferenceDTO();
 		newPreferenceDTO.setNumberOfAdults(2);
-		assertEquals(2, preferenceConverterDTO.converterDTOToEntity(newPreferenceDTO).getNumberOfAdults());
+		assertEquals(2, preferenceConverter.converterDTOToEntity(newPreferenceDTO).getNumberOfAdults());
+	}
+	
+	@Test
+	void converterEntityToDTOReturnsDTOWhenOk() throws ConverterException {
+		Preference preference = new Preference();
+		preference.setNumberOfAdults(2);
+		assertEquals(preference.getNumberOfAdults(), 
+				preferenceConverter.converterEntityToDTO(preference).getNumberOfAdults());
 	}
 
 }

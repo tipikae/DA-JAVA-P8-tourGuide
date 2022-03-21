@@ -7,11 +7,11 @@ import java.util.List;
 
 import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
 import com.tripmaster.tourguide.userService.dto.NewUserDTO;
+import com.tripmaster.tourguide.userService.dto.UserDTO;
 import com.tripmaster.tourguide.userService.exceptions.ConverterException;
 import com.tripmaster.tourguide.userService.exceptions.HttpException;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
-import com.tripmaster.tourguide.userService.model.User;
 
 import tripPricer.Provider;
 
@@ -26,25 +26,27 @@ public interface IUserServiceService {
 	/**
 	 * Add a user.
 	 * @param user NewUserDTO
-	 * @return User
+	 * @return UserDTO
 	 * @throws UserAlreadyExistsException 
 	 * @throws ConverterException 
 	 */
-	User addUser(NewUserDTO user) throws UserAlreadyExistsException, ConverterException;
+	UserDTO addUser(NewUserDTO user) throws UserAlreadyExistsException, ConverterException;
 	
 	/**
 	 * Get a user by username.
 	 * @param username String
-	 * @return User
+	 * @return UserDTO
 	 * @throws UserNotFoundException
+	 * @throws ConverterException 
 	 */
-	User getUser(String username) throws UserNotFoundException;
+	UserDTO getUser(String username) throws UserNotFoundException, ConverterException;
 	
 	/**
 	 * Get all users.
-	 * @return List<User>
+	 * @return List<UserDTO>
+	 * @throws ConverterException 
 	 */
-	List<User> getAllUsers();
+	List<UserDTO> getAllUsers() throws ConverterException;
 	
 	/**
 	 * Update an user's preferences.

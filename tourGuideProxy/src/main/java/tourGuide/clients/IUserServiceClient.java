@@ -3,6 +3,8 @@
  */
 package tourGuide.clients;
 
+import java.util.List;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import tourGuide.dto.NewPreferenceDTO;
 import tourGuide.dto.NewUserDTO;
+import tourGuide.model.Provider;
+import tourGuide.model.User;
 
 /**
  * Feign client for UserService
@@ -28,7 +32,7 @@ public interface IUserServiceClient {
 	 * @return List<Provider>
 	 */
 	@GetMapping("/trips/{username}")
-	Object getTripDeals(@PathVariable("username") String username);
+	List<Provider> getTripDeals(@PathVariable("username") String username);
 	
 	/**
 	 * Add a user.
@@ -36,15 +40,16 @@ public interface IUserServiceClient {
 	 * @return ResponseEntity<Object>
 	 */
 	@PostMapping("/user")
-	Object addUser(@RequestBody NewUserDTO newUserDTO);
+	User addUser(@RequestBody NewUserDTO newUserDTO);
 	
 	/**
 	 * Update an user's preferences.
-	 * @param username String
+	 * @param userName String
 	 * @param newPreferenceDTO NewPreferenceDTO
 	 */
-	@PutMapping("/user/{username}")
-	void updatePreferences(@PathVariable("username") String username, 
+	@PutMapping("/user/{userName}")
+	void updatePreferences(
+			@PathVariable("userName") String userName, 
 			@RequestBody NewPreferenceDTO newPreferenceDTO);
 	
 }

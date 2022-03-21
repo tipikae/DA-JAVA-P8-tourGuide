@@ -6,7 +6,7 @@ package com.tripmaster.tourguide.userService.controller;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
 import com.tripmaster.tourguide.userService.dto.NewUserDTO;
+import com.tripmaster.tourguide.userService.dto.UserDTO;
 import com.tripmaster.tourguide.userService.exceptions.ConverterException;
 import com.tripmaster.tourguide.userService.exceptions.HttpClientException;
 import com.tripmaster.tourguide.userService.exceptions.HttpException;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
-import com.tripmaster.tourguide.userService.model.User;
 import com.tripmaster.tourguide.userService.service.IUserServiceService;
 
 import tripPricer.Provider;
@@ -59,50 +59,52 @@ public class UserServiceController {
 	public ResponseEntity<Object> addUser(@RequestBody @Valid NewUserDTO newUserDTO) 
 			throws UserAlreadyExistsException, ConverterException {
 		LOGGER.info("addUser");
-		User user = userService.addUser(newUserDTO);
-		return new ResponseEntity<Object>(user, HttpStatus.OK);
+		UserDTO userDTO = userService.addUser(newUserDTO);
+		return new ResponseEntity<Object>(userDTO, HttpStatus.OK);
 	}
 	
 	/**
 	 * Get a user.
-	 * @param username String
+	 * @param userName String
 	 * @return ResponseEntity<Object>
 	 * @throws UserNotFoundException 
+	 * @throws ConverterException 
 	 */
-	@GetMapping("/user/{username}")
-	public ResponseEntity<Object> getUser(@PathVariable("username") @NotNull String username) 
-			throws UserNotFoundException {
+	@GetMapping("/user/{userName}")
+	public ResponseEntity<Object> getUser(@PathVariable("userName") @NotBlank String userName) 
+			throws UserNotFoundException, ConverterException {
 		LOGGER.info("getUser");
-		User user = userService.getUser(username);
-		return new ResponseEntity<Object>(user, HttpStatus.OK);
+		UserDTO userDTO = userService.getUser(userName);
+		return new ResponseEntity<Object>(userDTO, HttpStatus.OK);
 	}
 	
 	/**
 	 * Get all users.
 	 * @return ResponseEntity<Object>
+	 * @throws ConverterException 
 	 */
 	@GetMapping("/users")
-	public ResponseEntity<Object> getAllUsers() {
+	public ResponseEntity<Object> getAllUsers() throws ConverterException {
 		LOGGER.info("getAllUsers");
-		List<User> users = userService.getAllUsers();
-		return new ResponseEntity<Object>(users, HttpStatus.OK);
+		List<UserDTO> userDTOs = userService.getAllUsers();
+		return new ResponseEntity<Object>(userDTOs, HttpStatus.OK);
 	}
 	
 	/**
 	 * Update an user's preferences.
-	 * @param username String
+	 * @param userName String
 	 * @param newPreferenceDTO NewPreferenceDTO
 	 * @return ResponseEntity<Object>
 	 * @throws ConverterException 
 	 * @throws UserNotFoundException 
 	 */
-	@PutMapping("/user/{username}")
+	@PutMapping("/user/{userName}")
 	public ResponseEntity<Object> updatePreferences(
-			@PathVariable("username") @NotNull String username,
+			@PathVariable("userName") @NotBlank String userName,
 			@RequestBody @Valid NewPreferenceDTO newPreferenceDTO) 
 					throws UserNotFoundException, ConverterException {
 		LOGGER.info("updatePreferences");
-		userService.updatePreferences(username, newPreferenceDTO);
+		userService.updatePreferences(userName, newPreferenceDTO);
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
 	
@@ -114,7 +116,7 @@ public class UserServiceController {
 	 * @throws UserNotFoundException 
 	 */
 	@GetMapping("/trips/{username}")
-	public ResponseEntity<Object> getTripDeals(@PathVariable("username") @NotNull String username) 
+	public ResponseEntity<Object> getTripDeals(@PathVariable("username") @NotBlank String username) 
 			throws UserNotFoundException, HttpException {
 		LOGGER.info("getTripDeals");
 		List<Provider> tripDeals = userService.getTripDeals(username);

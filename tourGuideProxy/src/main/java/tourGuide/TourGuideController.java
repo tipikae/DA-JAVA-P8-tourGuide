@@ -97,15 +97,16 @@ public class TourGuideController {
     
     /**
      * Update an user's preferences.
-     * @param username String
+     * @param userName String
      * @param preference UserPreference
      * @return String
      */
-    @PutMapping("/updateUserPref/{username}")
-    public String updateUserPreferences(@PathVariable String username,
+    @PutMapping("/updateUserPreferences/{userName}")
+    public String updateUserPreferences(
+    		@PathVariable String userName,
     		@RequestBody @Valid NewPreferenceDTO newPreferenceDTO) {
     	LOGGER.info("updateUserPreferences");
-    	userClient.updatePreferences(username, newPreferenceDTO);
+    	userClient.updatePreferences(userName, newPreferenceDTO);
     	return "";
     }
 

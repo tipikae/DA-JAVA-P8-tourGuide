@@ -11,13 +11,21 @@ import com.tripmaster.tourguide.userService.exceptions.ConverterException;
  * @version 1.0
  *
  */
-public interface IConverterDTO <E, D> {
+public interface IConverterDTO <E, D, N> {
 
 	/**
 	 * Convert DTO to entity
-	 * @param dto D
+	 * @param newDto N
 	 * @return E
 	 * @throws ConverterException
 	 */
-	E converterDTOToEntity(D dto) throws ConverterException;
+	E converterDTOToEntity(N newDto) throws ConverterException;
+	
+	/**
+	 * Converter Entity to DTO.
+	 * @param entity E
+	 * @return D
+	 * @throws ConverterException
+	 */
+	D converterEntityToDTO(E entity) throws ConverterException;
 }

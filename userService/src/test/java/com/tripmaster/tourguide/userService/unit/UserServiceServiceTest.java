@@ -26,6 +26,7 @@ import com.tripmaster.tourguide.userService.converterDTO.IPreferenceConverterDTO
 import com.tripmaster.tourguide.userService.converterDTO.IUserConverterDTO;
 import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
 import com.tripmaster.tourguide.userService.dto.NewUserDTO;
+import com.tripmaster.tourguide.userService.dto.UserDTO;
 import com.tripmaster.tourguide.userService.exceptions.ConverterException;
 import com.tripmaster.tourguide.userService.exceptions.HttpException;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
@@ -62,9 +63,11 @@ class UserServiceServiceTest {
 	private static String username;
 	private static User user;
 	private static NewUserDTO newUserDTO;
+	private static UserDTO userDTO;
 	private static Provider provider;
 	private static List<Provider> providers;
 	private static List<User> users;
+	private static List<UserDTO> userDTOs;
 	
 	@BeforeAll
 	private static void setUp() {
@@ -77,6 +80,11 @@ class UserServiceServiceTest {
 		provider = new Provider(UUID.randomUUID(), "name", 1000);
 		providers = new ArrayList<>();
 		providers.add(provider);
+		userDTO = new UserDTO();
+		userDTO.setUserName(username);
+		userDTO.setEmailAddress("email");
+		userDTOs = new ArrayList<>();
+		userDTOs.add(userDTO);
 	}
 	
 	@Test
@@ -84,6 +92,7 @@ class UserServiceServiceTest {
 		when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
 		when(userDTOConverter.converterDTOToEntity(any(NewUserDTO.class))).thenReturn(user);
 		when(userRepository.save(any(User.class))).thenReturn(user);
+		when(userDTOConverter.converterEntityToDTO(any(User.class))).thenReturn(userDTO);
 		assertEquals(username, userService.addUser(newUserDTO).getUserName());
 	}
 	
@@ -101,8 +110,9 @@ class UserServiceServiceTest {
 	}
 	
 	@Test
-	void getUserReturnsUserWhenOk() throws UserNotFoundException {
+	void getUserReturnsUserWhenOk() throws UserNotFoundException, ConverterException {
 		when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+		when(userDTOConverter.converterEntityToDTO(any(User.class))).thenReturn(userDTO);
 		assertEquals("email", userService.getUser(username).getEmailAddress());
 	}
 	
@@ -113,8 +123,9 @@ class UserServiceServiceTest {
 	}
 	
 	@Test
-	void getAllUsersReturnsListWhenOk() {
+	void getAllUsersReturnsListWhenOk() throws ConverterException {
 		when(userRepository.findAll()).thenReturn(users);
+		when(userDTOConverter.converterEntitiesToDTOs(users)).thenReturn(userDTOs);
 		assertTrue(userService.getAllUsers().size() > 0);
 	}
 	

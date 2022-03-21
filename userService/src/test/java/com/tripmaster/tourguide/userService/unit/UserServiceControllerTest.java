@@ -27,9 +27,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.tripmaster.tourguide.userService.controller.UserServiceController;
 import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
 import com.tripmaster.tourguide.userService.dto.NewUserDTO;
+import com.tripmaster.tourguide.userService.dto.UserDTO;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
-import com.tripmaster.tourguide.userService.model.User;
 import com.tripmaster.tourguide.userService.service.IUserServiceService;
 
 import tripPricer.Provider;
@@ -45,10 +45,10 @@ class UserServiceControllerTest {
 	private static UUID userId;
 	private static String phone;
 	private static String email;
-	private static User user;
+	private static UserDTO userDTO;
 	private static Provider provider;
 	private static List<Provider> providers;
-	private static List<User> users;
+	private static List<UserDTO> userDTOs;
 	
 	@MockBean
 	private IUserServiceService userService;
@@ -60,9 +60,13 @@ class UserServiceControllerTest {
 		userId = UUID.randomUUID();
 		phone = "phone";
 		email = "email";
-		user = new User(userId, username, phone, email);
-		users = new ArrayList<>();
-		users.add(user);
+		userDTO = new UserDTO();
+		userDTO.setUserId(userId);
+		userDTO.setUserName(username);
+		userDTO.setPhoneNumber(phone);
+		userDTO.setEmailAddress(email);
+		userDTOs = new ArrayList<>();
+		userDTOs.add(userDTO);
 		provider = new Provider(UUID.randomUUID(), "name", 1000);
 		providers = new ArrayList<>();
 		providers.add(provider);
@@ -70,14 +74,15 @@ class UserServiceControllerTest {
 
 	@Test
 	void addUserReturnsOkWhenOk() throws Exception {
-		when(userService.addUser(any(NewUserDTO.class))).thenReturn(user);
+		when(userService.addUser(any(NewUserDTO.class))).thenReturn(userDTO);
 		mockMvc.perform(post(root + "/user")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{\"userId\": \"" + userId + "\","
 						+ "\"userName\": \"" + username + "\","
 						+ "\"phoneNumber\": \"" + phone + "\","
 						+ "\"emailAddress\": \"" + email + "\"}"))
-			.andExpect(status().isOk());
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.userId", is(userId.toString())));
 	}
 
 	@Test
@@ -105,7 +110,7 @@ class UserServiceControllerTest {
 	
 	@Test
 	void getUserReturnsUserWhenOk() throws Exception {
-		when(userService.getUser(username)).thenReturn(user);
+		when(userService.getUser(username)).thenReturn(userDTO);
 		mockMvc.perform(get(root + "/user/" + username))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.userId", is(userId.toString())));
@@ -121,7 +126,7 @@ class UserServiceControllerTest {
 	
 	@Test
 	void getAllUsersReturnsListWhenOk() throws Exception {
-		when(userService.getAllUsers()).thenReturn(users);
+		when(userService.getAllUsers()).thenReturn(userDTOs);
 		mockMvc.perform(get(root + "/users"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.[0].userName", is(username)));

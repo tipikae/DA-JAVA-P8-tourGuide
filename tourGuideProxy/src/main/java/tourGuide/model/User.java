@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tripmaster.tourguide.userService.model;
+package tourGuide.model;
 
 import java.util.Date;
 import java.util.UUID;
@@ -21,8 +21,7 @@ public class User {
 	private Date latestLocationTimestamp;
 	private Preference preference = new Preference();
 	
-	public User() {
-		
+	public User() {	
 	}
 	
 	public User(UUID userId, String userName, String phoneNumber, String emailAddress) {
@@ -58,20 +57,6 @@ public class User {
 	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-
-	/**
-	 * @return the preference
-	 */
-	public Preference getPreference() {
-		return preference;
-	}
-
-	/**
-	 * @param preference the preference to set
-	 */
-	public void setPreference(Preference preference) {
-		this.preference = preference;
 	}
 
 	/**
@@ -115,5 +100,20 @@ public class User {
 	public void setLatestLocationTimestamp(Date latestLocationTimestamp) {
 		this.latestLocationTimestamp = latestLocationTimestamp;
 	}
+
+	/**
+	 * @return the preference
+	 */
+	public Preference getPreference() {
+		return preference;
+	}
+
+	/**
+	 * @param preference the preference to set
+	 */
+	public void setPreference(Preference preference) {
+		this.preference = preference;
+	}
+	
 	
 }

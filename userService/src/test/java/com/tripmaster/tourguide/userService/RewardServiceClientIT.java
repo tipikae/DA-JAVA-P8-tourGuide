@@ -18,8 +18,9 @@ class RewardServiceClientIT {
 
 	@Test
 	void test() {
-		//int points = rewardClient.getUserRewardsPoints(UUID.randomUUID());
-		//assertEquals(0, points);
+		/*UUID userId = UUID.fromString("019b04a9-067a-4c76-8817-ee75088c3822");
+		int points = rewardClient.getUserRewardsPoints(userId);
+		assertEquals(100, points);*/
 	}
 
 }
