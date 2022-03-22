@@ -34,19 +34,20 @@ public class VisitedLocationRepositoryImpl implements IVisitedLocationRepository
 	 */
 	@Override
 	public MVisitedLocation save(MVisitedLocation visitedLocation) {
-		LOGGER.debug("save: userId=" + visitedLocation.userId 
-				+ ", latitude=" + visitedLocation.location.latitude
-				+ ", longitude=" + visitedLocation.location.longitude
-				+ ", timeVisited=" + visitedLocation.timeVisited.toString());
+		LOGGER.debug("save: userId=" + visitedLocation.getUserId() 
+				+ ", latitude=" + visitedLocation.getLocation().getLatitude()
+				+ ", longitude=" + visitedLocation.getLocation().getLongitude()
+				+ ", timeVisited=" + visitedLocation.getTimeVisited().toString());
 		
-		if(internalVisitedLocations.containsKey(visitedLocation.userId)) {
-			List<MVisitedLocation> visitedLocations = internalVisitedLocations.get(visitedLocation.userId);
+		if(internalVisitedLocations.containsKey(visitedLocation.getUserId())) {
+			List<MVisitedLocation> visitedLocations = 
+					internalVisitedLocations.get(visitedLocation.getUserId());
 			visitedLocations.add(visitedLocation);
-			internalVisitedLocations.replace(visitedLocation.userId, visitedLocations);
+			internalVisitedLocations.replace(visitedLocation.getUserId(), visitedLocations);
 		} else {
 			List<MVisitedLocation> visitedLocations = new ArrayList<>();
 			visitedLocations.add(visitedLocation);
-			internalVisitedLocations.put(visitedLocation.userId, visitedLocations);
+			internalVisitedLocations.put(visitedLocation.getUserId(), visitedLocations);
 		}
 		
 		return visitedLocation;

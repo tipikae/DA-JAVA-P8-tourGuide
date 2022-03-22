@@ -37,7 +37,7 @@ class VisitedLocationRepositoryIT {
 		
 		// findAll
 		Map<UUID, List<MVisitedLocation>> allVisitedLocations = visitedLocationRepository.findAll();
-		assertEquals(location, allVisitedLocations.get(userId).get(0).location);
+		assertEquals(location, allVisitedLocations.get(userId).get(0).getLocation());
 	}
 
 }

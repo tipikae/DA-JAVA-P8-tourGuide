@@ -11,6 +11,7 @@ import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
 import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
+import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 
 /**
@@ -24,8 +25,10 @@ public interface IGpsServiceService {
 	/**
 	 * Get all attractions.
 	 * @return List<AttractionDTO>
+	 * @throws ConverterLibException 
+	 * @throws ConverterDTOException 
 	 */
-	List<AttractionDTO> getAttractions();
+	List<AttractionDTO> getAttractions() throws ConverterDTOException, ConverterLibException;
 	
 	/**
 	 * Get user current location.

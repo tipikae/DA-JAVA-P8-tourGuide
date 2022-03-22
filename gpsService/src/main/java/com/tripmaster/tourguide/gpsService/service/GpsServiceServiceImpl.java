@@ -18,15 +18,17 @@ import org.springframework.stereotype.Service;
 import com.tripmaster.tourguide.gpsService.converters.IConverterDTOAttraction;
 import com.tripmaster.tourguide.gpsService.converters.IConverterDTOLocation;
 import com.tripmaster.tourguide.gpsService.converters.IConverterDTOVisitedLocation;
+import com.tripmaster.tourguide.gpsService.converters.IConverterLibAttraction;
 import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
 import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
+import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
-import com.tripmaster.tourguide.gpsService.model.MAttraction;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
+import com.tripmaster.tourguide.gpsService.util.IHelper;
 
 import gpsUtil.GpsUtil;
 
@@ -55,14 +57,21 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	
 	@Autowired
 	private IConverterDTOVisitedLocation visitedLocationDTOConverter;
+	
+	@Autowired
+	private IConverterLibAttraction attractionLibConverter;
+	
+	@Autowired
+	private IHelper helper;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<AttractionDTO> getAttractions() {
+	public List<AttractionDTO> getAttractions() throws ConverterDTOException, ConverterLibException {
 		LOGGER.debug("getAttractions");
-		return attractionDTOConverter.convertAttractionsToDTos((List<MAttraction>) gpsUtil.getAttractions());
+		return attractionDTOConverter.convertAttractionsToDTos(
+				attractionLibConverter.convertLibAttractionsToMAttractions(gpsUtil.getAttractions()));
 	}
 
 	/**
@@ -85,7 +94,7 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 		for(Entry<UUID, List<MVisitedLocation>> entry: visitedLocationRepository.findAll().entrySet()) {
 			UUID userId = entry.getKey();
 			List<MVisitedLocation> visitedLocations = entry.getValue();
-			MLocation location = (MLocation) visitedLocations.get(visitedLocations.size() - 1).location;
+			MLocation location = visitedLocations.get(visitedLocations.size() - 1).getLocation();
 			allUsersLastLocation.put(userId, locationDTOConverter.convertEntityToDTO(location));
 		}
 		

@@ -33,12 +33,12 @@ public class ConverterDTOAttractionImpl implements IConverterDTOAttraction {
 		AttractionDTO attractionDTO = new AttractionDTO();
 		
 		try {
-			attractionDTO.setAttractionId(entity.attractionId);
-			attractionDTO.setAttractionName(entity.attractionName);
-			attractionDTO.setCity(entity.city);
-			attractionDTO.setLatitude(entity.latitude);
-			attractionDTO.setLongitude(entity.longitude);
-			attractionDTO.setState(entity.state);
+			attractionDTO.setAttractionId(entity.getAttractionId());
+			attractionDTO.setAttractionName(entity.getAttractionName());
+			attractionDTO.setCity(entity.getCity());
+			attractionDTO.setLatitude(entity.getLatitude());
+			attractionDTO.setLongitude(entity.getLongitude());
+			attractionDTO.setState(entity.getState());
 		} catch (Exception e) {
 			LOGGER.debug("converterEntityToDTO: exception: " + e.getClass().getSimpleName() 
 					+ ", error: " + e.getMessage());
