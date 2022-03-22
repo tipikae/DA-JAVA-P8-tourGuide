@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.tripmaster.tourguide.userService.clients.IRewardServiceClient;
 import com.tripmaster.tourguide.userService.converterDTO.IPreferenceConverterDTO;
 import com.tripmaster.tourguide.userService.converterDTO.IUserConverterDTO;
 import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
@@ -24,6 +23,7 @@ import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsExceptio
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.userService.model.Preference;
 import com.tripmaster.tourguide.userService.model.User;
+import com.tripmaster.tourguide.userService.remote.IRewardService;
 import com.tripmaster.tourguide.userService.repository.IUserRepository;
 
 import tripPricer.Provider;
@@ -47,7 +47,7 @@ public class UserServiceServiceImpl implements IUserServiceService {
 	private TripPricer tripPricer;
 	
 	@Autowired
-	private IRewardServiceClient rewardClient;
+	private IRewardService rewardService;
 	
 	@Autowired
 	private IUserConverterDTO userConverter;
@@ -140,15 +140,7 @@ public class UserServiceServiceImpl implements IUserServiceService {
 		
 		User user = optional.get();
 		Preference preference = user.getPreference();
-		int points = 0;
-		
-		try {
-			points = rewardClient.getUserRewardsPoints(user.getUserId());
-		} catch (Exception e) {
-			LOGGER.debug("getTripDeals: rewardClient error: " + e.getClass().getSimpleName() 
-					+ ": " + e.getMessage());
-			throw new HttpException(e.getClass().getSimpleName() + ": " + e.getMessage());
-		}
+		int points = rewardService.getUserRewardsPoints(user.getUserId());
 		
 		return tripPricer.getPrice(username, user.getUserId(), preference.getNumberOfAdults(), 
 				preference.getNumberOfChildren(), preference.getTripDuration(), points);

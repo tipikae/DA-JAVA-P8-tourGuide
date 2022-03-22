@@ -21,7 +21,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.tripmaster.tourguide.userService.clients.IRewardServiceClient;
 import com.tripmaster.tourguide.userService.converterDTO.IPreferenceConverterDTO;
 import com.tripmaster.tourguide.userService.converterDTO.IUserConverterDTO;
 import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
@@ -33,10 +32,10 @@ import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsExceptio
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.userService.model.Preference;
 import com.tripmaster.tourguide.userService.model.User;
+import com.tripmaster.tourguide.userService.remote.IRewardService;
 import com.tripmaster.tourguide.userService.repository.IUserRepository;
 import com.tripmaster.tourguide.userService.service.UserServiceServiceImpl;
 
-import feign.FeignException;
 import tripPricer.Provider;
 import tripPricer.TripPricer;
 
@@ -50,7 +49,7 @@ class UserServiceServiceTest {
 	private TripPricer tripPricer;
 	
 	@Mock
-	private IRewardServiceClient rewardClient;
+	private IRewardService rewardService;
 	
 	@Mock
 	private IUserConverterDTO userDTOConverter;
@@ -158,7 +157,7 @@ class UserServiceServiceTest {
 	@Test
 	void getTripDealsReturnsListWhenOk() throws UserNotFoundException, HttpException {
 		when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
-		when(rewardClient.getUserRewardsPoints(any(UUID.class))).thenReturn(100);
+		when(rewardService.getUserRewardsPoints(any(UUID.class))).thenReturn(100);
 		when(tripPricer.getPrice(anyString(), any(UUID.class), anyInt(), anyInt(), anyInt(), anyInt()))
 			.thenReturn(providers);
 		assertTrue(userService.getTripDeals(username).size() > 0);
@@ -172,9 +171,9 @@ class UserServiceServiceTest {
 	}
 	
 	@Test
-	void getTripDealsThrowsExceptionWhenClientError() {
+	void getTripDealsThrowsExceptionWhenClientError() throws HttpException {
 		when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
-		doThrow(FeignException.class).when(rewardClient).getUserRewardsPoints(any(UUID.class));
+		doThrow(HttpException.class).when(rewardService).getUserRewardsPoints(any(UUID.class));
 		assertThrows(HttpException.class, () -> userService.getTripDeals(username));
 	}
 

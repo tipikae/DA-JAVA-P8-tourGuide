@@ -24,9 +24,11 @@ import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
 import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
+import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
+import com.tripmaster.tourguide.gpsService.remote.IUserService;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
 import com.tripmaster.tourguide.gpsService.util.IHelper;
 
@@ -63,6 +65,9 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	
 	@Autowired
 	private IHelper helper;
+	
+	@Autowired
+	private IUserService userService;
 
 	/**
 	 * {@inheritDoc}
@@ -78,8 +83,10 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public VisitedLocationDTO getUserLocation(String userName) {
+	public VisitedLocationDTO getUserLocation(String userName) throws HttpException {
 		LOGGER.debug("getUserLocation: userName=" + userName);
+		UUID userId = userService.getUserId(userName);
+		
 		return null;
 	}
 
@@ -118,9 +125,15 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 		return visitedLocationDTOConverter.convertVisitedLocationsToDTOs(optional.get());
 	}
 
+	/**
+	 * {@inheritDoc} 
+	 */
 	@Override
-	public List<AttractionDTO> getNearByAttractions(String username) throws UserNotFoundException {
-		// TODO Auto-generated method stub
+	public List<AttractionDTO> getNearByAttractions(String username) 
+			throws UserNotFoundException, HttpException {
+		LOGGER.debug("getNearByAttractions: username=" + username);
+		UUID userId = userService.getUserId(username);
+		
 		return null;
 	}
 

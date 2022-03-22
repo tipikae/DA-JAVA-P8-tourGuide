@@ -26,6 +26,7 @@ import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
 import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
+import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.service.IGpsServiceService;
 
@@ -63,10 +64,11 @@ public class GpsServiceController {
 	 * @param userName String
 	 * @return ResponseEntity<VisitedLocationDTO>
 	 * @throws UserNotFoundException 
+	 * @throws HttpException 
 	 */
 	@GetMapping("/location/{userName}")
 	public ResponseEntity<Object> getUserLocation(@PathVariable("userName") @NotBlank String userName) 
-			throws UserNotFoundException {
+			throws UserNotFoundException, HttpException {
 		LOGGER.info("getUserLocation: userName=" + userName);
 		VisitedLocationDTO visitedLocation = gpsService.getUserLocation(userName);
 		return new ResponseEntity<Object>(visitedLocation, HttpStatus.OK);
@@ -104,10 +106,11 @@ public class GpsServiceController {
 	 * @param userName String
 	 * @return ResponseEntity<List<AttractionDTO>>
 	 * @throws UserNotFoundException 
+	 * @throws HttpException 
 	 */
 	@GetMapping("/nearbyattractions/{userName}")
 	public ResponseEntity<Object> getNearByAttractions(@PathVariable("userName") @NotBlank String userName) 
-			throws UserNotFoundException {
+			throws UserNotFoundException, HttpException {
 		LOGGER.info("getNearByAttractions: userName=" + userName);
 		List<AttractionDTO> attractions = gpsService.getNearByAttractions(userName);
 		return new ResponseEntity<Object>(attractions, HttpStatus.OK);

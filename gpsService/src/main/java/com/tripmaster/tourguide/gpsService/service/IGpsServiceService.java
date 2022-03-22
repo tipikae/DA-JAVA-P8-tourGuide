@@ -12,6 +12,7 @@ import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
 import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
+import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 
 /**
@@ -34,8 +35,9 @@ public interface IGpsServiceService {
 	 * Get user current location.
 	 * @param username String
 	 * @return VisitedLocationDTO
+	 * @throws HttpException 
 	 */
-	VisitedLocationDTO getUserLocation(String username) throws UserNotFoundException;
+	VisitedLocationDTO getUserLocation(String username) throws UserNotFoundException, HttpException;
 	
 	/**
 	 * Get all users' last visited location.
@@ -59,6 +61,8 @@ public interface IGpsServiceService {
 	 * @param username String
 	 * @return List<AttractionDTO>
 	 * @throws UserNotFoundException
+	 * @throws HttpException 
 	 */
-	List<AttractionDTO> getNearByAttractions(String username) throws UserNotFoundException;
+	List<AttractionDTO> getNearByAttractions(String username) 
+			throws UserNotFoundException, HttpException;
 }
