@@ -9,11 +9,11 @@ package com.tripmaster.tourguide.gpsService.exceptions;
  * @version 1.0
  *
  */
-public class ConverterException extends GpsServiceException {
+public class ConverterDTOException extends GpsServiceException {
 
 	private static final long serialVersionUID = 1L;
 
-	public ConverterException(String arg0) {
+	public ConverterDTOException(String arg0) {
 		super(arg0);
 	}
 

@@ -6,8 +6,6 @@ package com.tripmaster.tourguide.gpsService.model;
 import java.util.Date;
 import java.util.UUID;
 
-import gpsUtil.location.Location;
-
 /**
  * VisitedLocation model.
  * @author tipikae
@@ -17,14 +15,14 @@ import gpsUtil.location.Location;
 public class MVisitedLocation {
 
 	private UUID userId;
-	private Location location;
+	private MLocation location;
 	private Date timeVisited;
 	
 	public MVisitedLocation() {
 		
 	}
 	
-	public MVisitedLocation(UUID userId, Location location, Date timeVisited) {
+	public MVisitedLocation(UUID userId, MLocation location, Date timeVisited) {
 		this.userId = userId;
 		this.location = location;
 		this.timeVisited = timeVisited;
@@ -47,14 +45,14 @@ public class MVisitedLocation {
 	/**
 	 * @return the location
 	 */
-	public Location getLocation() {
+	public MLocation getLocation() {
 		return location;
 	}
 
 	/**
 	 * @param location the location to set
 	 */
-	public void setLocation(Location location) {
+	public void setLocation(MLocation location) {
 		this.location = location;
 	}
 

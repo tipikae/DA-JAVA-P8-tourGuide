@@ -1,7 +1,9 @@
 /**
  * 
  */
-package com.tripmaster.tourguide.gpsService.converterDTO;
+package com.tripmaster.tourguide.gpsService.converters;
+
+import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 
 /**
  * Converter library model to application model.
@@ -15,6 +17,7 @@ public interface IConverterLib <L, M> {
 	 * Convert library model to application model.
 	 * @param libModel L
 	 * @return M
+	 * @throws ConverterLibException 
 	 */
-	M convertLibModelToModel(L libModel);
+	M convertLibModelToModel(L libModel) throws ConverterLibException;
 }

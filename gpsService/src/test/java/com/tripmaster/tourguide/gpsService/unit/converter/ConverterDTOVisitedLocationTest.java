@@ -15,10 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.tripmaster.tourguide.gpsService.converterDTO.ConverterDTOVisitedLocationImpl;
-import com.tripmaster.tourguide.gpsService.converterDTO.IConverterDTOLocation;
+import com.tripmaster.tourguide.gpsService.converters.ConverterDTOVisitedLocationImpl;
+import com.tripmaster.tourguide.gpsService.converters.IConverterDTOLocation;
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
-import com.tripmaster.tourguide.gpsService.exceptions.ConverterException;
+import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 
@@ -47,13 +47,13 @@ class ConverterDTOVisitedLocationTest {
 	}
 
 	@Test
-	void convertEntityToDTOReturnsDTOWhenOk() throws ConverterException {
+	void convertEntityToDTOReturnsDTOWhenOk() throws ConverterDTOException {
 		when(locationConverter.convertEntityToDTO(any(MLocation.class))).thenReturn(locationDTO);
 		assertEquals(userId, visitedLocationConverter.convertEntityToDTO(visitedLocation).getUserId());
 	}
 
 	@Test
-	void convertVisitedLocationsToDTOsReturnsListWhenOk() throws ConverterException {
+	void convertVisitedLocationsToDTOsReturnsListWhenOk() throws ConverterDTOException {
 		List<MVisitedLocation> visitedLocations = new ArrayList<>();
 		visitedLocations.add(visitedLocation);
 		when(locationConverter.convertEntityToDTO(any(MLocation.class))).thenReturn(locationDTO);

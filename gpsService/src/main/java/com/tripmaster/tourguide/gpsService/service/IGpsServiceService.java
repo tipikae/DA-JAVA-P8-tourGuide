@@ -10,7 +10,7 @@ import java.util.UUID;
 import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
 import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
-import com.tripmaster.tourguide.gpsService.exceptions.ConverterException;
+import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 
 /**
@@ -37,19 +37,19 @@ public interface IGpsServiceService {
 	/**
 	 * Get all users' last visited location.
 	 * @return Map<UUID, LocationDTO>
-	 * @throws ConverterException 
+	 * @throws ConverterDTOException 
 	 */
-	Map<UUID, LocationDTO> getAllUsersLastLocation() throws ConverterException;
+	Map<UUID, LocationDTO> getAllUsersLastLocation() throws ConverterDTOException;
 	
 	/**
 	 * Get a list of user's visited locations.
 	 * @param userId - UUID
 	 * @return List<VisitedLocationDTO>
 	 * @throws UserNotFoundException
-	 * @throws ConverterException 
+	 * @throws ConverterDTOException 
 	 */
 	List<VisitedLocationDTO> getUserVisitedLocations(UUID userId) 
-			throws UserNotFoundException, ConverterException;
+			throws UserNotFoundException, ConverterDTOException;
 	
 	/**
 	 * Get an users's nearby attractions.

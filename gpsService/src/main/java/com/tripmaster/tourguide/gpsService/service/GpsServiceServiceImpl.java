@@ -15,13 +15,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tripmaster.tourguide.gpsService.converterDTO.IConverterDTOAttraction;
-import com.tripmaster.tourguide.gpsService.converterDTO.IConverterDTOLocation;
-import com.tripmaster.tourguide.gpsService.converterDTO.IConverterDTOVisitedLocation;
+import com.tripmaster.tourguide.gpsService.converters.IConverterDTOAttraction;
+import com.tripmaster.tourguide.gpsService.converters.IConverterDTOLocation;
+import com.tripmaster.tourguide.gpsService.converters.IConverterDTOVisitedLocation;
 import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
 import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
-import com.tripmaster.tourguide.gpsService.exceptions.ConverterException;
+import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.model.MAttraction;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
@@ -78,7 +78,7 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Map<UUID, LocationDTO> getAllUsersLastLocation() throws ConverterException {
+	public Map<UUID, LocationDTO> getAllUsersLastLocation() throws ConverterDTOException {
 		LOGGER.debug("getAllUsersLastLocation");
 		
 		Map<UUID, LocationDTO> allUsersLastLocation = new HashMap<>();
@@ -97,7 +97,7 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	 */
 	@Override
 	public List<VisitedLocationDTO> getUserVisitedLocations(UUID userId) 
-			throws UserNotFoundException, ConverterException {
+			throws UserNotFoundException, ConverterDTOException {
 		LOGGER.debug("getUserVisitedLocations: userId=" + userId);
 		
 		Optional<List<MVisitedLocation>> optional = visitedLocationRepository.findByUserId(userId);

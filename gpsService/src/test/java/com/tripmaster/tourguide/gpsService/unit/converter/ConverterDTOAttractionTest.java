@@ -8,10 +8,10 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.tripmaster.tourguide.gpsService.converterDTO.ConverterDTOAttractionImpl;
-import com.tripmaster.tourguide.gpsService.converterDTO.IConverterDTOAttraction;
+import com.tripmaster.tourguide.gpsService.converters.ConverterDTOAttractionImpl;
+import com.tripmaster.tourguide.gpsService.converters.IConverterDTOAttraction;
 import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
-import com.tripmaster.tourguide.gpsService.exceptions.ConverterException;
+import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.model.MAttraction;
 
 class ConverterDTOAttractionTest {
@@ -30,12 +30,12 @@ class ConverterDTOAttractionTest {
 	}
 
 	@Test
-	void convertEntityToDTO() throws ConverterException {
+	void convertEntityToDTO() throws ConverterDTOException {
 		assertEquals(attractionName, attractionConverter.convertEntityToDTO(attraction).getAttractionName());
 	}
 
 	@Test
-	void convertAttractionsToDTos() throws ConverterException {
+	void convertAttractionsToDTos() throws ConverterDTOException {
 		List<MAttraction> attractions = new ArrayList<>();
 		attractions.add(attraction);
 		assertEquals(1, attractionConverter.convertAttractionsToDTos(attractions).size());

@@ -1,12 +1,12 @@
 /**
  * 
  */
-package com.tripmaster.tourguide.gpsService.converterDTO;
+package com.tripmaster.tourguide.gpsService.converters;
 
 import java.util.List;
 
 import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
-import com.tripmaster.tourguide.gpsService.exceptions.ConverterException;
+import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 
 /**
@@ -19,10 +19,10 @@ public interface IConverterDTOVisitedLocation extends IConverterDTO<MVisitedLoca
 
 	/**
 	 * Convert VisitedLocation List to DTO List.
-	 * @param visitedLocations List<VisitedLocation>
+	 * @param visitedLocations List<MVisitedLocation>
 	 * @return List<VisitedLocationDTO>
-	 * @throws ConverterException
+	 * @throws ConverterDTOException
 	 */
 	List<VisitedLocationDTO> convertVisitedLocationsToDTOs(List<MVisitedLocation> visitedLocations) 
-			throws ConverterException;
+			throws ConverterDTOException;
 }

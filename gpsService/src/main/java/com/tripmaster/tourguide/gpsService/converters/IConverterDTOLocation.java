@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tripmaster.tourguide.gpsService.converterDTO;
+package com.tripmaster.tourguide.gpsService.converters;
 
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
