@@ -21,6 +21,7 @@ import com.tripmaster.tourguide.gpsService.converters.IConverterDTOVisitedLocati
 import com.tripmaster.tourguide.gpsService.converters.IConverterLibAttraction;
 import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
+import com.tripmaster.tourguide.gpsService.dto.NearByAttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
@@ -129,12 +130,21 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	 * {@inheritDoc} 
 	 */
 	@Override
-	public List<AttractionDTO> getNearByAttractions(String username) 
+	public List<NearByAttractionDTO> getNearByAttractions(String username) 
 			throws UserNotFoundException, HttpException {
 		LOGGER.debug("getNearByAttractions: username=" + username);
+		
 		UUID userId = userService.getUserId(username);
 		
-		return null;
+		Optional<List<MVisitedLocation>> optional = visitedLocationRepository.findByUserId(userId);
+		if(!optional.isPresent()) {
+			LOGGER.debug("getNearByAttractions: error: user with userId=" + userId + " not found.");
+			throw new UserNotFoundException("User with userId=" + userId + " not found.");
+		}
+		
+		//List<NearByAttractionDTO> nearByAttractionDTOs = findNearByAttractions(userId);
+		
+		return nearByAttractionDTOs;
 	}
 
 }

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
+import com.tripmaster.tourguide.gpsService.dto.NearByAttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
@@ -104,7 +105,7 @@ public class GpsServiceController {
 	/**
 	 * Get nearby attractions.
 	 * @param userName String
-	 * @return ResponseEntity<List<AttractionDTO>>
+	 * @return ResponseEntity<List<NearByAttractionDTO>>
 	 * @throws UserNotFoundException 
 	 * @throws HttpException 
 	 */
@@ -112,7 +113,7 @@ public class GpsServiceController {
 	public ResponseEntity<Object> getNearByAttractions(@PathVariable("userName") @NotBlank String userName) 
 			throws UserNotFoundException, HttpException {
 		LOGGER.info("getNearByAttractions: userName=" + userName);
-		List<AttractionDTO> attractions = gpsService.getNearByAttractions(userName);
+		List<NearByAttractionDTO> attractions = gpsService.getNearByAttractions(userName);
 		return new ResponseEntity<Object>(attractions, HttpStatus.OK);
 	}
 

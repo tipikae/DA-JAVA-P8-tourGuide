@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.tripmaster.tourguide.gpsService.controller.GpsServiceController;
 import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
+import com.tripmaster.tourguide.gpsService.dto.NearByAttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.service.IGpsServiceService;
@@ -129,10 +130,14 @@ class GpsServiceControllerTest {
 	
 	@Test
 	void getNearByAttractionsReturnsListWhenOk() throws Exception {
-		when(gpsService.getNearByAttractions(anyString())).thenReturn(attractionDTOs);
+		NearByAttractionDTO nearByAttractionDTO = new NearByAttractionDTO();
+		nearByAttractionDTO.setAttractionName("attractionName");
+		List<NearByAttractionDTO> nearByAttractionDTOs = new ArrayList<>();
+		nearByAttractionDTOs.add(nearByAttractionDTO);
+		when(gpsService.getNearByAttractions(anyString())).thenReturn(nearByAttractionDTOs);
 		mockMvc.perform(get(root + "/nearbyattractions/" + userName))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.[0].city", is("city")));
+			.andExpect(jsonPath("$.[0].attractionName", is("attractionName")));
 		
 	}
 	

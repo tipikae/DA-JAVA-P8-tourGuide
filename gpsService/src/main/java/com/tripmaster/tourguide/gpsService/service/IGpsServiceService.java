@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
+import com.tripmaster.tourguide.gpsService.dto.NearByAttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
@@ -59,10 +60,10 @@ public interface IGpsServiceService {
 	/**
 	 * Get an users's nearby attractions.
 	 * @param username String
-	 * @return List<AttractionDTO>
+	 * @return List<NearByAttractionDTO>
 	 * @throws UserNotFoundException
 	 * @throws HttpException 
 	 */
-	List<AttractionDTO> getNearByAttractions(String username) 
+	List<NearByAttractionDTO> getNearByAttractions(String username) 
 			throws UserNotFoundException, HttpException;
 }
