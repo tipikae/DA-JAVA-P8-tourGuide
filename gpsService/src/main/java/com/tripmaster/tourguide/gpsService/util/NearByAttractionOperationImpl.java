@@ -4,8 +4,10 @@
 package com.tripmaster.tourguide.gpsService.util;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.SortedSet;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -16,9 +18,11 @@ import org.springframework.stereotype.Component;
 import com.tripmaster.tourguide.gpsService.converters.IConverterLibAttraction;
 import com.tripmaster.tourguide.gpsService.converters.IConverterLibLocation;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
+import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 import com.tripmaster.tourguide.gpsService.model.MAttraction;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
 import com.tripmaster.tourguide.gpsService.model.NearByAttraction;
+import com.tripmaster.tourguide.gpsService.remoteServices.IRewardService;
 
 import gpsUtil.GpsUtil;
 
@@ -45,23 +49,43 @@ public class NearByAttractionOperationImpl implements INearByAttractionOperation
 	
 	@Autowired
 	private IHelper helper;
+	
+	@Autowired
+	private IRewardService rewardService;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<NearByAttraction> getNearByAttractions(UUID userId) throws ConverterLibException {
+	public List<NearByAttraction> getNearByAttractions(UUID userId) 
+			throws ConverterLibException, HttpException {
 		LOGGER.debug("getNearByAttractions: userId=" + userId);
 		
-		List<NearByAttraction> nearByAttractions = new ArrayList<>();
-		SortedSet<E>
+		List<NearByAttraction> nearByAttractions = null;
+		List<UUID> attractionIds = null;
 		
-		//find
+		// find
 		List<MAttraction> mAttractions = findAttractions();
 		MLocation userLocation = findUserLocation(userId);
+		System.out.println("mAttractions: size=" + mAttractions.size());
 		
-		//sort
+		// load
+		Map<NearByAttraction, UUID> map = loadMap(mAttractions, userLocation);
+		System.out.println("map: size=" + map.size());
 		
+		// sublist
+		nearByAttractions = new ArrayList<>(map.keySet());
+		attractionIds = new ArrayList<>(map.values());
+		int max = (nearByAttractions.size() < MAX ? nearByAttractions.size() : MAX);
+		nearByAttractions = nearByAttractions.subList(0, max - 1);
+		
+		// points
+		for(NearByAttraction nearByAttraction: nearByAttractions) {
+			int index = nearByAttractions.indexOf(nearByAttraction);
+			UUID attractionId = attractionIds.get(index);
+			int points = rewardService.getAttractionRewardPoints(attractionId, userId);
+			nearByAttraction.setPoints(points);
+		}
 		
 		return nearByAttractions;
 	}
@@ -72,6 +96,33 @@ public class NearByAttractionOperationImpl implements INearByAttractionOperation
 	
 	private MLocation findUserLocation(UUID userId) throws ConverterLibException {
 		return locationConverter.convertLibModelToModel(gpsUtil.getUserLocation(userId).location);
+	}
+	
+	private Map<NearByAttraction, UUID> loadMap(List<MAttraction> attractions, MLocation userLocation) {
+		Map<NearByAttraction, UUID> map = new TreeMap<>(
+				new Comparator<NearByAttraction>() {
+
+			@Override
+			public int compare(NearByAttraction attraction1, NearByAttraction attraction2) {
+				Double distance1 = Double.valueOf(attraction1.getDistance());
+				Double distance2 = Double.valueOf(attraction2.getDistance());
+				return distance1.compareTo(distance2);
+			}
+		});
+		
+		attractions.stream().forEach(attraction -> {
+			MLocation attractionLocation = new MLocation(attraction.getLatitude(), 
+					attraction.getLongitude());
+			double distance = helper.calculateDistance(attraction.getLatitude(), 
+					attraction.getLongitude(), userLocation.getLatitude(), userLocation.getLongitude());
+			String attractionName = attraction.getAttractionName();
+			NearByAttraction nearByAttraction = new NearByAttraction(attractionName, attractionLocation,
+					userLocation, distance, 0);
+			map.put(nearByAttraction, attraction.getAttractionId());
+			System.out.println("AttractionId=" + attraction.getAttractionId());
+		});
+		
+		return map;
 	}
 
 }

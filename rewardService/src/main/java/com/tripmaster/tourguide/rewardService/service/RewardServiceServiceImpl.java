@@ -56,7 +56,6 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	@Override
 	public void calculateRewards(UUID userId) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	/**

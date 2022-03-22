@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
+import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 import com.tripmaster.tourguide.gpsService.model.NearByAttraction;
 
 /**
@@ -22,6 +23,7 @@ public interface INearByAttractionOperation {
 	 * @param userId UUID
 	 * @return List<NearByAttraction>
 	 * @throws ConverterLibException 
+	 * @throws HttpException 
 	 */
-	List<NearByAttraction> getNearByAttractions(UUID userId) throws ConverterLibException;
+	List<NearByAttraction> getNearByAttractions(UUID userId) throws ConverterLibException, HttpException;
 }
