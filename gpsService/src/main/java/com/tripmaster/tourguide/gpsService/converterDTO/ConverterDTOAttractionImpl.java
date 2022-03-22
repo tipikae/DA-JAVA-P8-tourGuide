@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterException;
-import com.tripmaster.tourguide.gpsService.model.Attraction;
+import com.tripmaster.tourguide.gpsService.model.MAttraction;
 
 /**
  * Attraction-DTO converter.
@@ -29,7 +29,7 @@ public class ConverterDTOAttractionImpl implements IConverterDTOAttraction {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public AttractionDTO convertEntityToDTO(Attraction entity) throws ConverterException {
+	public AttractionDTO convertEntityToDTO(MAttraction entity) throws ConverterException {
 		AttractionDTO attractionDTO = new AttractionDTO();
 		
 		try {
@@ -52,11 +52,11 @@ public class ConverterDTOAttractionImpl implements IConverterDTOAttraction {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<AttractionDTO> convertAttractionsToDTos(List<Attraction> attractions) 
+	public List<AttractionDTO> convertAttractionsToDTos(List<MAttraction> attractions) 
 			throws ConverterException {
 		List<AttractionDTO> attractionDTOs = new ArrayList<>();
 		
-		for(Attraction attraction: attractions) {
+		for(MAttraction attraction: attractions) {
 			attractionDTOs.add(convertEntityToDTO(attraction));
 		}
 		

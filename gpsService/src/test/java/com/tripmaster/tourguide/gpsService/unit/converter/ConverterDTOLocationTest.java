@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import com.tripmaster.tourguide.gpsService.converterDTO.ConverterDTOLocationImpl;
 import com.tripmaster.tourguide.gpsService.converterDTO.IConverterDTOLocation;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterException;
-import com.tripmaster.tourguide.gpsService.model.Location;
+import com.tripmaster.tourguide.gpsService.model.MLocation;
 
 class ConverterDTOLocationTest {
 	
@@ -15,7 +15,7 @@ class ConverterDTOLocationTest {
 
 	@Test
 	void convertEntityToDTO() throws ConverterException {
-		Location location = new Location(10d, 20d);
+		MLocation location = new MLocation(10d, 20d);
 		assertEquals(10d, locationConverter.convertEntityToDTO(location).getLatitude());
 	}
 

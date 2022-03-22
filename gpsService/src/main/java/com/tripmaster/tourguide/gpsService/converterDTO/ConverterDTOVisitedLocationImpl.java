@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 
 import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterException;
-import com.tripmaster.tourguide.gpsService.model.Location;
-import com.tripmaster.tourguide.gpsService.model.VisitedLocation;
+import com.tripmaster.tourguide.gpsService.model.MLocation;
+import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 
 /**
  * VisitedLocation-DTO converter.
@@ -34,11 +34,11 @@ public class ConverterDTOVisitedLocationImpl implements IConverterDTOVisitedLoca
 	 * {@inheritDoc}
 	 */
 	@Override
-	public VisitedLocationDTO convertEntityToDTO(VisitedLocation entity) throws ConverterException {
+	public VisitedLocationDTO convertEntityToDTO(MVisitedLocation entity) throws ConverterException {
 		VisitedLocationDTO visitedLocationDTO = new VisitedLocationDTO();
 		
 		try {
-			visitedLocationDTO.setLocation(locationConverter.convertEntityToDTO((Location) entity.location));
+			visitedLocationDTO.setLocation(locationConverter.convertEntityToDTO((MLocation) entity.location));
 			visitedLocationDTO.setTimeVisited(entity.timeVisited);
 			visitedLocationDTO.setUserId(entity.userId);
 		} catch (Exception e) {
@@ -54,11 +54,11 @@ public class ConverterDTOVisitedLocationImpl implements IConverterDTOVisitedLoca
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<VisitedLocationDTO> convertVisitedLocationsToDTOs(List<VisitedLocation> visitedLocations) 
+	public List<VisitedLocationDTO> convertVisitedLocationsToDTOs(List<MVisitedLocation> visitedLocations) 
 			throws ConverterException {
 		List<VisitedLocationDTO> visitedLocationDTOs = new ArrayList<>();
 		
-		for(VisitedLocation visitedLocation: visitedLocations) {
+		for(MVisitedLocation visitedLocation: visitedLocations) {
 			visitedLocationDTOs.add(convertEntityToDTO(visitedLocation));
 		}
 		

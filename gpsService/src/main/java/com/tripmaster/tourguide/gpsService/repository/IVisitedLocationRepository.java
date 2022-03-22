@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import gpsUtil.location.VisitedLocation;
+import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 
 /**
  * VisitedLocation repository definition.
@@ -23,18 +23,18 @@ public interface IVisitedLocationRepository {
 	 * @param visitedLocation
 	 * @return VisitedLocation
 	 */
-	VisitedLocation save(VisitedLocation visitedLocation);
+	MVisitedLocation save(MVisitedLocation visitedLocation);
 	
 	/**
 	 * Find all visitedLocations by userId.
 	 * @param userId
 	 * @return Optional<List<VisitedLocation>>
 	 */
-	Optional<List<VisitedLocation>> findByUserId(UUID userId);
+	Optional<List<MVisitedLocation>> findByUserId(UUID userId);
 	
 	/**
 	 * Find all visitedLocations.
 	 * @return Map<UUID, List<VisitedLocation>>
 	 */
-	Map<UUID, List<VisitedLocation>> findAll();
+	Map<UUID, List<MVisitedLocation>> findAll();
 }

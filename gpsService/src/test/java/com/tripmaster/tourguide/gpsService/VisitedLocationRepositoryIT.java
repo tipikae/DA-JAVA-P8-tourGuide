@@ -11,10 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.tripmaster.tourguide.gpsService.model.MLocation;
+import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
-
-import gpsUtil.location.Location;
-import gpsUtil.location.VisitedLocation;
 
 @SpringBootTest
 class VisitedLocationRepositoryIT {
@@ -25,9 +24,9 @@ class VisitedLocationRepositoryIT {
 	@Test
 	void test() {
 		UUID userId = UUID.randomUUID();
-		Location location = new Location(10d, 20d);
+		MLocation location = new MLocation(10d, 20d);
 		Date timeVisited = new Date();
-		VisitedLocation visitedLocation = new VisitedLocation(userId, location, timeVisited);
+		MVisitedLocation visitedLocation = new MVisitedLocation(userId, location, timeVisited);
 		
 		// save
 		assertEquals(visitedLocation, visitedLocationRepository.save(visitedLocation));
@@ -37,7 +36,7 @@ class VisitedLocationRepositoryIT {
 		assertEquals(1, visitedLocationRepository.findByUserId(userId).get().size());
 		
 		// findAll
-		Map<UUID, List<VisitedLocation>> allVisitedLocations = visitedLocationRepository.findAll();
+		Map<UUID, List<MVisitedLocation>> allVisitedLocations = visitedLocationRepository.findAll();
 		assertEquals(location, allVisitedLocations.get(userId).get(0).location);
 	}
 

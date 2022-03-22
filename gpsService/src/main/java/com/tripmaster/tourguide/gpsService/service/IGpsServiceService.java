@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
+import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
+import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
+import com.tripmaster.tourguide.gpsService.exceptions.ConverterException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
-
-import gpsUtil.location.Attraction;
-import gpsUtil.location.Location;
-import gpsUtil.location.VisitedLocation;
 
 /**
  * GpsService service.
@@ -23,36 +23,39 @@ public interface IGpsServiceService {
 
 	/**
 	 * Get all attractions.
-	 * @return List<Attraction>
+	 * @return List<AttractionDTO>
 	 */
-	List<Attraction> getAttractions();
+	List<AttractionDTO> getAttractions();
 	
 	/**
 	 * Get user current location.
 	 * @param username String
-	 * @return VisitedLocation
+	 * @return VisitedLocationDTO
 	 */
-	VisitedLocation getUserLocation(String username) throws UserNotFoundException;
+	VisitedLocationDTO getUserLocation(String username) throws UserNotFoundException;
 	
 	/**
 	 * Get all users' last visited location.
-	 * @return Map<UUID, Location>
+	 * @return Map<UUID, LocationDTO>
+	 * @throws ConverterException 
 	 */
-	Map<UUID, Location> getAllUsersLastLocation();
+	Map<UUID, LocationDTO> getAllUsersLastLocation() throws ConverterException;
 	
 	/**
 	 * Get a list of user's visited locations.
 	 * @param userId - UUID
-	 * @return List<VisitedLocation>
+	 * @return List<VisitedLocationDTO>
 	 * @throws UserNotFoundException
+	 * @throws ConverterException 
 	 */
-	List<VisitedLocation> getUserVisitedLocations(UUID userId) throws UserNotFoundException;
+	List<VisitedLocationDTO> getUserVisitedLocations(UUID userId) 
+			throws UserNotFoundException, ConverterException;
 	
 	/**
 	 * Get an users's nearby attractions.
 	 * @param username String
-	 * @return List<Attraction>
+	 * @return List<AttractionDTO>
 	 * @throws UserNotFoundException
 	 */
-	List<Attraction> getNearByAttractions(String username) throws UserNotFoundException;
+	List<AttractionDTO> getNearByAttractions(String username) throws UserNotFoundException;
 }

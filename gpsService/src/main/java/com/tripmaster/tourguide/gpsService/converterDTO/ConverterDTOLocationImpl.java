@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterException;
-import com.tripmaster.tourguide.gpsService.model.Location;
+import com.tripmaster.tourguide.gpsService.model.MLocation;
 
 /** Location-DTO converter.
  * @author tipikae
@@ -25,7 +25,7 @@ public class ConverterDTOLocationImpl implements IConverterDTOLocation {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public LocationDTO convertEntityToDTO(Location entity) throws ConverterException {
+	public LocationDTO convertEntityToDTO(MLocation entity) throws ConverterException {
 		LocationDTO locationDTO = new LocationDTO();
 		
 		try {

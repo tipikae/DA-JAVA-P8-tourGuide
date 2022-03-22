@@ -19,8 +19,8 @@ import com.tripmaster.tourguide.gpsService.converterDTO.ConverterDTOVisitedLocat
 import com.tripmaster.tourguide.gpsService.converterDTO.IConverterDTOLocation;
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterException;
-import com.tripmaster.tourguide.gpsService.model.Location;
-import com.tripmaster.tourguide.gpsService.model.VisitedLocation;
+import com.tripmaster.tourguide.gpsService.model.MLocation;
+import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 
 @ExtendWith(MockitoExtension.class)
 class ConverterDTOVisitedLocationTest {
@@ -32,15 +32,15 @@ class ConverterDTOVisitedLocationTest {
 	private ConverterDTOVisitedLocationImpl visitedLocationConverter = new ConverterDTOVisitedLocationImpl();
 	
 	private static UUID userId;
-	private static VisitedLocation visitedLocation;
-	private static Location location;
+	private static MVisitedLocation visitedLocation;
+	private static MLocation location;
 	private static LocationDTO locationDTO;
 	
 	@BeforeAll
 	private static void setUp() {
 		userId = UUID.randomUUID();
-		location = new Location(10d, 20d);
-		visitedLocation = new VisitedLocation(userId, location, null);
+		location = new MLocation(10d, 20d);
+		visitedLocation = new MVisitedLocation(userId, location, null);
 		locationDTO = new LocationDTO();
 		locationDTO.setLatitude(10d);
 		locationDTO.setLongitude(20d);
@@ -48,15 +48,15 @@ class ConverterDTOVisitedLocationTest {
 
 	@Test
 	void convertEntityToDTOReturnsDTOWhenOk() throws ConverterException {
-		when(locationConverter.convertEntityToDTO(any(Location.class))).thenReturn(locationDTO);
+		when(locationConverter.convertEntityToDTO(any(MLocation.class))).thenReturn(locationDTO);
 		assertEquals(userId, visitedLocationConverter.convertEntityToDTO(visitedLocation).getUserId());
 	}
 
 	@Test
 	void convertVisitedLocationsToDTOsReturnsListWhenOk() throws ConverterException {
-		List<VisitedLocation> visitedLocations = new ArrayList<>();
+		List<MVisitedLocation> visitedLocations = new ArrayList<>();
 		visitedLocations.add(visitedLocation);
-		when(locationConverter.convertEntityToDTO(any(Location.class))).thenReturn(locationDTO);
+		when(locationConverter.convertEntityToDTO(any(MLocation.class))).thenReturn(locationDTO);
 		assertEquals(1, visitedLocationConverter.convertVisitedLocationsToDTOs(visitedLocations).size());
 	}
 

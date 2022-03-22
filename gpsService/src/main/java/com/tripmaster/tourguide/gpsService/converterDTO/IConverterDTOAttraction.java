@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterException;
-import com.tripmaster.tourguide.gpsService.model.Attraction;
+import com.tripmaster.tourguide.gpsService.model.MAttraction;
 
 /**
  * Attraction-DTO converter.
@@ -15,7 +15,7 @@ import com.tripmaster.tourguide.gpsService.model.Attraction;
  * @version 1.0
  *
  */
-public interface IConverterDTOAttraction extends IConverterDTO<Attraction, AttractionDTO> {
+public interface IConverterDTOAttraction extends IConverterDTO<MAttraction, AttractionDTO> {
 
 	/**
 	 * Convert Attraction List to DTO List.
@@ -23,5 +23,5 @@ public interface IConverterDTOAttraction extends IConverterDTO<Attraction, Attra
 	 * @return List<AttractionDTO>
 	 * @throws ConverterException
 	 */
-	List<AttractionDTO> convertAttractionsToDTos(List<Attraction> attractions) throws ConverterException;
+	List<AttractionDTO> convertAttractionsToDTos(List<MAttraction> attractions) throws ConverterException;
 }

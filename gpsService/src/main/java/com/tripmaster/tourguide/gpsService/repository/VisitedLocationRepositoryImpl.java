@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import gpsUtil.location.VisitedLocation;
+import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 
 /**
  * VisitedLocation repository implementation.
@@ -27,24 +27,24 @@ public class VisitedLocationRepositoryImpl implements IVisitedLocationRepository
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(VisitedLocationRepositoryImpl.class);
 	
-	private static Map<UUID, List<VisitedLocation>> internalVisitedLocations = new HashMap<>();
+	private static Map<UUID, List<MVisitedLocation>> internalVisitedLocations = new HashMap<>();
 
 	/**
 	 * {@inheritDoc} 
 	 */
 	@Override
-	public VisitedLocation save(VisitedLocation visitedLocation) {
+	public MVisitedLocation save(MVisitedLocation visitedLocation) {
 		LOGGER.debug("save: userId=" + visitedLocation.userId 
 				+ ", latitude=" + visitedLocation.location.latitude
 				+ ", longitude=" + visitedLocation.location.longitude
 				+ ", timeVisited=" + visitedLocation.timeVisited.toString());
 		
 		if(internalVisitedLocations.containsKey(visitedLocation.userId)) {
-			List<VisitedLocation> visitedLocations = internalVisitedLocations.get(visitedLocation.userId);
+			List<MVisitedLocation> visitedLocations = internalVisitedLocations.get(visitedLocation.userId);
 			visitedLocations.add(visitedLocation);
 			internalVisitedLocations.replace(visitedLocation.userId, visitedLocations);
 		} else {
-			List<VisitedLocation> visitedLocations = new ArrayList<>();
+			List<MVisitedLocation> visitedLocations = new ArrayList<>();
 			visitedLocations.add(visitedLocation);
 			internalVisitedLocations.put(visitedLocation.userId, visitedLocations);
 		}
@@ -56,7 +56,7 @@ public class VisitedLocationRepositoryImpl implements IVisitedLocationRepository
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Optional<List<VisitedLocation>> findByUserId(UUID userId) {
+	public Optional<List<MVisitedLocation>> findByUserId(UUID userId) {
 		LOGGER.debug("findByUserId: userId=" + userId);
 		
 		if(internalVisitedLocations.containsKey(userId)) {
@@ -70,7 +70,7 @@ public class VisitedLocationRepositoryImpl implements IVisitedLocationRepository
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Map<UUID, List<VisitedLocation>> findAll() {
+	public Map<UUID, List<MVisitedLocation>> findAll() {
 		LOGGER.debug("findAll");
 		return internalVisitedLocations;
 	}

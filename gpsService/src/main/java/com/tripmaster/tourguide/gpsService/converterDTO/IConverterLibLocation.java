@@ -3,15 +3,16 @@
  */
 package com.tripmaster.tourguide.gpsService.converterDTO;
 
-import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
 
+import gpsUtil.location.Location;
+
 /**
- * Location-DTO converter.
+ * Converter library Location to model Location.
  * @author tipikae
  * @version 1.0
  *
  */
-public interface IConverterDTOLocation extends IConverterDTO<MLocation, LocationDTO> {
+public interface IConverterLibLocation extends IConverterLib<Location, MLocation> {
 
 }
