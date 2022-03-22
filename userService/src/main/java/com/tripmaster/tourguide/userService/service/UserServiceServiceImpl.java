@@ -5,6 +5,7 @@ package com.tripmaster.tourguide.userService.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsExceptio
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.userService.model.Preference;
 import com.tripmaster.tourguide.userService.model.User;
-import com.tripmaster.tourguide.userService.remote.IRewardService;
+import com.tripmaster.tourguide.userService.remoteServices.IRewardService;
 import com.tripmaster.tourguide.userService.repository.IUserRepository;
 
 import tripPricer.Provider;
@@ -144,6 +145,23 @@ public class UserServiceServiceImpl implements IUserServiceService {
 		
 		return tripPricer.getPrice(username, user.getUserId(), preference.getNumberOfAdults(), 
 				preference.getNumberOfChildren(), preference.getTripDuration(), points);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public UUID getUserId(String userName) throws UserNotFoundException {
+		LOGGER.debug("getUserId: username=" + userName);
+		
+		Optional<User> optional = userRepository.findByUsername(userName);
+		if(!optional.isPresent()) {
+			LOGGER.debug("updatePreferences: error: user with username=" + userName + " not found.");
+			throw new UserNotFoundException(
+					"user with username=" + userName + " not found.");
+		}
+		
+		return optional.get().getUserId();
 	}
 
 }

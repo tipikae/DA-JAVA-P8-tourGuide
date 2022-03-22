@@ -183,4 +183,21 @@ class UserServiceControllerTest {
 			.andExpect(status().is(404));
 	}
 	
+	@Test
+	void getUserIdReturnsUUIDWhenOk() throws Exception {
+		when(userService.getUserId(anyString())).thenReturn(userId);
+		mockMvc.perform(get(root + "/user")
+				.param("userName", username))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$", is(userId.toString())));
+	}
+	
+	@Test
+	void getUserIdReturns404WhenUserNotFound() throws Exception {
+		doThrow(UserNotFoundException.class).when(userService).getUserId(anyString());
+		mockMvc.perform(get(root + "/user")
+				.param("userName", username))
+			.andExpect(status().is(404));
+	}
+	
 }

@@ -1,7 +1,4 @@
-/**
- * 
- */
-package com.tripmaster.tourguide.gpsService.remote;
+package com.tripmaster.tourguide.rewardService.remoteServices;
 
 import java.util.UUID;
 
@@ -10,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.tripmaster.tourguide.gpsService.clients.IUserServiceClient;
-import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
-import com.tripmaster.tourguide.gpsService.model.User;
+import com.tripmaster.tourguide.rewardService.clients.IUserServiceClient;
+import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
+import com.tripmaster.tourguide.rewardService.model.User;
 
 /**
  * UserService service.

@@ -1,4 +1,4 @@
-package com.tripmaster.tourguide.gpsService.unit;
+package com.tripmaster.tourguide.rewardService.unit;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -13,11 +13,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.tripmaster.tourguide.gpsService.clients.IUserServiceClient;
-import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
-import com.tripmaster.tourguide.gpsService.model.User;
-import com.tripmaster.tourguide.gpsService.remoteServices.IUserService;
-import com.tripmaster.tourguide.gpsService.remoteServices.UserServiceImpl;
+import com.tripmaster.tourguide.rewardService.clients.IUserServiceClient;
+import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
+import com.tripmaster.tourguide.rewardService.model.User;
+import com.tripmaster.tourguide.rewardService.remoteServices.IUserService;
+import com.tripmaster.tourguide.rewardService.remoteServices.UserServiceImpl;
 
 import feign.FeignException;
 

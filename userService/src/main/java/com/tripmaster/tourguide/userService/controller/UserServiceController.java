@@ -4,6 +4,7 @@
 package com.tripmaster.tourguide.userService.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
@@ -121,6 +123,20 @@ public class UserServiceController {
 		LOGGER.info("getTripDeals");
 		List<Provider> tripDeals = userService.getTripDeals(username);
 		return new ResponseEntity<Object>(tripDeals, HttpStatus.OK);
+	}
+	
+	/**
+	 * Get an user's id.
+	 * @param userName String
+	 * @return ResponseEntity<Object>
+	 * @throws UserNotFoundException
+	 */
+	@GetMapping("/user")
+	public ResponseEntity<Object> getUserId(@RequestParam("userName") @NotBlank String userName) 
+			throws UserNotFoundException {
+		LOGGER.info("getUserId");
+		UUID userId = userService.getUserId(userName);
+		return new ResponseEntity<Object>(userId, HttpStatus.OK);
 	}
 
 }

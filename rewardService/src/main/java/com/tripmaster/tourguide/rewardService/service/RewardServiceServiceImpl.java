@@ -19,7 +19,7 @@ import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
 import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.rewardService.model.Reward;
-import com.tripmaster.tourguide.rewardService.model.User;
+import com.tripmaster.tourguide.rewardService.remoteServices.IUserService;
 import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
 
 import rewardCentral.RewardCentral;
@@ -46,6 +46,9 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	
 	@Autowired
 	private IRewardConverterDTO rewardConverter;
+	
+	@Autowired
+	private IUserService userService;
 
 	/**
 	 * {@inheritDoc}
@@ -64,16 +67,8 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 			throws UserNotFoundException, HttpException, ConverterException {
 		LOGGER.debug("getUserRewards: userName=" + userName);
 		
-		User user = null;
-		try {
-			user = userClient.getUser(userName);
-		} catch (Exception e) {
-			LOGGER.debug("getUserRewards: userClient error: " + e.getClass().getSimpleName() 
-					+ ": " + e.getMessage());
-			throw new HttpException(e.getClass().getSimpleName() + ": " + e.getMessage());
-		}
+		UUID userId = userService.getUserId(userName);
 		
-		UUID userId = user.getUserId();
 		Optional<List<Reward>> optional = rewardRepository.findByUserId(userId);
 		if(!optional.isPresent()) {
 			LOGGER.debug("getUserRewards: error: user with userId=" + userId + " not found.");

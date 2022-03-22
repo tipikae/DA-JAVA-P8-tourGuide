@@ -3,6 +3,8 @@
  */
 package com.tripmaster.tourguide.rewardService.clients;
 
+import java.util.UUID;
+
 import com.tripmaster.tourguide.rewardService.model.User;
 
 import feign.Param;
@@ -23,4 +25,12 @@ public interface IUserServiceClient {
 	 */
 	@RequestLine("GET /user/{userName}")
 	User getUser(@Param("userName") String userName);
+	
+	/**
+	 * Get a user id.
+	 * @param userName String
+	 * @return UUID
+	 */
+	@RequestLine("GET /user")
+	UUID getUserId(@Param("userName") String userName);
 }

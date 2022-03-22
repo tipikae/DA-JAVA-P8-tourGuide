@@ -4,6 +4,7 @@
 package com.tripmaster.tourguide.userService.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
 import com.tripmaster.tourguide.userService.dto.NewUserDTO;
@@ -66,5 +67,13 @@ public interface IUserServiceService {
 	 */
 	List<Provider> getTripDeals(String userName) 
 			throws UserNotFoundException, HttpException;
+	
+	/**
+	 * Get an user's id.
+	 * @param userName String
+	 * @return UUID
+	 * @throws UserNotFoundException
+	 */
+	UUID getUserId(String userName) throws UserNotFoundException;
 	
 }

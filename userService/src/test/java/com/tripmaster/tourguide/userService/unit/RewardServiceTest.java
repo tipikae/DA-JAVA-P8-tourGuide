@@ -15,8 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.tripmaster.tourguide.userService.clients.IRewardServiceClient;
 import com.tripmaster.tourguide.userService.exceptions.HttpException;
-import com.tripmaster.tourguide.userService.remote.IRewardService;
-import com.tripmaster.tourguide.userService.remote.RewardServiceImpl;
+import com.tripmaster.tourguide.userService.remoteServices.IRewardService;
+import com.tripmaster.tourguide.userService.remoteServices.RewardServiceImpl;
 
 import feign.FeignException;
 

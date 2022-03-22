@@ -32,7 +32,7 @@ import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsExceptio
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.userService.model.Preference;
 import com.tripmaster.tourguide.userService.model.User;
-import com.tripmaster.tourguide.userService.remote.IRewardService;
+import com.tripmaster.tourguide.userService.remoteServices.IRewardService;
 import com.tripmaster.tourguide.userService.repository.IUserRepository;
 import com.tripmaster.tourguide.userService.service.UserServiceServiceImpl;
 
@@ -61,6 +61,7 @@ class UserServiceServiceTest {
 	private UserServiceServiceImpl userService;
 	
 	private static String username;
+	private static UUID userId;
 	private static User user;
 	private static NewUserDTO newUserDTO;
 	private static UserDTO userDTO;
@@ -73,7 +74,8 @@ class UserServiceServiceTest {
 	private static void setUp() {
 		ReflectionTestUtils.setField(UserServiceServiceImpl.class, "apiKey", "test-api-key");
 		username = "username";
-		user = new User(UUID.randomUUID(), username, "phone", "email");
+		userId = UUID.randomUUID();
+		user = new User(userId, username, "phone", "email");
 		newUserDTO = new NewUserDTO(UUID.randomUUID(), username, "phone", "email");
 		users = new ArrayList<>();
 		users.add(user);
@@ -175,6 +177,18 @@ class UserServiceServiceTest {
 		when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 		doThrow(HttpException.class).when(rewardService).getUserRewardsPoints(any(UUID.class));
 		assertThrows(HttpException.class, () -> userService.getTripDeals(username));
+	}
+	
+	@Test
+	void getUserIdReturnsUUIDWhenOk() throws UserNotFoundException {
+		when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+		assertEquals(userId, userService.getUserId(anyString()));
+	}
+	
+	@Test
+	void getUserIdThrowsExceptionWhenUserNotFound() {
+		when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+		assertThrows(UserNotFoundException.class, () -> userService.getUserId(username));
 	}
 
 }

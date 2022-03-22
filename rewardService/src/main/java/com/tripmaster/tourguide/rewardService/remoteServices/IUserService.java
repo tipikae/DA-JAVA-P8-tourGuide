@@ -1,12 +1,9 @@
-/**
- * 
- */
-package com.tripmaster.tourguide.gpsService.remote;
+package com.tripmaster.tourguide.rewardService.remoteServices;
 
 import java.util.UUID;
 
-import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
-import com.tripmaster.tourguide.gpsService.model.User;
+import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
+import com.tripmaster.tourguide.rewardService.model.User;
 
 /**
  * UserService service.

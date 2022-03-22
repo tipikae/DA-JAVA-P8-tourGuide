@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tripmaster.tourguide.userService.remote;
+package com.tripmaster.tourguide.userService.remoteServices;
 
 import java.util.UUID;
 

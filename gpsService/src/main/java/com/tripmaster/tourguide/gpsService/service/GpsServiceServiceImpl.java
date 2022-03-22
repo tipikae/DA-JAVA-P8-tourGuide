@@ -28,7 +28,7 @@ import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
-import com.tripmaster.tourguide.gpsService.remote.IUserService;
+import com.tripmaster.tourguide.gpsService.remoteServices.IUserService;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
 import com.tripmaster.tourguide.gpsService.util.IHelper;
 
