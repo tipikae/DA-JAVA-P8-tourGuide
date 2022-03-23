@@ -35,10 +35,12 @@ public interface IGpsServiceService {
 	/**
 	 * Get user current location.
 	 * @param username String
-	 * @return VisitedLocationDTO
+	 * @return LocationDTO
 	 * @throws HttpException 
+	 * @throws ConverterLibException 
+	 * @throws ConverterDTOException 
 	 */
-	VisitedLocationDTO getUserLocation(String username) throws UserNotFoundException, HttpException;
+	LocationDTO getUserLocation(String username) throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException;
 	
 	/**
 	 * Get all users' last visited location.

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jsoniter.output.JsonStream;
 
-import gpsUtil.location.VisitedLocation;
 import tourGuide.clients.IGpsServiceClient;
+import tourGuide.clients.IRewardServiceClient;
 import tourGuide.clients.IUserServiceClient;
 import tourGuide.dto.NewPreferenceDTO;
 import tourGuide.dto.NewUserDTO;
@@ -36,6 +36,9 @@ public class TourGuideController {
 	@Autowired
 	private IGpsServiceClient gpsClient;
 	
+	@Autowired
+	private IRewardServiceClient rewardClient;
+	
     @RequestMapping("/")
     public String index() {
         return "Greetings from TourGuide!";
@@ -43,8 +46,8 @@ public class TourGuideController {
     
     @RequestMapping("/getLocation") 
     public String getLocation(@RequestParam String userName) {
-    	VisitedLocation visitedLocation = tourGuideService.getUserLocation(userName);
-		return JsonStream.serialize(visitedLocation.location);
+    	LOGGER.info("getLocation: userName=" + userName);
+		return JsonStream.serialize(gpsClient.getUserLocation(userName));
     }
     
     //  TODO: Change this method to no longer return a List of Attractions.
@@ -58,13 +61,14 @@ public class TourGuideController {
         //    Note: Attraction reward points can be gathered from RewardsCentral
     @RequestMapping("/getNearbyAttractions") 
     public String getNearbyAttractions(@RequestParam String userName) {
+    	LOGGER.info("getNearbyAttractions: userName=" + userName);
     	return JsonStream.serialize(gpsClient.getNearByAttractions(userName));
     }
     
     @RequestMapping("/getRewards") 
     public String getRewards(@RequestParam String userName) {
-    	LOGGER.info("getRewards");
-    	return JsonStream.serialize(tourGuideService.getUserRewards(userName));
+    	LOGGER.info("getRewards: userName=" + userName);
+    	return JsonStream.serialize(rewardClient.getUserRewards(userName));
     }
     
     @RequestMapping("/getAllCurrentLocations")
@@ -78,13 +82,13 @@ public class TourGuideController {
     	//        "019b04a9-067a-4c76-8817-ee75088c3822": {"longitude":-48.188821,"latitude":74.84371} 
     	//        ...
     	//     }
-    	
-    	return JsonStream.serialize("");
+    	LOGGER.info("getAllCurrentLocations");
+    	return JsonStream.serialize(gpsClient.getAllUsersLastLocation());
     }
     
     @RequestMapping("/getTripDeals")
     public String getTripDeals(@RequestParam String userName) {
-    	LOGGER.info("getTripDeals");
+    	LOGGER.info("getTripDeals: userName=" + userName);
     	return JsonStream.serialize(userClient.getTripDeals(userName));
     }
     
@@ -95,7 +99,7 @@ public class TourGuideController {
      */
     @PostMapping("/addUser")
     public String addUser(@RequestBody @Valid NewUserDTO newUserDTO) {
-    	LOGGER.info("addUser");
+    	LOGGER.info("addUser: userName=" + newUserDTO.getUserName());
 		return JsonStream.serialize(userClient.addUser(newUserDTO));
     }
     
@@ -109,7 +113,7 @@ public class TourGuideController {
     public String updateUserPreferences(
     		@PathVariable String userName,
     		@RequestBody @Valid NewPreferenceDTO newPreferenceDTO) {
-    	LOGGER.info("updateUserPreferences");
+    	LOGGER.info("updateUserPreferences: userName=" + userName);
     	userClient.updatePreferences(userName, newPreferenceDTO);
     	return "";
     }

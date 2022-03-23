@@ -20,6 +20,7 @@ import com.tripmaster.tourguide.gpsService.converters.IConverterDTOLocation;
 import com.tripmaster.tourguide.gpsService.converters.IConverterDTONearByAttraction;
 import com.tripmaster.tourguide.gpsService.converters.IConverterDTOVisitedLocation;
 import com.tripmaster.tourguide.gpsService.converters.IConverterLibAttraction;
+import com.tripmaster.tourguide.gpsService.converters.IConverterLibVisitedLocation;
 import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
 import com.tripmaster.tourguide.gpsService.dto.NearByAttractionDTO;
@@ -28,8 +29,10 @@ import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
+import com.tripmaster.tourguide.gpsService.model.MAttraction;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
+import com.tripmaster.tourguide.gpsService.remoteServices.IRewardService;
 import com.tripmaster.tourguide.gpsService.remoteServices.IUserService;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
 import com.tripmaster.tourguide.gpsService.util.INearByAttractionOperation;
@@ -54,7 +57,16 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	private GpsUtil gpsUtil;
 	
 	@Autowired
+	private IUserService userService;
+	
+	@Autowired
+	private IRewardService rewardService;
+	
+	@Autowired
 	private IConverterDTOAttraction attractionDTOConverter;
+	
+	@Autowired
+	private IConverterLibAttraction attractionLibConverter;
 	
 	@Autowired
 	private IConverterDTOLocation locationDTOConverter;
@@ -63,10 +75,7 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	private IConverterDTOVisitedLocation visitedLocationDTOConverter;
 	
 	@Autowired
-	private IConverterLibAttraction attractionLibConverter;
-	
-	@Autowired
-	private IUserService userService;
+	private IConverterLibVisitedLocation visitedLocationLibConverter;
 	
 	@Autowired
 	private INearByAttractionOperation nearByAttractionOperation;
@@ -88,11 +97,21 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public VisitedLocationDTO getUserLocation(String userName) throws HttpException {
+	public LocationDTO getUserLocation(String userName) 
+			throws HttpException, ConverterDTOException, ConverterLibException {
 		LOGGER.debug("getUserLocation: userName=" + userName);
-		//UUID userId = userService.getUserId(userName);
 		
-		return null;
+		UUID userId = userService.getUserId(userName);
+		Optional<List<MVisitedLocation>> optional = visitedLocationRepository.findByUserId(userId);
+		if(!optional.isPresent()) {
+			return locationDTOConverter.convertEntityToDTO(trackUserLocation(userId).getLocation());
+		}
+		
+		List<MVisitedLocation> mVisitedLocations = optional.get();
+		int last = mVisitedLocations.size() - 1;
+		MVisitedLocation mVisitedLocation = mVisitedLocations.get(last);
+		
+		return locationDTOConverter.convertEntityToDTO(mVisitedLocation.getLocation());
 	}
 
 	/**
@@ -151,6 +170,28 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 						nearByAttractionOperation.getNearByAttractions(userId));
 		
 		return nearByAttractionDTOs;
+	}
+
+	private MVisitedLocation trackUserLocation(UUID userId) 
+			throws ConverterLibException, ConverterDTOException, HttpException {
+		LOGGER.debug("trackUserLocation: userId=" + userId);
+		
+		// get current location
+		MVisitedLocation mVisitedLocation = visitedLocationLibConverter.convertLibModelToModel(
+				gpsUtil.getUserLocation(userId));
+		
+		// save current location
+		visitedLocationRepository.save(mVisitedLocation);
+		
+		// call calculateRewards
+		List<MVisitedLocation> mVisitedLocations = visitedLocationRepository.findByUserId(userId).get();
+		List<MAttraction> mAttractions = attractionLibConverter.convertLibAttractionsToMAttractions(
+				gpsUtil.getAttractions());
+		rewardService.calculateRewards(userId, 
+				visitedLocationDTOConverter.convertVisitedLocationsToDTOs(mVisitedLocations), 
+				attractionDTOConverter.convertAttractionsToDTos(mAttractions));
+		
+		return mVisitedLocation;
 	}
 
 }

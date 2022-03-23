@@ -3,6 +3,7 @@
  */
 package com.tripmaster.tourguide.gpsService.remoteServices;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.tripmaster.tourguide.gpsService.clients.IRewardServiceClient;
+import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
+import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 
 /**
@@ -43,6 +46,22 @@ public class RewardServiceImpl implements IRewardService {
 		}
 		
 		return points;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void calculateRewards(UUID userId, List<VisitedLocationDTO> visitedLocationDTOs,
+			List<AttractionDTO> attractionDTOs) throws HttpException {
+		try {
+			rewardClient.calculateRewards(userId, visitedLocationDTOs, attractionDTOs);
+		} catch (Exception e) {
+			LOGGER.debug("calculateRewards: rewardClient error: " + e.getClass().getSimpleName() 
+					+ ": " + e.getMessage());
+			throw new HttpException(e.getClass().getSimpleName() + ": " + e.getMessage());
+		}
+		
 	}
 
 }

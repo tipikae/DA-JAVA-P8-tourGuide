@@ -45,6 +45,8 @@ import com.tripmaster.tourguide.gpsService.util.INearByAttractionOperation;
 
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
+import gpsUtil.location.Location;
+import gpsUtil.location.VisitedLocation;
 
 @ExtendWith(MockitoExtension.class)
 class GpsServiceServiceTest {
@@ -122,17 +124,27 @@ class GpsServiceServiceTest {
 		assertEquals(1, gpsService.getAttractions().size());
 	}
 
-	/*@Test
-	void getUserLocationReturnsVisitedLocationWhenOk() {
+	@Test
+	void getUserLocationReturnsLocationWhenNotFound() throws HttpException {
+		VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(10d, 20d), timeVisited);
+		when(userService.getUserId(anyString())).thenReturn(userId);
+		when(visitedLocationRepository.findByUserId(any(UUID.class))).thenReturn(Optional.empty());
 		when(gpsUtil.getUserLocation(any(UUID.class))).thenReturn(visitedLocation);
-		assertEquals(10d, gpsService.getUserLocation(userName).location.latitude);
+		
 	}
 
 	@Test
-	void getUserLocationThrowsExceptionWhenUserNotFound() {
-		when(gpsUtil.getUserLocation(any(UUID.class))).thenReturn(visitedLocation);
-		assertEquals(10d, gpsService.getUserLocation(userName).location.latitude);
-	}*/
+	void getUserLocationReturnsLocationWhenFound() 
+			throws HttpException, ConverterDTOException, ConverterLibException {
+		LocationDTO locationDTO = new LocationDTO();
+		locationDTO.setLatitude(10d);
+		locationDTO.setLongitude(20d);
+		when(userService.getUserId(anyString())).thenReturn(userId);
+		when(visitedLocationRepository.findByUserId(any(UUID.class)))
+			.thenReturn(Optional.of(mVisitedLocations));
+		when(locationDTOConverter.convertEntityToDTO(any(MLocation.class))).thenReturn(locationDTO);
+		assertEquals(20d, gpsService.getUserLocation(userName).getLongitude());
+	}
 	
 	@Test
 	void getAllUsersLastLocationReturnsMapWhenOK() throws ConverterDTOException {
