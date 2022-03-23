@@ -3,6 +3,8 @@
  */
 package com.tripmaster.tourguide.rewardService.util;
 
+import com.tripmaster.tourguide.rewardService.model.Location;
+
 /**
  * Helper interface.
  * @author tipikae
@@ -13,11 +15,9 @@ public interface IHelper {
 
 	/**
 	 * Calculate distance between two points.
-	 * @param latitude1 latitude point 1.
-	 * @param longitude1 longitude point 1.
-	 * @param latitude2 latitude point 2.
-	 * @param longitude2 longitude point 2.
+	 * @param location1 Location.
+	 * @param location2 Location.
 	 * @return double
 	 */
-	double calculateDistance(double latitude1, double longitude1, double latitude2, double longitude2);
+	double calculateDistance(Location location1, Location location2);
 }

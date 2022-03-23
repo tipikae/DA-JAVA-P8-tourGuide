@@ -6,6 +6,7 @@ package com.tripmaster.tourguide.rewardService.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.tripmaster.tourguide.rewardService.clients.IGpsServiceClient;
 import com.tripmaster.tourguide.rewardService.clients.IUserServiceClient;
 import com.tripmaster.tourguide.rewardService.exceptions.MyFeignErrorDecoder;
 
@@ -31,5 +32,15 @@ public class HttpClientConfig {
 				.errorDecoder(new MyFeignErrorDecoder())
 				.client(new OkHttpClient())
 				.target(IUserServiceClient.class, "http://localhost:8082/userservice");
+	}
+
+	@Bean
+	public IGpsServiceClient getGpsServiceClient() {
+		return Feign.builder()
+				.encoder(new GsonEncoder())
+				.decoder(new GsonDecoder())
+				.errorDecoder(new MyFeignErrorDecoder())
+				.client(new OkHttpClient())
+				.target(IGpsServiceClient.class, "http://localhost:8081/gpsservice");
 	}
 }

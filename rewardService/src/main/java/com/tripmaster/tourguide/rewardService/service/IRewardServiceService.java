@@ -22,8 +22,9 @@ public interface IRewardServiceService {
 	/**
 	 * Calculate rewards.
 	 * @param userId UUID
+	 * @throws HttpException 
 	 */
-	void calculateRewards(UUID userId);
+	void calculateRewards(UUID userId) throws HttpException;
 	
 	/**
 	 * Get a user's rewards.

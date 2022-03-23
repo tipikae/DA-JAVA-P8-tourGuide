@@ -3,6 +3,8 @@
  */
 package com.tripmaster.tourguide.rewardService.service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -10,6 +12,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.tripmaster.tourguide.rewardService.converterDTO.IRewardConverterDTO;
@@ -17,10 +20,14 @@ import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
 import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
 import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
+import com.tripmaster.tourguide.rewardService.model.Attraction;
+import com.tripmaster.tourguide.rewardService.model.Location;
 import com.tripmaster.tourguide.rewardService.model.Reward;
+import com.tripmaster.tourguide.rewardService.model.VisitedLocation;
 import com.tripmaster.tourguide.rewardService.remoteServices.IGpsService;
 import com.tripmaster.tourguide.rewardService.remoteServices.IUserService;
 import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
+import com.tripmaster.tourguide.rewardService.util.IHelper;
 
 import rewardCentral.RewardCentral;
 
@@ -49,13 +56,46 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	
 	@Autowired
 	private IGpsService gpsService;
+	
+	@Autowired
+	private IHelper helper;
+	
+	@Value("${reward.proximityBuffer}")
+	private static int proximityBuffer;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void calculateRewards(UUID userId) {
-		// TODO Auto-generated method stub
+	public void calculateRewards(UUID userId) throws HttpException {
+		LOGGER.debug("calculateRewards: userId=" + userId);
+		
+		List<VisitedLocation> visitedLocations = gpsService.getUserVisitedLocations(userId);
+		List<Attraction> attractions = gpsService.getAttractions();
+		
+		Optional<List<Reward>> optional = rewardRepository.findByUserId(userId);
+		List<Reward> rewards = (optional.isPresent() ? optional.get() : new ArrayList<>());
+		
+		Iterator<VisitedLocation> itVisitedLocation = visitedLocations.iterator();
+		Iterator<Attraction> itAttraction = attractions.iterator();
+		
+		while(itVisitedLocation.hasNext()) {
+			VisitedLocation visitedLocation = itVisitedLocation.next();
+			while(itAttraction.hasNext()) {
+				Attraction attraction = itAttraction.next();
+				if(rewards.stream().filter(r -> 
+							r.getAttraction().getAttractionName().equals(attraction.getAttractionName()))
+						.count() == 0) {
+					if(nearAttraction(visitedLocation.getLocation(), attraction)) {
+						Reward reward = 
+								new Reward(visitedLocation, attraction, 
+										getRewardPoints(attraction.getAttractionId(), userId));
+						rewardRepository.save(reward);
+					}
+				}
+			}
+		}
+		
 	}
 
 	/**
@@ -107,6 +147,14 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 		LOGGER.debug("getAttractionRewardPoints: attractionId=" + attractionId 
 				+ ", userId=" + userId);
 		
+		return getRewardPoints(attractionId, userId);
+	}
+
+	private boolean nearAttraction(Location location, Attraction attraction) {
+		return helper.calculateDistance(location, attraction) > proximityBuffer ? false : true;
+	}
+
+	private int getRewardPoints(UUID attractionId, UUID userId) {
 		return rewardCentral.getAttractionRewardPoints(attractionId, userId);
 	}
 }

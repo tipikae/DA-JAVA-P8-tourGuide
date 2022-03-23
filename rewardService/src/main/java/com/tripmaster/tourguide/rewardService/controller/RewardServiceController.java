@@ -47,10 +47,12 @@ public class RewardServiceController {
 	 * Calculate rewards.
 	 * @param userId UUID
 	 * @return ResponseEntity<Object>
+	 * @throws HttpException 
 	 * @throws UserNotFoundException 
 	 */
 	@GetMapping("/calculate/{userId}")
-	public ResponseEntity<Object> calculate(@PathVariable("userId") @NotNull UUID userId) {
+	public ResponseEntity<Object> calculate(@PathVariable("userId") @NotNull UUID userId) 
+			throws HttpException {
 		LOGGER.info("calculate");
 		rewardService.calculateRewards(userId);
 		return new ResponseEntity<>(HttpStatus.OK);

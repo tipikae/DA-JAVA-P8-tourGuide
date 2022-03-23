@@ -2,6 +2,8 @@ package com.tripmaster.tourguide.rewardService.util;
 
 import org.springframework.stereotype.Component;
 
+import com.tripmaster.tourguide.rewardService.model.Location;
+
 /**
  * Helper class.
  * @author tipikae
@@ -17,11 +19,11 @@ public class HelperImpl implements IHelper {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public double calculateDistance(double latitude1, double longitude1, double latitude2, double longitude2) {
-		double lat1 = Math.toRadians(latitude1);
-        double lon1 = Math.toRadians(longitude1);
-        double lat2 = Math.toRadians(latitude2);
-        double lon2 = Math.toRadians(longitude2);
+	public double calculateDistance(Location location1, Location location2) {
+		double lat1 = Math.toRadians(location1.getLatitude());
+        double lon1 = Math.toRadians(location1.getLongitude());
+        double lat2 = Math.toRadians(location2.getLatitude());
+        double lon2 = Math.toRadians(location2.getLongitude());
 
         double angle = Math.acos(Math.sin(lat1) * Math.sin(lat2)
                                + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon1 - lon2));
