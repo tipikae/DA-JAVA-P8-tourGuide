@@ -18,6 +18,7 @@ import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
 import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.rewardService.model.Reward;
+import com.tripmaster.tourguide.rewardService.remoteServices.IGpsService;
 import com.tripmaster.tourguide.rewardService.remoteServices.IUserService;
 import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
 
@@ -45,6 +46,9 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	
 	@Autowired
 	private IUserService userService;
+	
+	@Autowired
+	private IGpsService gpsService;
 
 	/**
 	 * {@inheritDoc}

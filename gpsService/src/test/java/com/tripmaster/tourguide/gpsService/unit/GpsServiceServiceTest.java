@@ -26,6 +26,7 @@ import com.tripmaster.tourguide.gpsService.converters.IConverterDTOLocation;
 import com.tripmaster.tourguide.gpsService.converters.IConverterDTONearByAttraction;
 import com.tripmaster.tourguide.gpsService.converters.IConverterDTOVisitedLocation;
 import com.tripmaster.tourguide.gpsService.converters.IConverterLibAttraction;
+import com.tripmaster.tourguide.gpsService.converters.IConverterLibVisitedLocation;
 import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
 import com.tripmaster.tourguide.gpsService.dto.NearByAttractionDTO;
@@ -38,6 +39,7 @@ import com.tripmaster.tourguide.gpsService.model.MAttraction;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 import com.tripmaster.tourguide.gpsService.model.NearByAttraction;
+import com.tripmaster.tourguide.gpsService.remoteServices.IRewardService;
 import com.tripmaster.tourguide.gpsService.remoteServices.IUserService;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
 import com.tripmaster.tourguide.gpsService.service.GpsServiceServiceImpl;
@@ -67,6 +69,9 @@ class GpsServiceServiceTest {
 	private IConverterDTOVisitedLocation visitedLocationDTOConverter;
 	
 	@Mock
+	private IConverterLibVisitedLocation visitedLocationLibConverter;
+	
+	@Mock
 	private IConverterLibAttraction attractionLibConverter;
 	
 	@Mock
@@ -77,6 +82,9 @@ class GpsServiceServiceTest {
 	
 	@Mock
 	private IUserService userService;
+	
+	@Mock
+	private IRewardService rewardService;
 	
 	@InjectMocks
 	private GpsServiceServiceImpl gpsService;
@@ -124,13 +132,22 @@ class GpsServiceServiceTest {
 		assertEquals(1, gpsService.getAttractions().size());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
-	void getUserLocationReturnsLocationWhenNotFound() throws HttpException {
+	void getUserLocationReturnsLocationWhenNotFound() 
+			throws HttpException, ConverterLibException, ConverterDTOException {
 		VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(10d, 20d), timeVisited);
+		LocationDTO locationDTO = new LocationDTO();
+		locationDTO.setLatitude(10d);
+		locationDTO.setLongitude(20d);
 		when(userService.getUserId(anyString())).thenReturn(userId);
-		when(visitedLocationRepository.findByUserId(any(UUID.class))).thenReturn(Optional.empty());
+		when(visitedLocationRepository.findByUserId(any(UUID.class)))
+			.thenReturn(Optional.empty(), Optional.of(mVisitedLocations));
 		when(gpsUtil.getUserLocation(any(UUID.class))).thenReturn(visitedLocation);
-		
+		when(visitedLocationLibConverter.convertLibModelToModel(any(VisitedLocation.class)))
+			.thenReturn(mVisitedLocation);
+		when(locationDTOConverter.convertEntityToDTO(any(MLocation.class))).thenReturn(locationDTO);
+		assertEquals(10d, gpsService.getUserLocation(userName).getLatitude());
 	}
 
 	@Test

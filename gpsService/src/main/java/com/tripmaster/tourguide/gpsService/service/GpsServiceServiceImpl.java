@@ -29,7 +29,6 @@ import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
-import com.tripmaster.tourguide.gpsService.model.MAttraction;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 import com.tripmaster.tourguide.gpsService.remoteServices.IRewardService;
@@ -104,6 +103,7 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 		UUID userId = userService.getUserId(userName);
 		Optional<List<MVisitedLocation>> optional = visitedLocationRepository.findByUserId(userId);
 		if(!optional.isPresent()) {
+			// trackUserLocation
 			return locationDTOConverter.convertEntityToDTO(trackUserLocation(userId).getLocation());
 		}
 		
@@ -184,12 +184,7 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 		visitedLocationRepository.save(mVisitedLocation);
 		
 		// call calculateRewards
-		List<MVisitedLocation> mVisitedLocations = visitedLocationRepository.findByUserId(userId).get();
-		List<MAttraction> mAttractions = attractionLibConverter.convertLibAttractionsToMAttractions(
-				gpsUtil.getAttractions());
-		rewardService.calculateRewards(userId, 
-				visitedLocationDTOConverter.convertVisitedLocationsToDTOs(mVisitedLocations), 
-				attractionDTOConverter.convertAttractionsToDTos(mAttractions));
+		rewardService.calculateRewards(userId);
 		
 		return mVisitedLocation;
 	}

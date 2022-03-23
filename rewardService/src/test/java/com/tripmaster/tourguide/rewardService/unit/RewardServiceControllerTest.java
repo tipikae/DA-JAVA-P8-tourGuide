@@ -3,6 +3,7 @@ package com.tripmaster.tourguide.rewardService.unit;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -52,8 +53,10 @@ class RewardServiceControllerTest {
 	}
 	
 	@Test
-	void calculate() {
-		
+	void calculateReturns200WhenOk() throws Exception {
+		doNothing().when(rewardService).calculateRewards(any(UUID.class));
+		mockMvc.perform(get(root + "/calculate/" + UUID.randomUUID().toString()))
+			.andExpect(status().isOk());
 	}
 	
 	@Test

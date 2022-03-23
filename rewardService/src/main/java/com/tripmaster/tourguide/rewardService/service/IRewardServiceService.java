@@ -22,9 +22,8 @@ public interface IRewardServiceService {
 	/**
 	 * Calculate rewards.
 	 * @param userId UUID
-	 * @throws UserNotFoundException
 	 */
-	void calculateRewards(UUID userId) throws UserNotFoundException;
+	void calculateRewards(UUID userId);
 	
 	/**
 	 * Get a user's rewards.

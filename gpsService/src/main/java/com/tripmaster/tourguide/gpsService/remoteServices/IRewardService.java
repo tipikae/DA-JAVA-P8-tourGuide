@@ -3,11 +3,8 @@
  */
 package com.tripmaster.tourguide.gpsService.remoteServices;
 
-import java.util.List;
 import java.util.UUID;
 
-import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
-import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 
 /**
@@ -30,10 +27,7 @@ public interface IRewardService {
 	/**
 	 * Calculate rewards.
 	 * @param userId UUID
-	 * @param visitedLocationDTOs List<VisitedLocationDTO>
-	 * @param attractionDTOs List<AttractionDTO>
 	 * @throws HttpException 
 	 */
-	void calculateRewards(UUID userId, List<VisitedLocationDTO> visitedLocationDTOs, 
-			List<AttractionDTO> attractionDTOs) throws HttpException;
+	void calculateRewards(UUID userId) throws HttpException;
 }

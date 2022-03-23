@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.tripmaster.tourguide.rewardService.converterDTO.IRewardConverterDTO;
@@ -29,6 +30,7 @@ import com.tripmaster.tourguide.rewardService.model.Location;
 import com.tripmaster.tourguide.rewardService.model.Reward;
 import com.tripmaster.tourguide.rewardService.model.User;
 import com.tripmaster.tourguide.rewardService.model.VisitedLocation;
+import com.tripmaster.tourguide.rewardService.remoteServices.IGpsService;
 import com.tripmaster.tourguide.rewardService.remoteServices.IUserService;
 import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
 import com.tripmaster.tourguide.rewardService.service.RewardServiceServiceImpl;
@@ -49,6 +51,9 @@ class RewardServiceServiceTest {
 	
 	@Mock
 	private IUserService userService;
+	
+	@Mock
+	private IGpsService gpsService;
 	
 	@InjectMocks
 	private RewardServiceServiceImpl rewardService;
@@ -88,8 +93,15 @@ class RewardServiceServiceTest {
 	}
 	
 	@Test
-	void calculateRewards() {
-		
+	void calculateRewardsWhenOk() throws HttpException {
+		List<Attraction> attractions = new ArrayList<>();
+		attractions.add(attraction);
+		List<VisitedLocation> visitedLocations = new ArrayList<>();
+		visitedLocations.add(visitedLocation);
+		when(gpsService.getAttractions()).thenReturn(attractions);
+		when(gpsService.getUserVisitedLocations(any(UUID.class))).thenReturn(visitedLocations);
+		rewardService.calculateRewards(userId);
+		Mockito.verify(rewardRepository).save(any(Reward.class));
 	}
 	
 	@Test
