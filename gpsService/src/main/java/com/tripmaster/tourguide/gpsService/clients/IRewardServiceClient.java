@@ -22,6 +22,6 @@ public interface IRewardServiceClient {
 	 * @param userId UUID
 	 * @return int
 	 */
-	@RequestLine("GET /rewards")
+	@RequestLine("GET /reward")
 	int getAttractionRewardPoints(@Param("attractionId") UUID attractionId, @Param("userId") UUID userId);
 }

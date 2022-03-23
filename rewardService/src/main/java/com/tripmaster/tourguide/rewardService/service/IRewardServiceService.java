@@ -44,4 +44,12 @@ public interface IRewardServiceService {
 	 * @throws UserNotFoundException
 	 */
 	int getUserRewardsPoints(UUID userId) throws UserNotFoundException;
+	
+	/**
+	 * Get an attraction's reward points.
+	 * @param attractionId UUID
+	 * @param userId UUID
+	 * @return int
+	 */
+	int getAttractionRewardPoints(UUID attractionId, UUID userId);
 }

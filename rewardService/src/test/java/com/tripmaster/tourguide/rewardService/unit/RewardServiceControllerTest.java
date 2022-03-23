@@ -97,5 +97,15 @@ class RewardServiceControllerTest {
 		mockMvc.perform(get(root + "/points/ "))
 			.andExpect(status().is(400));
 	}
+	
+	@Test
+	void getAttractionRewardPointsReturnsIntWhenOk() throws Exception {
+		when(rewardService.getAttractionRewardPoints(any(UUID.class), any(UUID.class))).thenReturn(points);
+		mockMvc.perform(get(root + "/reward")
+				.param("attractionId", UUID.randomUUID().toString())
+				.param("userId", UUID.randomUUID().toString()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$", is(points)));
+	}
 
 }

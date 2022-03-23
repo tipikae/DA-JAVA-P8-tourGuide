@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tripmaster.tourguide.rewardService.clients.IUserServiceClient;
 import com.tripmaster.tourguide.rewardService.converterDTO.IRewardConverterDTO;
 import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
 import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
@@ -40,9 +39,6 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	
 	@Autowired
 	private RewardCentral rewardCentral;
-	
-	@Autowired
-	private IUserServiceClient userClient;
 	
 	@Autowired
 	private IRewardConverterDTO rewardConverter;
@@ -97,5 +93,16 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 		}
 		
 		return sum;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getAttractionRewardPoints(UUID attractionId, UUID userId) {
+		LOGGER.debug("getAttractionRewardPoints: attractionId=" + attractionId 
+				+ ", userId=" + userId);
+		
+		return rewardCentral.getAttractionRewardPoints(attractionId, userId);
 	}
 }

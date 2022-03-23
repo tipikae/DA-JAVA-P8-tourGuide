@@ -87,4 +87,19 @@ public class RewardServiceController {
 		return new ResponseEntity<Object>(points, HttpStatus.OK);
 	}
 	
+	/**
+	 * Get an attraction's reward points.
+	 * @param attractionId UUID
+	 * @param userId UUID
+	 * @return ResponseEntity<Object>
+	 */
+	@GetMapping("/reward")
+	public ResponseEntity<Object> getAttractionRewardPoints(
+			@RequestParam("attractionId") @NotNull UUID attractionId, 
+			@RequestParam("userId") @NotNull UUID userId) {
+		LOGGER.info("getAttractionRewardPoints");
+		int points = rewardService.getAttractionRewardPoints(attractionId, userId);
+		return new ResponseEntity<Object>(points, HttpStatus.OK);
+	}
+	
 }

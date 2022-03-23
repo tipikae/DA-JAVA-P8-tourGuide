@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.tripmaster.tourguide.rewardService.clients.IUserServiceClient;
 import com.tripmaster.tourguide.rewardService.converterDTO.IRewardConverterDTO;
 import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
 import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
@@ -31,10 +29,10 @@ import com.tripmaster.tourguide.rewardService.model.Location;
 import com.tripmaster.tourguide.rewardService.model.Reward;
 import com.tripmaster.tourguide.rewardService.model.User;
 import com.tripmaster.tourguide.rewardService.model.VisitedLocation;
+import com.tripmaster.tourguide.rewardService.remoteServices.IUserService;
 import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
 import com.tripmaster.tourguide.rewardService.service.RewardServiceServiceImpl;
 
-import feign.FeignException;
 import rewardCentral.RewardCentral;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,7 +48,7 @@ class RewardServiceServiceTest {
 	private IRewardConverterDTO rewardConverter;
 	
 	@Mock
-	private IUserServiceClient userclient;
+	private IUserService userService;
 	
 	@InjectMocks
 	private RewardServiceServiceImpl rewardService;
@@ -101,26 +99,20 @@ class RewardServiceServiceTest {
 		user.setUserName(userName);
 		List<RewardDTO> rewardDTOs = new ArrayList<>();
 		rewardDTOs.add(new RewardDTO());
-		when(userclient.getUser(anyString())).thenReturn(user);
+		when(userService.getUserId(anyString())).thenReturn(userId);
 		when(rewardRepository.findByUserId(any(UUID.class))).thenReturn(Optional.of(rewards));
 		when(rewardConverter.converterRewardsToDTOs(anyList())).thenReturn(rewardDTOs);
 		assertEquals(1, rewardService.getUserRewards(userName).size());
 	}
 	
 	@Test
-	void getUserRewardsThrowsExceptionWhenUserNotFound() {
+	void getUserRewardsThrowsExceptionWhenUserNotFound() throws HttpException {
 		User user = new User();
 		user.setUserId(userId);
 		user.setUserName(userName);
-		when(userclient.getUser(anyString())).thenReturn(user);
+		when(userService.getUserId(anyString())).thenReturn(userId);
 		when(rewardRepository.findByUserId(any(UUID.class))).thenReturn(Optional.empty());
 		assertThrows(UserNotFoundException.class, () -> rewardService.getUserRewards(userName));
-	}
-	
-	@Test
-	void getUserRewardsThrowsExceptionWhenClientError() {
-		doThrow(FeignException.class).when(userclient).getUser(anyString());
-		assertThrows(HttpException.class, () -> rewardService.getUserRewards(userName));
 	}
 	
 	@Test
@@ -133,6 +125,12 @@ class RewardServiceServiceTest {
 	void getUserRewardsPointsThrowsExceptionWhenUserNotFound() {
 		when(rewardRepository.findByUserId(any(UUID.class))).thenReturn(Optional.empty());
 		assertThrows(UserNotFoundException.class, () -> rewardService.getUserRewardsPoints(userId));
+	}
+	
+	@Test
+	void getAttractionRewardPointsReturnsPointsWhenOk() {
+		when(rewardCentral.getAttractionRewardPoints(any(UUID.class), any(UUID.class))).thenReturn(points);
+		assertEquals(points, rewardService.getAttractionRewardPoints(UUID.randomUUID(), UUID.randomUUID()));
 	}
 
 }

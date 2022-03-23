@@ -38,6 +38,6 @@ public class HttpClientConfig {
 				.decoder(new GsonDecoder())
 				.errorDecoder(new MyFeignErrorDecoder())
 				.client(new OkHttpClient())
-				.target(IRewardServiceClient.class, "http://localhost:8083/");
+				.target(IRewardServiceClient.class, "http://localhost:8083/rewardservice");
 	}
 }
