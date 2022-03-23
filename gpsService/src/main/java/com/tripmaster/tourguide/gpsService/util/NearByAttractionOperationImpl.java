@@ -63,21 +63,20 @@ public class NearByAttractionOperationImpl implements INearByAttractionOperation
 		
 		List<NearByAttraction> nearByAttractions = null;
 		List<UUID> attractionIds = null;
+		int max = 0;
 		
 		// find
 		List<MAttraction> mAttractions = findAttractions();
 		MLocation userLocation = findUserLocation(userId);
-		System.out.println("mAttractions: size=" + mAttractions.size());
 		
 		// load
 		Map<NearByAttraction, UUID> map = loadMap(mAttractions, userLocation);
-		System.out.println("map: size=" + map.size());
 		
 		// sublist
 		nearByAttractions = new ArrayList<>(map.keySet());
 		attractionIds = new ArrayList<>(map.values());
-		int max = (nearByAttractions.size() < MAX ? nearByAttractions.size() : MAX);
-		nearByAttractions = nearByAttractions.subList(0, max - 1);
+		max = (nearByAttractions.size() < MAX ? nearByAttractions.size() : MAX);
+		nearByAttractions = nearByAttractions.subList(0, max);
 		
 		// points
 		for(NearByAttraction nearByAttraction: nearByAttractions) {
@@ -119,7 +118,6 @@ public class NearByAttractionOperationImpl implements INearByAttractionOperation
 			NearByAttraction nearByAttraction = new NearByAttraction(attractionName, attractionLocation,
 					userLocation, distance, 0);
 			map.put(nearByAttraction, attraction.getAttractionId());
-			System.out.println("AttractionId=" + attraction.getAttractionId());
 		});
 		
 		return map;

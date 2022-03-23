@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -23,7 +24,6 @@ import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 import com.tripmaster.tourguide.gpsService.model.MAttraction;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
-import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 import com.tripmaster.tourguide.gpsService.remoteServices.IRewardService;
 import com.tripmaster.tourguide.gpsService.util.IHelper;
 import com.tripmaster.tourguide.gpsService.util.INearByAttractionOperation;
@@ -90,13 +90,17 @@ class NearByAttractionOperationTest {
 	}
 
 	@Test
-	void getNearByAttractionsThrowsExceptionWhenServiceError() {
-		
-	}
-
-	@Test
-	void getNearByAttractionsThrowsExceptionWhenConverterError() {
-		
+	void getNearByAttractionsThrowsExceptionWhenServiceError() throws ConverterLibException, HttpException {
+		when(gpsUtil.getAttractions()).thenReturn(attractions);
+		when(attractionConverter.convertLibAttractionsToMAttractions(anyList())).thenReturn(mAttractions);
+		when(gpsUtil.getUserLocation(any(UUID.class))).thenReturn(visitedLocation);
+		when(locationConverter.convertLibModelToModel(any(Location.class))).thenReturn(mLocation);
+		when(helper.calculateDistance(anyDouble(), anyDouble(), anyDouble(), anyDouble()))
+			.thenReturn(10d, 20d, 30d, 40d, 50d, 60d, 70d, 80d, 90d, 100d);
+		doThrow(HttpException.class).when(rewardService)
+			.getAttractionRewardPoints(any(UUID.class), any(UUID.class));
+		assertThrows(HttpException.class, 
+				() -> nearByAttractionOperation.getNearByAttractions(UUID.randomUUID()));
 	}
 
 }

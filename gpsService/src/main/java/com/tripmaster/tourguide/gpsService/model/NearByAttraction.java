@@ -98,5 +98,15 @@ public class NearByAttraction {
 	public void setPoints(int points) {
 		this.points = points;
 	}
+
+	@Override
+	public String toString() {
+		return "Attraction name = " + getAttractionName() 
+			+ ", Attraction location = {" + getAttractionLocation().latitude + ", " 
+				+ getAttractionLocation().getLongitude() + "}" 
+			+ ", user location = {" + getUserLocation().getLatitude() + ", " + getUserLocation().getLongitude() + "}" 
+			+ ", distance = " + getDistance() 
+			+ ", points = " + getPoints();
+	}
 	
 }

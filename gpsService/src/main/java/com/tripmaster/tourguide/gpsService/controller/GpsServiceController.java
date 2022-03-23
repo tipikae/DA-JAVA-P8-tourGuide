@@ -108,10 +108,12 @@ public class GpsServiceController {
 	 * @return ResponseEntity<List<NearByAttractionDTO>>
 	 * @throws UserNotFoundException 
 	 * @throws HttpException 
+	 * @throws ConverterLibException 
+	 * @throws ConverterDTOException 
 	 */
 	@GetMapping("/nearbyattractions/{userName}")
 	public ResponseEntity<Object> getNearByAttractions(@PathVariable("userName") @NotBlank String userName) 
-			throws UserNotFoundException, HttpException {
+			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException {
 		LOGGER.info("getNearByAttractions: userName=" + userName);
 		List<NearByAttractionDTO> attractions = gpsService.getNearByAttractions(userName);
 		return new ResponseEntity<Object>(attractions, HttpStatus.OK);

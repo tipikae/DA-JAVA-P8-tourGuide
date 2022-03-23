@@ -63,7 +63,9 @@ public interface IGpsServiceService {
 	 * @return List<NearByAttractionDTO>
 	 * @throws UserNotFoundException
 	 * @throws HttpException 
+	 * @throws ConverterLibException 
+	 * @throws ConverterDTOException 
 	 */
 	List<NearByAttractionDTO> getNearByAttractions(String username) 
-			throws UserNotFoundException, HttpException;
+			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException;
 }

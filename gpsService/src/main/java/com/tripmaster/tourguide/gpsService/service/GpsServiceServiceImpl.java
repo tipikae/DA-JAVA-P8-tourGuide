@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.tripmaster.tourguide.gpsService.converters.IConverterDTOAttraction;
 import com.tripmaster.tourguide.gpsService.converters.IConverterDTOLocation;
+import com.tripmaster.tourguide.gpsService.converters.IConverterDTONearByAttraction;
 import com.tripmaster.tourguide.gpsService.converters.IConverterDTOVisitedLocation;
 import com.tripmaster.tourguide.gpsService.converters.IConverterLibAttraction;
 import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
@@ -31,7 +32,7 @@ import com.tripmaster.tourguide.gpsService.model.MLocation;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 import com.tripmaster.tourguide.gpsService.remoteServices.IUserService;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
-import com.tripmaster.tourguide.gpsService.util.IHelper;
+import com.tripmaster.tourguide.gpsService.util.INearByAttractionOperation;
 
 import gpsUtil.GpsUtil;
 
@@ -65,10 +66,13 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	private IConverterLibAttraction attractionLibConverter;
 	
 	@Autowired
-	private IHelper helper;
+	private IUserService userService;
 	
 	@Autowired
-	private IUserService userService;
+	private INearByAttractionOperation nearByAttractionOperation;
+	
+	@Autowired
+	private IConverterDTONearByAttraction nearByAttractionDTOConverter;
 
 	/**
 	 * {@inheritDoc}
@@ -86,7 +90,7 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	@Override
 	public VisitedLocationDTO getUserLocation(String userName) throws HttpException {
 		LOGGER.debug("getUserLocation: userName=" + userName);
-		UUID userId = userService.getUserId(userName);
+		//UUID userId = userService.getUserId(userName);
 		
 		return null;
 	}
@@ -127,11 +131,11 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	}
 
 	/**
-	 * {@inheritDoc} 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public List<NearByAttractionDTO> getNearByAttractions(String username) 
-			throws UserNotFoundException, HttpException {
+			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException {
 		LOGGER.debug("getNearByAttractions: username=" + username);
 		
 		UUID userId = userService.getUserId(username);
@@ -142,7 +146,9 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 			throw new UserNotFoundException("User with userId=" + userId + " not found.");
 		}
 		
-		//List<NearByAttractionDTO> nearByAttractionDTOs = findNearByAttractions(userId);
+		List<NearByAttractionDTO> nearByAttractionDTOs = 
+				nearByAttractionDTOConverter.convertNearByAttractionsToDTOs(
+						nearByAttractionOperation.getNearByAttractions(userId));
 		
 		return nearByAttractionDTOs;
 	}
