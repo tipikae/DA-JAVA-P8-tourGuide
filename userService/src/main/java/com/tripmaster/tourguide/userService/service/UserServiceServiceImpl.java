@@ -57,18 +57,18 @@ public class UserServiceServiceImpl implements IUserServiceService {
 	private IPreferenceConverterDTO preferenceConverter;
 	
 	@Value("${trippricer.apikey}")
-	private static String apiKey;
+	private String apiKey;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public UserDTO addUser(NewUserDTO newUserDTO) throws UserAlreadyExistsException, ConverterException {
-		LOGGER.debug("save: username=" + newUserDTO.getUserName());
+		LOGGER.debug("addUser: username=" + newUserDTO.getUserName());
 		
 		Optional<User> optional = userRepository.findByUsername(newUserDTO.getUserName());
 		if(optional.isPresent()) {
-			LOGGER.debug("save: error: user with username=" + newUserDTO.getUserName() + " already exists.");
+			LOGGER.debug("addUser: error: user with username=" + newUserDTO.getUserName() + " already exists.");
 			throw new UserAlreadyExistsException(
 					"user with username=" + newUserDTO.getUserName() + " already exists.");
 		}
@@ -101,7 +101,11 @@ public class UserServiceServiceImpl implements IUserServiceService {
 	@Override
 	public List<UserDTO> getAllUsers() throws ConverterException {
 		LOGGER.debug("getAllUsers");
-		return userConverter.converterEntitiesToDTOs(userRepository.findAll());
+		
+		List<UserDTO> userDTOs = userConverter.converterEntitiesToDTOs(userRepository.findAll());
+		LOGGER.debug("getAllUsers: returns " + userDTOs.size() + " items.");
+		
+		return userDTOs;
 	}
 
 	/**
@@ -134,7 +138,7 @@ public class UserServiceServiceImpl implements IUserServiceService {
 		
 		Optional<User> optional = userRepository.findByUsername(username);
 		if(!optional.isPresent()) {
-			LOGGER.debug("updatePreferences: error: user with username=" + username + " not found.");
+			LOGGER.debug("getTripDeals: error: user with username=" + username + " not found.");
 			throw new UserNotFoundException(
 					"user with username=" + username + " not found.");
 		}
@@ -142,9 +146,11 @@ public class UserServiceServiceImpl implements IUserServiceService {
 		User user = optional.get();
 		Preference preference = user.getPreference();
 		int points = rewardService.getUserRewardsPoints(user.getUserId());
-		
-		return tripPricer.getPrice(username, user.getUserId(), preference.getNumberOfAdults(), 
+		List<Provider> providers = tripPricer.getPrice(username, user.getUserId(), preference.getNumberOfAdults(), 
 				preference.getNumberOfChildren(), preference.getTripDuration(), points);
+		LOGGER.debug("getTripDeals: returns " + providers.size() + " items.");
+		
+		return providers;
 	}
 
 	/**
@@ -156,7 +162,7 @@ public class UserServiceServiceImpl implements IUserServiceService {
 		
 		Optional<User> optional = userRepository.findByUsername(userName);
 		if(!optional.isPresent()) {
-			LOGGER.debug("updatePreferences: error: user with username=" + userName + " not found.");
+			LOGGER.debug("getUserId: error: user with username=" + userName + " not found.");
 			throw new UserNotFoundException(
 					"user with username=" + userName + " not found.");
 		}

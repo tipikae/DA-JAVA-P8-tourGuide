@@ -34,7 +34,9 @@ public class RewardRepositoryImpl implements IRewardRepository {
 	 */
 	@Override
 	public Reward save(Reward reward) {
-		LOGGER.debug("save");
+		LOGGER.debug("save reward: attraction=" + reward.getAttraction().getAttractionName() 
+				+ ", userId=" + reward.getVisitedLocation().getUserId() 
+				+ ", points=" + reward.getRewardPoints());
 		
 		UUID userId = reward.getVisitedLocation().getUserId();
 		if(internalRewards.containsKey(userId)) {

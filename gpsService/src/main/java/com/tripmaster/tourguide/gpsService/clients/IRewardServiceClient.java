@@ -22,13 +22,13 @@ public interface IRewardServiceClient {
 	 * @param userId UUID
 	 * @return int
 	 */
-	@RequestLine("GET /reward")
+	@RequestLine("GET /reward?attractionId={attractionId}&userId={userId}")
 	int getAttractionRewardPoints(@Param("attractionId") UUID attractionId, @Param("userId") UUID userId);
 	
 	/**
 	 * Calculate an user's rewards.
 	 * @param userId UUID
 	 */
-	@RequestLine("GET /calculate")
+	@RequestLine("GET /calculate/{userId}")
 	void calculateRewards(@Param("userId") UUID userId);
 }

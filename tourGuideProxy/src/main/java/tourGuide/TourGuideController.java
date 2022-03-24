@@ -1,5 +1,9 @@
 package tourGuide;
 
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -20,15 +24,16 @@ import tourGuide.clients.IRewardServiceClient;
 import tourGuide.clients.IUserServiceClient;
 import tourGuide.dto.NewPreferenceDTO;
 import tourGuide.dto.NewUserDTO;
-import tourGuide.service.TourGuideService;
+import tourGuide.model.Location;
+import tourGuide.model.NearByAttraction;
+import tourGuide.model.Provider;
+import tourGuide.model.Reward;
+import tourGuide.model.User;
 
 @RestController
 public class TourGuideController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(TourGuideController.class);
-
-	@Autowired
-	TourGuideService tourGuideService;
 	
 	@Autowired
 	private IUserServiceClient userClient;
@@ -45,9 +50,10 @@ public class TourGuideController {
     }
     
     @RequestMapping("/getLocation") 
-    public String getLocation(@RequestParam String userName) {
+    public Location getLocation(@RequestParam String userName) {
     	LOGGER.info("getLocation: userName=" + userName);
-		return JsonStream.serialize(gpsClient.getUserLocation(userName));
+		//return JsonStream.serialize(gpsClient.getUserLocation(userName));
+		return gpsClient.getUserLocation(userName);
     }
     
     //  TODO: Change this method to no longer return a List of Attractions.
@@ -60,19 +66,21 @@ public class TourGuideController {
         // The reward points for visiting each Attraction.
         //    Note: Attraction reward points can be gathered from RewardsCentral
     @RequestMapping("/getNearbyAttractions") 
-    public String getNearbyAttractions(@RequestParam String userName) {
+    public List<NearByAttraction> getNearbyAttractions(@RequestParam String userName) {
     	LOGGER.info("getNearbyAttractions: userName=" + userName);
-    	return JsonStream.serialize(gpsClient.getNearByAttractions(userName));
+    	//return JsonStream.serialize(gpsClient.getNearByAttractions(userName));
+    	return gpsClient.getNearByAttractions(userName);
     }
     
     @RequestMapping("/getRewards") 
-    public String getRewards(@RequestParam String userName) {
+    public List<Reward> getRewards(@RequestParam String userName) {
     	LOGGER.info("getRewards: userName=" + userName);
-    	return JsonStream.serialize(rewardClient.getUserRewards(userName));
+    	//return JsonStream.serialize(rewardClient.getUserRewards(userName));
+    	return rewardClient.getUserRewards(userName);
     }
     
     @RequestMapping("/getAllCurrentLocations")
-    public String getAllCurrentLocations() {
+    public Map<UUID, Location> getAllCurrentLocations() {
     	// TODO: Get a list of every user's most recent location as JSON
     	//- Note: does not use gpsUtil to query for their current location, 
     	//        but rather gathers the user's current location from their stored location history.
@@ -83,13 +91,15 @@ public class TourGuideController {
     	//        ...
     	//     }
     	LOGGER.info("getAllCurrentLocations");
-    	return JsonStream.serialize(gpsClient.getAllUsersLastLocation());
+    	//return JsonStream.serialize(gpsClient.getAllUsersLastLocation());
+    	return gpsClient.getAllUsersLastLocation();
     }
     
     @RequestMapping("/getTripDeals")
-    public String getTripDeals(@RequestParam String userName) {
+    public List<Provider> getTripDeals(@RequestParam String userName) {
     	LOGGER.info("getTripDeals: userName=" + userName);
-    	return JsonStream.serialize(userClient.getTripDeals(userName));
+    	//return JsonStream.serialize(userClient.getTripDeals(userName));
+    	return userClient.getTripDeals(userName);
     }
     
     /**
@@ -98,9 +108,10 @@ public class TourGuideController {
      * @return String
      */
     @PostMapping("/addUser")
-    public String addUser(@RequestBody @Valid NewUserDTO newUserDTO) {
+    public User addUser(@RequestBody @Valid NewUserDTO newUserDTO) {
     	LOGGER.info("addUser: userName=" + newUserDTO.getUserName());
-		return JsonStream.serialize(userClient.addUser(newUserDTO));
+		//return JsonStream.serialize(userClient.addUser(newUserDTO));
+		return userClient.addUser(newUserDTO);
     }
     
     /**

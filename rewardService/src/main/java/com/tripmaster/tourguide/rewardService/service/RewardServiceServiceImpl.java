@@ -60,8 +60,8 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	@Autowired
 	private IHelper helper;
 	
-	@Value("${reward.proximityBuffer}")
-	private static int proximityBuffer;
+	@Value("${reward.proximityBuffer:10.0}")
+	private double proximityBuffer;
 
 	/**
 	 * {@inheritDoc}
@@ -114,6 +114,8 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 			throw new UserNotFoundException("user with userId=" + userId + " not found.");
 		}
 		
+		LOGGER.debug("getUserRewards: returns " + optional.get().size() + " items.");
+		
 		return rewardConverter.converterRewardsToDTOs(optional.get());
 	}
 
@@ -151,7 +153,8 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	}
 
 	private boolean nearAttraction(Location location, Attraction attraction) {
-		return helper.calculateDistance(location, attraction) > proximityBuffer ? false : true;
+		double distance = helper.calculateDistance(location, attraction);
+		return distance > proximityBuffer ? false : true;
 	}
 
 	private int getRewardPoints(UUID attractionId, UUID userId) {

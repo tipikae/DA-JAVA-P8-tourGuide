@@ -88,8 +88,12 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	@Override
 	public List<AttractionDTO> getAttractions() throws ConverterDTOException, ConverterLibException {
 		LOGGER.debug("getAttractions");
-		return attractionDTOConverter.convertAttractionsToDTos(
+		
+		List<AttractionDTO> attractionDTOs = attractionDTOConverter.convertAttractionsToDTos(
 				attractionLibConverter.convertLibAttractionsToMAttractions(gpsUtil.getAttractions()));
+		LOGGER.debug("getAttractions: returns " + attractionDTOs.size() + " items.");
+		
+		return attractionDTOs;
 	}
 
 	/**
@@ -129,6 +133,8 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 			allUsersLastLocation.put(userId, locationDTOConverter.convertEntityToDTO(location));
 		}
 		
+		LOGGER.debug("getAllUsersLastLocation: returns " + allUsersLastLocation.size() + " items.");
+		
 		return allUsersLastLocation;
 	}
 
@@ -145,6 +151,8 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 			LOGGER.debug("getUserVisitedLocations: error: user with userId=" + userId + " not found.");
 			throw new UserNotFoundException("User with userId=" + userId + " not found.");
 		}
+		
+		LOGGER.debug("getUserVisitedLocations: returns " + optional.get().size() + " items.");
 		
 		return visitedLocationDTOConverter.convertVisitedLocationsToDTOs(optional.get());
 	}
@@ -168,6 +176,8 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 		List<NearByAttractionDTO> nearByAttractionDTOs = 
 				nearByAttractionDTOConverter.convertNearByAttractionsToDTOs(
 						nearByAttractionOperation.getNearByAttractions(userId));
+		
+		LOGGER.debug("getNearByAttractions: returns " + nearByAttractionDTOs.size() + " items.");
 		
 		return nearByAttractionDTOs;
 	}

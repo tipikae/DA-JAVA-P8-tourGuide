@@ -37,7 +37,7 @@ public interface IGpsServiceClient {
 	 * @param userId UUID
 	 * @return Location
 	 */
-	@RequestMapping(value = "/userlocation", method = RequestMethod.GET)
+	@RequestMapping(value = "/location/{userName}", method = RequestMethod.GET)
 	Location getUserLocation(@PathVariable("userName") String userName);
 	
 	/**

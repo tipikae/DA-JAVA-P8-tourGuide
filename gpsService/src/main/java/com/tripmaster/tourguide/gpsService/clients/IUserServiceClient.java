@@ -28,6 +28,6 @@ public interface IUserServiceClient {
 	 * @param userName String
 	 * @return UUID
 	 */
-	@RequestLine("GET /user")
+	@RequestLine("GET /user?userName={userName}")
 	UUID getUserId(@Param("userName") String userName);
 }

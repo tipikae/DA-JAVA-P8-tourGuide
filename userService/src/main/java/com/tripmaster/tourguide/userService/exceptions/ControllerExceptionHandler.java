@@ -43,7 +43,7 @@ public class ControllerExceptionHandler {
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(UserNotFoundException.class)
 	ControllerException exceptionHandler(UserNotFoundException e) {
-		LOGGER.debug("Catching UserAlreadyExistsException: " + e.getMessage());
+		LOGGER.debug("Catching UserNotFoundException: " + e.getMessage());
 		return new ControllerException(HttpStatus.NOT_FOUND.value(), "User not found.");
 	}
 	

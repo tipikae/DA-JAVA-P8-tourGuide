@@ -32,6 +32,6 @@ public interface IGpsServiceClient {
 	 * @param userId UUID
 	 * @return List<VisitedLocation>
 	 */
-	@RequestLine("GET /locations")
+	@RequestLine("GET /locations/{userId}")
 	List<VisitedLocation> getUserVisitedLocations(@Param("userId") UUID userId);
 }
