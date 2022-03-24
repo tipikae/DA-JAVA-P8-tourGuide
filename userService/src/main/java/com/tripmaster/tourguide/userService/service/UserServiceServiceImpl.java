@@ -3,6 +3,7 @@
  */
 package com.tripmaster.tourguide.userService.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -56,7 +57,7 @@ public class UserServiceServiceImpl implements IUserServiceService {
 	@Autowired
 	private IPreferenceConverterDTO preferenceConverter;
 	
-	@Value("${trippricer.apikey}")
+	@Value("${trippricer.apikey:test-api-key}")
 	private String apiKey;
 
 	/**
@@ -168,6 +169,18 @@ public class UserServiceServiceImpl implements IUserServiceService {
 		}
 		
 		return optional.get().getUserId();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<UUID> getAllUserIds() {
+		LOGGER.debug("getAllUserIds");
+		List<UUID> userIds = new ArrayList<>();
+		userRepository.findAll().forEach(user -> userIds.add(user.getUserId()));
+		
+		return userIds;
 	}
 
 }

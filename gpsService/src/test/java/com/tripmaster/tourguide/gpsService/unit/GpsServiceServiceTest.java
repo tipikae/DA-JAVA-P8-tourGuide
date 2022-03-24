@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,6 +44,7 @@ import com.tripmaster.tourguide.gpsService.remoteServices.IRewardService;
 import com.tripmaster.tourguide.gpsService.remoteServices.IUserService;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
 import com.tripmaster.tourguide.gpsService.service.GpsServiceServiceImpl;
+import com.tripmaster.tourguide.gpsService.tracker.Tracker;
 import com.tripmaster.tourguide.gpsService.util.INearByAttractionOperation;
 
 import gpsUtil.GpsUtil;
@@ -86,6 +88,9 @@ class GpsServiceServiceTest {
 	@Mock
 	private IRewardService rewardService;
 	
+	@Mock
+	private Tracker tracker;
+	
 	@InjectMocks
 	private GpsServiceServiceImpl gpsService;
 	
@@ -121,6 +126,11 @@ class GpsServiceServiceTest {
 		attractionDTO.setAttractionName("name");
 		attractionDTOs = new ArrayList<>();
 		attractionDTOs.add(attractionDTO);
+	}
+	
+	@BeforeEach
+	private void setUpPerTest() {
+		tracker.stopTracking();
 	}
 
 	@Test
@@ -222,6 +232,16 @@ class GpsServiceServiceTest {
 		when(visitedLocationRepository.findByUserId(any(UUID.class))).thenReturn(Optional.empty());
 		assertThrows(UserNotFoundException.class, () ->
 				gpsService.getNearByAttractions(userName));
+	}
+	
+	@Test
+	void trackUserLocationReturnsMVisitedLocationWhenOk() 
+			throws ConverterLibException, ConverterDTOException, HttpException {
+		VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(10d, 20d), timeVisited);
+		when(gpsUtil.getUserLocation(any(UUID.class))).thenReturn(visitedLocation);
+		when(visitedLocationLibConverter.convertLibModelToModel(any(VisitedLocation.class)))
+			.thenReturn(mVisitedLocation);
+		assertEquals(visitedLocation.userId, gpsService.trackUserLocation(userId).getUserId());
 	}
 
 }

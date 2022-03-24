@@ -19,7 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import com.tripmaster.tourguide.userService.converterDTO.IPreferenceConverterDTO;
 import com.tripmaster.tourguide.userService.converterDTO.IUserConverterDTO;
@@ -72,7 +71,6 @@ class UserServiceServiceTest {
 	
 	@BeforeAll
 	private static void setUp() {
-		ReflectionTestUtils.setField(UserServiceServiceImpl.class, "apiKey", "test-api-key");
 		username = "username";
 		userId = UUID.randomUUID();
 		user = new User(userId, username, "phone", "email");
@@ -189,6 +187,12 @@ class UserServiceServiceTest {
 	void getUserIdThrowsExceptionWhenUserNotFound() {
 		when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
 		assertThrows(UserNotFoundException.class, () -> userService.getUserId(username));
+	}
+	
+	@Test
+	void getAllUserIdsReturnsIdsWhenOk() {
+		when(userRepository.findAll()).thenReturn(users);
+		assertEquals(user.getUserId(), userService.getAllUserIds().get(0));
 	}
 
 }

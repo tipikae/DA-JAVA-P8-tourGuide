@@ -15,6 +15,7 @@ import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
+import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 
 /**
  * GpsService service.
@@ -70,4 +71,15 @@ public interface IGpsServiceService {
 	 */
 	List<NearByAttractionDTO> getNearByAttractions(String username) 
 			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException;
+
+	/**
+	 * Track user location
+	 * @param userId UUID
+	 * @return MVisitedLocation
+	 * @throws ConverterLibException
+	 * @throws ConverterDTOException
+	 * @throws HttpException
+	 */
+	MVisitedLocation trackUserLocation(UUID userId) 
+			throws ConverterLibException, ConverterDTOException, HttpException;
 }

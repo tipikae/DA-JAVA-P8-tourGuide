@@ -3,6 +3,7 @@
  */
 package com.tripmaster.tourguide.gpsService.remoteServices;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -62,6 +63,24 @@ public class UserServiceImpl implements IUserService {
 		}
 		
 		return userId;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<UUID> getAllUserIds() throws HttpException {
+		List<UUID> userIds = null;
+		
+		try {
+			userIds = userClient.getAllUserIds();
+		} catch (Exception e) {
+			LOGGER.debug("getAllUserIds: userClient error: " + e.getClass().getSimpleName() 
+					+ ": " + e.getMessage());
+			throw new HttpException(e.getClass().getSimpleName() + ": " + e.getMessage());
+		}
+		
+		return userIds;
 	}
 
 }

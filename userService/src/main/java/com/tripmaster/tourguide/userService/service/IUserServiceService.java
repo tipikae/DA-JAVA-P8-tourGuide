@@ -75,5 +75,11 @@ public interface IUserServiceService {
 	 * @throws UserNotFoundException
 	 */
 	UUID getUserId(String userName) throws UserNotFoundException;
+
+	/**
+	 * Get all userIds.
+	 * @return List<UUID>
+	 */
+	List<UUID> getAllUserIds();
 	
 }

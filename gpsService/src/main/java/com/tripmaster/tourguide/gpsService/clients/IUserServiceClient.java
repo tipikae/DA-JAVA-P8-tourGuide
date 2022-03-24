@@ -1,5 +1,6 @@
 package com.tripmaster.tourguide.gpsService.clients;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.tripmaster.tourguide.gpsService.model.User;
@@ -30,4 +31,11 @@ public interface IUserServiceClient {
 	 */
 	@RequestLine("GET /user?userName={userName}")
 	UUID getUserId(@Param("userName") String userName);
+
+	/**
+	 * Get all userIds.
+	 * @return List<UUID>
+	 */
+	@RequestLine("GET /userIds")
+	List<UUID> getAllUserIds();
 }

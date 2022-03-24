@@ -182,7 +182,11 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 		return nearByAttractionDTOs;
 	}
 
-	private MVisitedLocation trackUserLocation(UUID userId) 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public MVisitedLocation trackUserLocation(UUID userId) 
 			throws ConverterLibException, ConverterDTOException, HttpException {
 		LOGGER.debug("trackUserLocation: userId=" + userId);
 		

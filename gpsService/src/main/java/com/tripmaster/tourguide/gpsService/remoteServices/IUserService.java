@@ -3,6 +3,7 @@
  */
 package com.tripmaster.tourguide.gpsService.remoteServices;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
@@ -31,4 +32,11 @@ public interface IUserService {
 	 * @throws HttpException 
 	 */
 	UUID getUserId(String userName) throws HttpException;
+
+	/**
+	 * Get all userIds.
+	 * @return List<UUID>
+	 * @throws HttpException 
+	 */
+	List<UUID> getAllUserIds() throws HttpException;
 }

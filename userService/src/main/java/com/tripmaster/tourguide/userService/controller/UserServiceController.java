@@ -138,5 +138,16 @@ public class UserServiceController {
 		UUID userId = userService.getUserId(userName);
 		return new ResponseEntity<Object>(userId, HttpStatus.OK);
 	}
+	
+	/**
+	 * Get all userIds.
+	 * @return ResponseEntity<Object>
+	 */
+	@GetMapping("/userIds")
+	public ResponseEntity<Object> getAllUserIds() {
+		LOGGER.info("getAllUserIds");
+		List<UUID> userIds = userService.getAllUserIds();
+		return new ResponseEntity<Object>(userIds, HttpStatus.OK);
+	}
 
 }

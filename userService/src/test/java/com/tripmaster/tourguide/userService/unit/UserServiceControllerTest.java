@@ -1,6 +1,7 @@
 package com.tripmaster.tourguide.userService.unit;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -198,6 +199,14 @@ class UserServiceControllerTest {
 		mockMvc.perform(get(root + "/user")
 				.param("userName", username))
 			.andExpect(status().is(404));
+	}
+	
+	@Test
+	void getAllUserIdsReturnsIdsWhenOk() {
+		List<UUID> userIds = new ArrayList<>();
+		userIds.add(userId);
+		when(userService.getAllUserIds()).thenReturn(userIds);
+		assertEquals(1, userService.getAllUserIds().size());
 	}
 	
 }

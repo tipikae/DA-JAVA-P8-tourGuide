@@ -19,7 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import com.tripmaster.tourguide.rewardService.converterDTO.IRewardConverterDTO;
 import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
@@ -80,7 +79,6 @@ class RewardServiceServiceTest {
 	
 	@BeforeAll
 	private static void setUp() {
-		ReflectionTestUtils.setField(RewardServiceServiceImpl.class, "proximityBuffer", 10);
 		userName = "username";
 		userId = UUID.randomUUID();
 		attractionId = UUID.randomUUID();
