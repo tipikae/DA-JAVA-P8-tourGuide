@@ -4,6 +4,7 @@
 package com.tripmaster.tourguide.rewardService.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -70,7 +71,10 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	public void calculateRewards(UUID userId) throws HttpException {
 		LOGGER.debug("calculateRewards: userId=" + userId);
 		
-		List<VisitedLocation> visitedLocations = gpsService.getUserVisitedLocations(userId);
+		//List<VisitedLocation> visitedLocations = gpsService.getUserVisitedLocations(userId);
+		VisitedLocation vl = new VisitedLocation(userId, new Location(10d, 20d), new Date());
+		List<VisitedLocation> visitedLocations = new ArrayList<>();
+		visitedLocations.add(vl);
 		List<Attraction> attractions = gpsService.getAttractions();
 		
 		Optional<List<Reward>> optional = rewardRepository.findByUserId(userId);

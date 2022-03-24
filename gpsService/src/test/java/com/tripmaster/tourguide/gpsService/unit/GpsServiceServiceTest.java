@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -176,7 +177,8 @@ class GpsServiceServiceTest {
 	@Test
 	void getAllUsersLastLocationReturnsMapWhenOK() throws ConverterDTOException {
 		Map<UUID, List<MVisitedLocation>> allUsersVisitedLocations = new HashMap<>();
-		allUsersVisitedLocations.put(userId, mVisitedLocations);
+		List<MVisitedLocation> visitedLocations = new CopyOnWriteArrayList<>(mVisitedLocations);
+		allUsersVisitedLocations.put(userId, visitedLocations);
 		LocationDTO locationDTO = new LocationDTO();
 		locationDTO.setLatitude(10d);
 		when(visitedLocationRepository.findAll()).thenReturn(allUsersVisitedLocations);

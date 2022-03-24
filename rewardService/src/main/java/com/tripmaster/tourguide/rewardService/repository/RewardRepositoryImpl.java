@@ -3,12 +3,12 @@
  */
 package com.tripmaster.tourguide.rewardService.repository;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +44,7 @@ public class RewardRepositoryImpl implements IRewardRepository {
 			rewards.add(reward);
 			internalRewards.replace(userId, rewards);
 		} else {
-			List<Reward> rewards = new ArrayList<>();
+			List<Reward> rewards = new CopyOnWriteArrayList<>();
 			rewards.add(reward);
 			internalRewards.put(userId, rewards);
 		}

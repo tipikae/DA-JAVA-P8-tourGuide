@@ -41,7 +41,7 @@ public class Tracker extends Thread {
 	
 	private boolean stop = false;
 
-	public Tracker(IGpsServiceService gpsService) {
+	public Tracker() {
 		addShutDownHook();
 		executorService.submit(this);
 	}
@@ -50,6 +50,7 @@ public class Tracker extends Thread {
 	 * Assures to shut down the Tracker thread.
 	 */
 	public void stopTracking() {
+		LOGGER.debug("stopTracking");
 		stop = true;
 		executorService.shutdownNow();
 	}

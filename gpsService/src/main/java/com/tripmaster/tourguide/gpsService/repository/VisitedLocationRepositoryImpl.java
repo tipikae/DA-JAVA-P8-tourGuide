@@ -3,12 +3,12 @@
  */
 package com.tripmaster.tourguide.gpsService.repository;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,8 @@ public class VisitedLocationRepositoryImpl implements IVisitedLocationRepository
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(VisitedLocationRepositoryImpl.class);
 	
-	private static Map<UUID, List<MVisitedLocation>> internalVisitedLocations = new HashMap<>();
+	private static Map<UUID, List<MVisitedLocation>> internalVisitedLocations 
+		= new HashMap<>();
 
 	/**
 	 * {@inheritDoc} 
@@ -45,7 +46,7 @@ public class VisitedLocationRepositoryImpl implements IVisitedLocationRepository
 			visitedLocations.add(visitedLocation);
 			internalVisitedLocations.replace(visitedLocation.getUserId(), visitedLocations);
 		} else {
-			List<MVisitedLocation> visitedLocations = new ArrayList<>();
+			List<MVisitedLocation> visitedLocations = new CopyOnWriteArrayList<>();
 			visitedLocations.add(visitedLocation);
 			internalVisitedLocations.put(visitedLocation.getUserId(), visitedLocations);
 		}
