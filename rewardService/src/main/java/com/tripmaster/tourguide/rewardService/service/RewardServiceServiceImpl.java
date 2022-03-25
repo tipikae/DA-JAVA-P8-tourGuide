@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +45,8 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RewardServiceServiceImpl.class);
 	
+	private static ExecutorService executorService = Executors.newFixedThreadPool(1000);
+	
 	@Autowired
 	private IRewardRepository rewardRepository;
 	
@@ -63,6 +67,10 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	
 	@Value("${reward.proximityBuffer:10.0}")
 	private double proximityBuffer;
+	
+	public RewardServiceServiceImpl() {
+		addShutDownHook();
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -87,19 +95,28 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 			VisitedLocation visitedLocation = itVisitedLocation.next();
 			while(itAttraction.hasNext()) {
 				Attraction attraction = itAttraction.next();
-				if(rewards.stream().filter(r -> 
-							r.getAttraction().getAttractionName().equals(attraction.getAttractionName()))
-						.count() == 0) {
-					if(nearAttraction(visitedLocation.getLocation(), attraction)) {
-						Reward reward = 
-								new Reward(visitedLocation, attraction, 
-										getRewardPoints(attraction.getAttractionId(), userId));
-						rewardRepository.save(reward);
+				
+				// async 
+				executorService.execute(new Runnable() {
+					
+					@Override
+					public void run() {
+						if(rewards.stream().filter(r -> 
+									r.getAttraction().getAttractionName()
+										.equals(attraction.getAttractionName()))
+										.count() == 0) {
+							if(nearAttraction(visitedLocation.getLocation(), attraction)) {
+								Reward reward = 
+										new Reward(visitedLocation, attraction, 
+												getRewardPoints(attraction.getAttractionId(), userId));
+								rewardRepository.save(reward);
+							}
+						}
+						
 					}
-				}
+				});
 			}
 		}
-		
 	}
 
 	/**
@@ -163,5 +180,18 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 
 	private int getRewardPoints(UUID attractionId, UUID userId) {
 		return rewardCentral.getAttractionRewardPoints(attractionId, userId);
+	}
+	
+	private void addShutDownHook() {
+		LOGGER.debug("calculateRewards: addShutDownHook");
+		
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			
+			@Override
+			public void run() {
+				LOGGER.debug("calculateRewards: stopTracking");
+				executorService.shutdownNow();
+		      } 
+		    }); 
 	}
 }

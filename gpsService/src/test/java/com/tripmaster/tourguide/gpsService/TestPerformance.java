@@ -27,7 +27,7 @@ class TestPerformance {
 	@Autowired
 	private Tracker tracker;
 	
-	private int userNumber = 100;
+	private int userNumber = 1000;
 
 	@Test
 	public void highVolumeTrackLocation() 
@@ -42,11 +42,13 @@ class TestPerformance {
 		
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
-		for(int i = 0; i < userNumber; i++) {
-			UUID userId = userIds.get(i);
-			System.out.println("user " + i);
-			gpsService.trackUserLocation(userId);
-		}
+		userIds.parallelStream().forEach(userId -> {
+			try {
+				gpsService.trackUserLocation(userId);
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+			}
+		});
 		stopWatch.stop();
 
 		System.out.println("highVolumeTrackLocation: Time Elapsed: " 

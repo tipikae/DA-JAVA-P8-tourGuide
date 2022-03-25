@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -49,6 +51,8 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(GpsServiceServiceImpl.class);
 	
+	private static ExecutorService executorService = Executors.newFixedThreadPool(20);
+	
 	@Autowired
 	private IVisitedLocationRepository visitedLocationRepository;
 	
@@ -81,6 +85,10 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	
 	@Autowired
 	private IConverterDTONearByAttraction nearByAttractionDTOConverter;
+	
+	public GpsServiceServiceImpl() {
+		addShutDownHook();
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -187,20 +195,49 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	 */
 	@Override
 	public MVisitedLocation trackUserLocation(UUID userId) 
-			throws ConverterLibException, ConverterDTOException, HttpException {
+			throws ConverterLibException, HttpException {
 		LOGGER.debug("trackUserLocation: userId=" + userId);
 		
 		// get current location
 		MVisitedLocation mVisitedLocation = visitedLocationLibConverter.convertLibModelToModel(
 				gpsUtil.getUserLocation(userId));
 		
-		// save current location
-		visitedLocationRepository.save(mVisitedLocation);
-		
-		// call calculateRewards
-		rewardService.calculateRewards(userId);
+		executorService.execute(new Runnable() {
+
+			@Override
+			public void run() {
+				// save current location
+				visitedLocationRepository.save(mVisitedLocation);
+			}
+		});
+
+		// call calculateRewards in async thread
+		executorService.execute(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					rewardService.calculateRewards(userId);
+				} catch (Exception e) {
+					LOGGER.debug("trackUserLocation: calculateRewards error: " + e.getMessage());
+				}
+			}
+		});
 		
 		return mVisitedLocation;
+	}
+	
+	private void addShutDownHook() {
+		LOGGER.debug("trackUserLocation: addShutDownHook");
+		
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			
+			@Override
+			public void run() {
+				LOGGER.debug("trackUserLocation: stopTracking");
+				executorService.shutdownNow();
+		      } 
+		    }); 
 	}
 
 }

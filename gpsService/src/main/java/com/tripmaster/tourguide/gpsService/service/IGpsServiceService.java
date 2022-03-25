@@ -77,9 +77,8 @@ public interface IGpsServiceService {
 	 * @param userId UUID
 	 * @return MVisitedLocation
 	 * @throws ConverterLibException
-	 * @throws ConverterDTOException
 	 * @throws HttpException
 	 */
 	MVisitedLocation trackUserLocation(UUID userId) 
-			throws ConverterLibException, ConverterDTOException, HttpException;
+			throws ConverterLibException, HttpException;
 }

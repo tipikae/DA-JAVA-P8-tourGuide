@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 import com.tripmaster.tourguide.gpsService.remoteServices.IUserService;
@@ -50,7 +49,7 @@ public class Tracker extends Thread {
 	 * Assures to shut down the Tracker thread.
 	 */
 	public void stopTracking() {
-		LOGGER.debug("stopTracking");
+		LOGGER.debug("Tracker: stopTracking");
 		stop = true;
 		executorService.shutdownNow();
 	}
@@ -64,7 +63,7 @@ public class Tracker extends Thread {
 		
 		while(true) {
 			if(Thread.currentThread().isInterrupted() || stop) {
-				LOGGER.debug("run: Tracker stopping");
+				LOGGER.debug("Tracker: run: Tracker stopping");
 				break;
 			}
 			
@@ -72,27 +71,27 @@ public class Tracker extends Thread {
 			try {
 				userIds = userService.getAllUserIds();
 			} catch (HttpException e) {
-				LOGGER.debug("run: userService failed to retrieve all userIds.");
+				LOGGER.debug("Tracker: run: userService failed to retrieve all userIds.");
 			}
 			
-			LOGGER.debug("run: Begin Tracker. Tracking " + userIds.size() + " users.");
+			LOGGER.debug("Tracker: run: Begin Tracker. Tracking " + userIds.size() + " users.");
 			
 			stopWatch.start();
 			userIds.forEach(userId -> {
 				try {
 					gpsService.trackUserLocation(userId);
-				} catch (ConverterLibException | ConverterDTOException | HttpException e) {
-					LOGGER.debug("run: gpsService failed to track user location: userId=" + userId);
+				} catch (ConverterLibException | HttpException e) {
+					LOGGER.debug("Tracker: run: gpsService failed to track user location: userId=" + userId);
 				}
 			});
 			stopWatch.stop();
 			
-			LOGGER.debug("run: Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) 
+			LOGGER.debug("Tracker: run: Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) 
 			+ " seconds."); 
 			stopWatch.reset();
 			
 			try {
-				LOGGER.debug("run: Tracker sleeping");
+				LOGGER.debug("Tracker: run: Tracker sleeping");
 				TimeUnit.SECONDS.sleep(TRACKING_POLLING_INTERVAL);
 			} catch (InterruptedException e) {
 				break;
@@ -102,7 +101,7 @@ public class Tracker extends Thread {
 	}
 	
 	private void addShutDownHook() {
-		LOGGER.debug("addShutDownHook");
+		LOGGER.debug("Tracker: addShutDownHook");
 		Runtime.getRuntime().addShutdownHook(new Thread() { 
 		      public void run() {
 		        stopTracking();
