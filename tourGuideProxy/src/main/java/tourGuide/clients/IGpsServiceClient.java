@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import tourGuide.model.Attraction;
 import tourGuide.model.Location;
 import tourGuide.model.NearByAttraction;
+import tourGuide.model.VisitedLocation;
 
 /**
  * Feign client for GpsService.
@@ -35,10 +36,10 @@ public interface IGpsServiceClient {
 	/**
 	 * Mapping for getUserLocation.
 	 * @param userId UUID
-	 * @return Location
+	 * @return VisitedLocation
 	 */
 	@RequestMapping(value = "/location/{userName}", method = RequestMethod.GET)
-	Location getUserLocation(@PathVariable("userName") String userName);
+	VisitedLocation getUserLocation(@PathVariable("userName") String userName);
 	
 	/**
 	 * Get all users last location.

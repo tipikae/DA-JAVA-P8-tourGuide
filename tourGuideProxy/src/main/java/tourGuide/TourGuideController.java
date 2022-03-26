@@ -29,6 +29,7 @@ import tourGuide.model.NearByAttraction;
 import tourGuide.model.Provider;
 import tourGuide.model.Reward;
 import tourGuide.model.User;
+import tourGuide.model.VisitedLocation;
 
 @RestController
 public class TourGuideController {
@@ -50,7 +51,7 @@ public class TourGuideController {
     }
     
     @RequestMapping("/getLocation") 
-    public Location getLocation(@RequestParam String userName) {
+    public VisitedLocation getLocation(@RequestParam String userName) {
     	LOGGER.info("getLocation: userName=" + userName);
 		//return JsonStream.serialize(gpsClient.getUserLocation(userName));
 		return gpsClient.getUserLocation(userName);
@@ -108,10 +109,10 @@ public class TourGuideController {
      * @return String
      */
     @PostMapping("/addUser")
-    public Object addUser(@RequestBody @Valid NewUserDTO newUserDTO) {
+    public User addUser(@RequestBody @Valid NewUserDTO newUserDTO) {
     	LOGGER.info("addUser: userName=" + newUserDTO.getUserName());
 		//return JsonStream.serialize(userClient.addUser(newUserDTO));
-    	Object user = userClient.addUser(newUserDTO);
+    	User user = userClient.addUser(newUserDTO);
 		return user;
     }
     

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -19,9 +20,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.tripmaster.tourguide.rewardService.controller.RewardServiceController;
+import com.tripmaster.tourguide.rewardService.dto.NewVisitedLocationsAndAttractionsDTO;
 import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.rewardService.service.IRewardServiceService;
@@ -54,8 +57,11 @@ class RewardServiceControllerTest {
 	
 	@Test
 	void calculateReturns200WhenOk() throws Exception {
-		doNothing().when(rewardService).calculateRewards(any(UUID.class));
-		mockMvc.perform(get(root + "/calculate/" + UUID.randomUUID().toString()))
+		doNothing().when(rewardService)
+			.calculateRewards(any(UUID.class), any(NewVisitedLocationsAndAttractionsDTO.class));
+		mockMvc.perform(post(root + "/calculate/" + UUID.randomUUID().toString())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{visitedLocations: {}, attractions: {}}"))
 			.andExpect(status().isOk());
 	}
 	

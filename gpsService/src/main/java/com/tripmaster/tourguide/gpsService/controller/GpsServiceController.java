@@ -63,7 +63,7 @@ public class GpsServiceController {
 	/**
 	 * Get a user's location.
 	 * @param userName String
-	 * @return ResponseEntity<LocationDTO>
+	 * @return ResponseEntity<VisitedLocationDTO>
 	 * @throws UserNotFoundException 
 	 * @throws HttpException 
 	 * @throws ConverterLibException 
@@ -73,7 +73,7 @@ public class GpsServiceController {
 	public ResponseEntity<Object> getUserLocation(@PathVariable("userName") @NotBlank String userName) 
 			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException {
 		LOGGER.info("getUserLocation: userName=" + userName);
-		LocationDTO visitedLocation = gpsService.getUserLocation(userName);
+		VisitedLocationDTO visitedLocation = gpsService.getUserLocation(userName);
 		return new ResponseEntity<Object>(visitedLocation, HttpStatus.OK);
 	}
 	

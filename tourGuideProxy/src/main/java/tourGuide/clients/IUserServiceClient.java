@@ -41,7 +41,7 @@ public interface IUserServiceClient {
 	 * @return ResponseEntity<Object>
 	 */
 	@PostMapping("/user")
-	Object addUser(@RequestBody NewUserDTO newUserDTO) throws FeignException;
+	User addUser(@RequestBody NewUserDTO newUserDTO) throws FeignException;
 	
 	/**
 	 * Update an user's preferences.

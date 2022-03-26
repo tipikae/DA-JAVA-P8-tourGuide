@@ -4,7 +4,6 @@
 package com.tripmaster.tourguide.rewardService.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.tripmaster.tourguide.rewardService.converterDTO.IRewardConverterDTO;
+import com.tripmaster.tourguide.rewardService.dto.NewVisitedLocationsAndAttractionsDTO;
 import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
 import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
 import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
@@ -27,7 +27,7 @@ import com.tripmaster.tourguide.rewardService.model.Attraction;
 import com.tripmaster.tourguide.rewardService.model.Location;
 import com.tripmaster.tourguide.rewardService.model.Reward;
 import com.tripmaster.tourguide.rewardService.model.VisitedLocation;
-import com.tripmaster.tourguide.rewardService.remoteServices.IGpsService;
+import com.tripmaster.tourguide.rewardService.model.VisitedLocationsAndAttractions;
 import com.tripmaster.tourguide.rewardService.remoteServices.IUserService;
 import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
 import com.tripmaster.tourguide.rewardService.util.IHelper;
@@ -60,9 +60,6 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	private IUserService userService;
 	
 	@Autowired
-	private IGpsService gpsService;
-	
-	@Autowired
 	private IHelper helper;
 	
 	@Value("${reward.proximityBuffer:10.0}")
@@ -76,14 +73,12 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void calculateRewards(UUID userId) throws HttpException {
+	public void calculateRewards(UUID userId, NewVisitedLocationsAndAttractionsDTO 
+			newVisitedLocationsAndAttractionsDTO) throws HttpException {
 		LOGGER.debug("calculateRewards: userId=" + userId);
 
-		/*VisitedLocation vl = new VisitedLocation(userId, new Location(10d, 20d), new Date());
-		List<VisitedLocation> visitedLocations = new ArrayList<>();
-		visitedLocations.add(vl);*/
-		List<VisitedLocation> visitedLocations = gpsService.getUserVisitedLocations(userId);
-		List<Attraction> attractions = gpsService.getAttractions();
+		List<VisitedLocation> visitedLocations = newVisitedLocationsAndAttractionsDTO.getVisitedLocations();
+		List<Attraction> attractions = newVisitedLocationsAndAttractionsDTO.getAttractions();
 		
 		Optional<List<Reward>> optional = rewardRepository.findByUserId(userId);
 		List<Reward> rewards = (optional.isPresent() ? optional.get() : new ArrayList<>());

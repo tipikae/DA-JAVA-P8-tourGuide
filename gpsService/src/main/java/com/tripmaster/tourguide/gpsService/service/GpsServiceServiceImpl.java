@@ -7,8 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.function.Supplier;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -109,7 +114,7 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public LocationDTO getUserLocation(String userName) 
+	public VisitedLocationDTO getUserLocation(String userName) 
 			throws HttpException, ConverterDTOException, ConverterLibException {
 		LOGGER.debug("getUserLocation: userName=" + userName);
 		
@@ -117,14 +122,14 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 		Optional<List<MVisitedLocation>> optional = visitedLocationRepository.findByUserId(userId);
 		if(!optional.isPresent()) {
 			// trackUserLocation
-			return locationDTOConverter.convertEntityToDTO(trackUserLocation(userId).getLocation());
+			return visitedLocationDTOConverter.convertEntityToDTO(trackUserLocation(userId));
 		}
 		
 		List<MVisitedLocation> mVisitedLocations = optional.get();
 		int last = mVisitedLocations.size() - 1;
 		MVisitedLocation mVisitedLocation = mVisitedLocations.get(last);
 		
-		return locationDTOConverter.convertEntityToDTO(mVisitedLocation.getLocation());
+		return visitedLocationDTOConverter.convertEntityToDTO(mVisitedLocation);
 	}
 
 	/**
@@ -199,17 +204,40 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 			throws ConverterLibException, HttpException {
 		LOGGER.debug("trackUserLocation: userId=" + userId);
 		
-		// get current location
-		MVisitedLocation mVisitedLocation = visitedLocationLibConverter.convertLibModelToModel(
-				gpsUtil.getUserLocation(userId));
+		CompletableFuture<MVisitedLocation> futureLocation = CompletableFuture.supplyAsync(() -> {
+			// get current location
+			MVisitedLocation mVisitedLocation = null;
+			try {
+				mVisitedLocation = visitedLocationLibConverter.convertLibModelToModel(
+					gpsUtil.getUserLocation(userId));
+			} catch (ConverterLibException e) {
+				LOGGER.error("trackUserLocation: get current location error: " + e.getMessage());
+			}
+			
+			return mVisitedLocation;
+		}, executorService)
 		
-		// save current location
-		visitedLocationRepository.save(mVisitedLocation);
+				// save current location
+		.thenApplyAsync(visitedLocation -> {
+			 return visitedLocationRepository.save(visitedLocation);
+		}, executorService)
 		
-		// call calculateRewards in async thread
-		rewardService.calculateRewards(userId);
+		// call calculateRewards
+		.thenApplyAsync(visitedLocation -> {
+			/*try {
+				rewardService.calculateRewards(userId);
+			} catch (HttpException e) {
+				LOGGER.error("trackUserLocation: call calculateRewards error: " + e.getMessage());
+			}*/
+			return visitedLocation;
+		}, executorService);
 		
-		return mVisitedLocation;
+		try {
+			return futureLocation.get();
+		} catch (InterruptedException | ExecutionException e) {
+			LOGGER.error("trackUserLocation: get future error: " + e.getMessage());
+			throw new ConverterLibException(e.getMessage());
+		}
 	}
 	
 	private void addShutDownHook() {

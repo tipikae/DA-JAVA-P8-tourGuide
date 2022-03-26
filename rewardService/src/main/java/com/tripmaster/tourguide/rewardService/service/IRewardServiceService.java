@@ -6,6 +6,7 @@ package com.tripmaster.tourguide.rewardService.service;
 import java.util.List;
 import java.util.UUID;
 
+import com.tripmaster.tourguide.rewardService.dto.NewVisitedLocationsAndAttractionsDTO;
 import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
 import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
 import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
@@ -22,9 +23,11 @@ public interface IRewardServiceService {
 	/**
 	 * Calculate rewards.
 	 * @param userId UUID
+	 * @param newVisitedLocationsAndAttractionsDTO NewVisitedLocationsAndAttractionsDTO
 	 * @throws HttpException 
 	 */
-	void calculateRewards(UUID userId) throws HttpException;
+	void calculateRewards(UUID userId, NewVisitedLocationsAndAttractionsDTO 
+			newVisitedLocationsAndAttractionsDTO) throws HttpException;
 	
 	/**
 	 * Get a user's rewards.

@@ -2,12 +2,9 @@ package tourGuide;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-//import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.time.StopWatch;
@@ -21,7 +18,6 @@ import tourGuide.helper.InternalTestHelper;
 import tourGuide.service.RewardsService;
 import tourGuide.service.TourGuideService;
 import tourGuide.user.User;
-import tourGuide.user.UserReward;
 import tripPricer.TripPricer;
 
 public class TestPerformance {

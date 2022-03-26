@@ -145,33 +145,33 @@ class GpsServiceServiceTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	void getUserLocationReturnsLocationWhenNotFound() 
+	void getUserLocationReturnsVisitedLocationWhenNotFound() 
 			throws HttpException, ConverterLibException, ConverterDTOException {
 		VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(10d, 20d), timeVisited);
-		LocationDTO locationDTO = new LocationDTO();
-		locationDTO.setLatitude(10d);
-		locationDTO.setLongitude(20d);
+		VisitedLocationDTO visitedLocationDTO = new VisitedLocationDTO();
+		visitedLocationDTO.setUserId(userId);
 		when(userService.getUserId(anyString())).thenReturn(userId);
 		when(visitedLocationRepository.findByUserId(any(UUID.class)))
 			.thenReturn(Optional.empty(), Optional.of(mVisitedLocations));
 		when(gpsUtil.getUserLocation(any(UUID.class))).thenReturn(visitedLocation);
 		when(visitedLocationLibConverter.convertLibModelToModel(any(VisitedLocation.class)))
 			.thenReturn(mVisitedLocation);
-		when(locationDTOConverter.convertEntityToDTO(any(MLocation.class))).thenReturn(locationDTO);
-		assertEquals(10d, gpsService.getUserLocation(userName).getLatitude());
+		when(visitedLocationDTOConverter.convertEntityToDTO(any(MVisitedLocation.class)))
+			.thenReturn(visitedLocationDTO);
+		assertEquals(userId, gpsService.getUserLocation(userName).getUserId());
 	}
 
 	@Test
-	void getUserLocationReturnsLocationWhenFound() 
+	void getUserLocationReturnsVisitedLocationWhenFound() 
 			throws HttpException, ConverterDTOException, ConverterLibException {
-		LocationDTO locationDTO = new LocationDTO();
-		locationDTO.setLatitude(10d);
-		locationDTO.setLongitude(20d);
+		VisitedLocationDTO visitedLocationDTO = new VisitedLocationDTO();
+		visitedLocationDTO.setUserId(userId);
 		when(userService.getUserId(anyString())).thenReturn(userId);
 		when(visitedLocationRepository.findByUserId(any(UUID.class)))
 			.thenReturn(Optional.of(mVisitedLocations));
-		when(locationDTOConverter.convertEntityToDTO(any(MLocation.class))).thenReturn(locationDTO);
-		assertEquals(20d, gpsService.getUserLocation(userName).getLongitude());
+		when(visitedLocationDTOConverter.convertEntityToDTO(any(MVisitedLocation.class)))
+			.thenReturn(visitedLocationDTO);
+		assertEquals(userId, gpsService.getUserLocation(userName).getUserId());
 	}
 	
 	@Test

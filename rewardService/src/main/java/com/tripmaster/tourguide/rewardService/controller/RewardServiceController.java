@@ -6,6 +6,7 @@ package com.tripmaster.tourguide.rewardService.controller;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -17,10 +18,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tripmaster.tourguide.rewardService.dto.NewVisitedLocationsAndAttractionsDTO;
 import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
 import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
 import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
@@ -46,15 +50,18 @@ public class RewardServiceController {
 	/**
 	 * Calculate rewards.
 	 * @param userId UUID
+	 * @param newVisitedLocationsAndAttractionsDTO NewVisitedLocationsAndAttractionsDTO
 	 * @return ResponseEntity<Object>
 	 * @throws HttpException 
 	 * @throws UserNotFoundException 
 	 */
-	@GetMapping("/calculate/{userId}")
-	public ResponseEntity<Object> calculate(@PathVariable("userId") @NotNull UUID userId) 
+	@PostMapping(value = "/calculate/{userId}", consumes = {"application/json"})
+	public ResponseEntity<Object> calculate(
+			@PathVariable("userId") @NotNull UUID userId,
+			@RequestBody @Valid NewVisitedLocationsAndAttractionsDTO newVisitedLocationsAndAttractionsDTO) 
 			throws HttpException {
 		LOGGER.info("calculate");
-		rewardService.calculateRewards(userId);
+		rewardService.calculateRewards(userId, newVisitedLocationsAndAttractionsDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

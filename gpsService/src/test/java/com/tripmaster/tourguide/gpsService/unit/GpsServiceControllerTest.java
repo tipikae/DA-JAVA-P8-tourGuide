@@ -78,10 +78,10 @@ class GpsServiceControllerTest {
 	
 	@Test
 	void getUserLocationReturnsLocationWhenOk() throws Exception {
-		when(gpsService.getUserLocation(anyString())).thenReturn(locationDTO);
+		when(gpsService.getUserLocation(anyString())).thenReturn(visitedLocationDTO);
 		mockMvc.perform(get(root + "/location/" + userName))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.latitude", is(locationDTO.getLatitude())));
+			.andExpect(jsonPath("$.userId", is(userId.toString())));
 	}
 	
 	@Test
