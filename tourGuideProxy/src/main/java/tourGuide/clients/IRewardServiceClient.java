@@ -3,12 +3,15 @@
  */
 package tourGuide.clients;
 
-import java.util.UUID;
+import java.util.List;
+
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import tourGuide.model.Reward;
 
 /**
  * Feign client for RewardService.
@@ -16,17 +19,14 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @version 1.0
  *
  */
-@FeignClient(url = "http://localhost:8083")
+@FeignClient(name = "RewardService", url = "http://localhost:8083/rewardservice")
 public interface IRewardServiceClient {
 
 	/**
 	 * Get attraction reward points.
-	 * @param attractionId
-	 * @param userId
-	 * @return int
+	 * @param userName String
+	 * @return List<Reward>
 	 */
-	@RequestMapping(value = "/rewardservice/points", method = RequestMethod.GET)
-	int getAttractionRewardPoints(
-			@RequestParam("attractionId") UUID attractionId, 
-			@RequestParam("userId") UUID userId);
+	@GetMapping("/rewards/{userName}")
+	List<Reward> getUserRewards(@PathVariable("userName") @NotBlank String userName);
 }

@@ -3,18 +3,28 @@
  */
 package com.tripmaster.tourguide.rewardService.controller;
 
+import java.util.List;
 import java.util.UUID;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
+import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
+import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
+import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.rewardService.service.IRewardServiceService;
 
 /**
@@ -25,6 +35,7 @@ import com.tripmaster.tourguide.rewardService.service.IRewardServiceService;
  */
 @RestController
 @RequestMapping("/rewardservice")
+@Validated
 public class RewardServiceController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RewardServiceController.class);
@@ -32,5 +43,64 @@ public class RewardServiceController {
 	@Autowired
 	private IRewardServiceService rewardService;
 	
+	/**
+	 * Calculate rewards.
+	 * @param userId UUID
+	 * @return ResponseEntity<Object>
+	 * @throws HttpException 
+	 * @throws UserNotFoundException 
+	 */
+	@GetMapping("/calculate/{userId}")
+	public ResponseEntity<Object> calculate(@PathVariable("userId") @NotNull UUID userId) 
+			throws HttpException {
+		LOGGER.info("calculate");
+		rewardService.calculateRewards(userId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	/**
+	 * Get an user's rewards.
+	 * @param userName String
+	 * @return ResponseEntity<Object>
+	 * @throws UserNotFoundException 
+	 * @throws ConverterException 
+	 * @throws HttpException 
+	 */
+	@GetMapping("/rewards/{userName}")
+	public ResponseEntity<Object> getUserRewards(@PathVariable("userName") @NotBlank String userName) 
+			throws UserNotFoundException, HttpException, ConverterException {
+		LOGGER.info("getUserRewards");
+		List<RewardDTO> rewards = rewardService.getUserRewards(userName);
+		return new ResponseEntity<Object>(rewards, HttpStatus.OK);
+	}
+	
+	/**
+	 * Get an user's rewards points sum.
+	 * @param userId UUID
+	 * @return ResponseEntity<Object>
+	 * @throws UserNotFoundException 
+	 */
+	@GetMapping("/points/{userId}")
+	public ResponseEntity<Object> getUserRewardsPoints(@PathVariable("userId") @NotNull UUID userId) 
+			throws UserNotFoundException {
+		LOGGER.info("getUserRewardsPoints");
+		int points = rewardService.getUserRewardsPoints(userId);
+		return new ResponseEntity<Object>(points, HttpStatus.OK);
+	}
+	
+	/**
+	 * Get an attraction's reward points.
+	 * @param attractionId UUID
+	 * @param userId UUID
+	 * @return ResponseEntity<Object>
+	 */
+	@GetMapping("/reward")
+	public ResponseEntity<Object> getAttractionRewardPoints(
+			@RequestParam("attractionId") @NotNull UUID attractionId, 
+			@RequestParam("userId") @NotNull UUID userId) {
+		LOGGER.info("getAttractionRewardPoints");
+		int points = rewardService.getAttractionRewardPoints(attractionId, userId);
+		return new ResponseEntity<Object>(points, HttpStatus.OK);
+	}
 	
 }

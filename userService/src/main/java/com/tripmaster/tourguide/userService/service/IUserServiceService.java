@@ -4,10 +4,13 @@
 package com.tripmaster.tourguide.userService.service;
 
 import java.util.List;
+import java.util.UUID;
 
-import com.tripmaster.tourguide.userService.entities.Reward;
-import com.tripmaster.tourguide.userService.entities.User;
-import com.tripmaster.tourguide.userService.entities.VisitedLocation;
+import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
+import com.tripmaster.tourguide.userService.dto.NewUserDTO;
+import com.tripmaster.tourguide.userService.dto.UserDTO;
+import com.tripmaster.tourguide.userService.exceptions.ConverterException;
+import com.tripmaster.tourguide.userService.exceptions.HttpException;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
 
@@ -20,50 +23,63 @@ import tripPricer.Provider;
  *
  */
 public interface IUserServiceService {
-
-	/**
-	 * Add a new user.
-	 * @param user
-	 * @return User
-	 * @throws UserAlreadyExistsException
-	 */
-	User addUser(User user) throws UserAlreadyExistsException;
 	
 	/**
-	 * Get a user by his username.
-	 * @param username
-	 * @return User
-	 * @throws UserNotFoundException
+	 * Add a user.
+	 * @param user NewUserDTO
+	 * @return UserDTO
+	 * @throws UserAlreadyExistsException 
+	 * @throws ConverterException 
 	 */
-	User getUserByUsername(String username) throws UserNotFoundException;
+	UserDTO addUser(NewUserDTO user) throws UserAlreadyExistsException, ConverterException;
+	
+	/**
+	 * Get a user by username.
+	 * @param username String
+	 * @return UserDTO
+	 * @throws UserNotFoundException
+	 * @throws ConverterException 
+	 */
+	UserDTO getUser(String username) throws UserNotFoundException, ConverterException;
 	
 	/**
 	 * Get all users.
-	 * @return List<User>
+	 * @return List<UserDTO>
+	 * @throws ConverterException 
 	 */
-	List<User> getAllUsers();
+	List<UserDTO> getAllUsers() throws ConverterException;
 	
 	/**
-	 * Get a user rewards.
-	 * @param username
-	 * @return List<Reward>
-	 * @throws UserNotFoundException
+	 * Update an user's preferences.
+	 * @param userName String
+	 * @param preference NewPreferenceDTO
+	 * @throws ConverterException 
 	 */
-	List<Reward> getRewards(String username) throws UserNotFoundException;
-	
+	void updatePreferences(String userName, NewPreferenceDTO preference) 
+			throws UserNotFoundException, ConverterException;
+
 	/**
-	 * Get a user visited locations.
-	 * @param username
-	 * @return List<VisitedLocation>
-	 * @throws UserNotFoundException
-	 */
-	List<VisitedLocation> getVisitedLocations(String username) throws UserNotFoundException;
-	
-	/**
-	 * Get trip deals according user preferences.
+	 * Get an user's trip deals.
+	 * @param userName String
 	 * @return List<Provider>
 	 * @throws UserNotFoundException
+	 * @throws HttpException 
 	 */
-	List<Provider> getTripDeals(String username) throws UserNotFoundException;
+	List<Provider> getTripDeals(String userName) 
+			throws UserNotFoundException, HttpException;
+	
+	/**
+	 * Get an user's id.
+	 * @param userName String
+	 * @return UUID
+	 * @throws UserNotFoundException
+	 */
+	UUID getUserId(String userName) throws UserNotFoundException;
+
+	/**
+	 * Get all userIds.
+	 * @return List<UUID>
+	 */
+	List<UUID> getAllUserIds();
 	
 }

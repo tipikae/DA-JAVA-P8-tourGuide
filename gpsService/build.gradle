@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.6.4'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'
 }
 
 group = 'com.tripmaster.tourguide'
@@ -23,7 +24,12 @@ dependencies {
     implementation(name:'gpsUtil', ext:'jar')
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	//developmentOnly 'org.springframework.boot:spring-boot-devtools'
+  	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation 'io.github.openfeign:feign-gson'
+	implementation 'io.github.openfeign:feign-slf4j'
+	implementation 'io.github.openfeign:feign-okhttp'
+    implementation group: 'org.javamoney', name: 'moneta', version: '1.4.2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
@@ -35,4 +41,38 @@ dependencyManagement {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+test {
+    reports {
+        junitXml.enabled = false
+        html.enabled = true
+    }               
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
+test.finalizedBy jacocoTestReport
+check.dependsOn jacocoTestCoverageVerification
+
+jacocoTestCoverageVerification {
+  violationRules {
+    rule {
+      limit {
+        counter = 'LINE'
+        value = 'COVEREDRATIO'
+        minimum = 0.5
+      }
+    }
+  }
 }

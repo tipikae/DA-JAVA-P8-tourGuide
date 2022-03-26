@@ -4,15 +4,21 @@
 package com.tripmaster.tourguide.gpsService.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
-import com.tripmaster.tourguide.gpsService.exceptions.CustomNumberFormatException;
-
-import gpsUtil.location.Attraction;
-import gpsUtil.location.VisitedLocation;
+import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
+import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
+import com.tripmaster.tourguide.gpsService.dto.NearByAttractionDTO;
+import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
+import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
+import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
+import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
+import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
+import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 
 /**
- * Interface for accessing gpsUtil lib.
+ * GpsService service.
  * @author tipikae
  * @version 1.0
  *
@@ -21,14 +27,58 @@ public interface IGpsServiceService {
 
 	/**
 	 * Get all attractions.
-	 * @return List<Attraction>
+	 * @return List<AttractionDTO>
+	 * @throws ConverterLibException 
+	 * @throws ConverterDTOException 
 	 */
-	List<Attraction> getAttractions();
+	List<AttractionDTO> getAttractions() throws ConverterDTOException, ConverterLibException;
 	
 	/**
 	 * Get user current location.
-	 * @param userId UUID
-	 * @return VisitedLocation
+	 * @param username String
+	 * @return LocationDTO
+	 * @throws HttpException 
+	 * @throws ConverterLibException 
+	 * @throws ConverterDTOException 
 	 */
-	VisitedLocation getUserLocation(UUID userId) throws CustomNumberFormatException;
+	LocationDTO getUserLocation(String username) throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException;
+	
+	/**
+	 * Get all users' last visited location.
+	 * @return Map<UUID, LocationDTO>
+	 * @throws ConverterDTOException 
+	 */
+	Map<UUID, LocationDTO> getAllUsersLastLocation() throws ConverterDTOException;
+	
+	/**
+	 * Get a list of user's visited locations.
+	 * @param userId - UUID
+	 * @return List<VisitedLocationDTO>
+	 * @throws UserNotFoundException
+	 * @throws ConverterDTOException 
+	 */
+	List<VisitedLocationDTO> getUserVisitedLocations(UUID userId) 
+			throws UserNotFoundException, ConverterDTOException;
+	
+	/**
+	 * Get an users's nearby attractions.
+	 * @param username String
+	 * @return List<NearByAttractionDTO>
+	 * @throws UserNotFoundException
+	 * @throws HttpException 
+	 * @throws ConverterLibException 
+	 * @throws ConverterDTOException 
+	 */
+	List<NearByAttractionDTO> getNearByAttractions(String username) 
+			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException;
+
+	/**
+	 * Track user location
+	 * @param userId UUID
+	 * @return MVisitedLocation
+	 * @throws ConverterLibException
+	 * @throws HttpException
+	 */
+	MVisitedLocation trackUserLocation(UUID userId) 
+			throws ConverterLibException, HttpException;
 }
