@@ -108,10 +108,11 @@ public class TourGuideController {
      * @return String
      */
     @PostMapping("/addUser")
-    public User addUser(@RequestBody @Valid NewUserDTO newUserDTO) {
+    public Object addUser(@RequestBody @Valid NewUserDTO newUserDTO) {
     	LOGGER.info("addUser: userName=" + newUserDTO.getUserName());
 		//return JsonStream.serialize(userClient.addUser(newUserDTO));
-		return userClient.addUser(newUserDTO);
+    	Object user = userClient.addUser(newUserDTO);
+		return user;
     }
     
     /**

@@ -39,6 +39,7 @@ import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository
 import com.tripmaster.tourguide.gpsService.util.INearByAttractionOperation;
 
 import gpsUtil.GpsUtil;
+import gpsUtil.location.VisitedLocation;
 
 /**
  * GpsService service.
@@ -51,7 +52,7 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(GpsServiceServiceImpl.class);
 	
-	private static ExecutorService executorService = Executors.newFixedThreadPool(20);
+	private static ExecutorService executorService = Executors.newCachedThreadPool();
 	
 	@Autowired
 	private IVisitedLocationRepository visitedLocationRepository;
@@ -202,27 +203,11 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 		MVisitedLocation mVisitedLocation = visitedLocationLibConverter.convertLibModelToModel(
 				gpsUtil.getUserLocation(userId));
 		
-		executorService.execute(new Runnable() {
-
-			@Override
-			public void run() {
-				// save current location
-				visitedLocationRepository.save(mVisitedLocation);
-			}
-		});
-
+		// save current location
+		visitedLocationRepository.save(mVisitedLocation);
+		
 		// call calculateRewards in async thread
-		executorService.execute(new Runnable() {
-			
-			@Override
-			public void run() {
-				try {
-					rewardService.calculateRewards(userId);
-				} catch (Exception e) {
-					LOGGER.debug("trackUserLocation: calculateRewards error: " + e.getMessage());
-				}
-			}
-		});
+		rewardService.calculateRewards(userId);
 		
 		return mVisitedLocation;
 	}

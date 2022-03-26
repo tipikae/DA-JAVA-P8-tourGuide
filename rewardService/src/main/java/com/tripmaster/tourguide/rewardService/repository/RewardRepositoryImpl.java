@@ -3,11 +3,11 @@
  */
 package com.tripmaster.tourguide.rewardService.repository;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class RewardRepositoryImpl implements IRewardRepository {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RewardRepositoryImpl.class);
 	
-	private static Map<UUID, List<Reward>> internalRewards = new HashMap<>();
+	private static Map<UUID, List<Reward>> internalRewards = new ConcurrentHashMap<>();
 
 	/**
 	 * {@inheritDoc}

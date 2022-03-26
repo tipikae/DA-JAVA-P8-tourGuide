@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import feign.FeignException;
 import tourGuide.dto.NewPreferenceDTO;
 import tourGuide.dto.NewUserDTO;
 import tourGuide.model.Provider;
@@ -40,7 +41,7 @@ public interface IUserServiceClient {
 	 * @return ResponseEntity<Object>
 	 */
 	@PostMapping("/user")
-	User addUser(@RequestBody NewUserDTO newUserDTO);
+	Object addUser(@RequestBody NewUserDTO newUserDTO) throws FeignException;
 	
 	/**
 	 * Update an user's preferences.

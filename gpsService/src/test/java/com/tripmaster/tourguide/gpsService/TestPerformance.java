@@ -2,10 +2,11 @@ package com.tripmaster.tourguide.gpsService;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.time.StopWatch;
 import org.junit.jupiter.api.Test;
@@ -27,21 +28,20 @@ class TestPerformance {
 	@Autowired
 	private Tracker tracker;
 	
-	private int userNumber = 1000;
+	private int userNumber = 100;
 
 	@Test
 	public void highVolumeTrackLocation() 
 			throws ConverterLibException, ConverterDTOException, HttpException {
 		tracker.stopTracking();
 		
-		List<UUID> userIds = new ArrayList<>();
-		for(int i = 0; i < userNumber; i++) {
-			UUID userId = UUID.randomUUID();
-			userIds.add(userId);
-		}
+		List<UUID> userIds = IntStream.range(0, userNumber)
+				.mapToObj(i -> UUID.randomUUID())
+				.collect(Collectors.toList());
 		
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
+		
 		userIds.parallelStream().forEach(userId -> {
 			try {
 				gpsService.trackUserLocation(userId);
@@ -49,6 +49,7 @@ class TestPerformance {
 				System.err.println(e.getMessage());
 			}
 		});
+		
 		stopWatch.stop();
 
 		System.out.println("highVolumeTrackLocation: Time Elapsed: " 

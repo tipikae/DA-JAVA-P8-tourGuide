@@ -45,7 +45,7 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RewardServiceServiceImpl.class);
 	
-	private static ExecutorService executorService = Executors.newFixedThreadPool(1000);
+	private static ExecutorService executorService = Executors.newCachedThreadPool();
 	
 	@Autowired
 	private IRewardRepository rewardRepository;
@@ -78,11 +78,11 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	@Override
 	public void calculateRewards(UUID userId) throws HttpException {
 		LOGGER.debug("calculateRewards: userId=" + userId);
-		
-		//List<VisitedLocation> visitedLocations = gpsService.getUserVisitedLocations(userId);
-		VisitedLocation vl = new VisitedLocation(userId, new Location(10d, 20d), new Date());
+
+		/*VisitedLocation vl = new VisitedLocation(userId, new Location(10d, 20d), new Date());
 		List<VisitedLocation> visitedLocations = new ArrayList<>();
-		visitedLocations.add(vl);
+		visitedLocations.add(vl);*/
+		List<VisitedLocation> visitedLocations = gpsService.getUserVisitedLocations(userId);
 		List<Attraction> attractions = gpsService.getAttractions();
 		
 		Optional<List<Reward>> optional = rewardRepository.findByUserId(userId);
@@ -95,26 +95,17 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 			VisitedLocation visitedLocation = itVisitedLocation.next();
 			while(itAttraction.hasNext()) {
 				Attraction attraction = itAttraction.next();
-				
-				// async 
-				executorService.execute(new Runnable() {
-					
-					@Override
-					public void run() {
-						if(rewards.stream().filter(r -> 
-									r.getAttraction().getAttractionName()
-										.equals(attraction.getAttractionName()))
-										.count() == 0) {
-							if(nearAttraction(visitedLocation.getLocation(), attraction)) {
-								Reward reward = 
-										new Reward(visitedLocation, attraction, 
-												getRewardPoints(attraction.getAttractionId(), userId));
-								rewardRepository.save(reward);
-							}
-						}
-						
+				if(rewards.stream().filter(r -> 
+							r.getAttraction().getAttractionName()
+								.equals(attraction.getAttractionName()))
+								.count() == 0) {
+					if(nearAttraction(visitedLocation.getLocation(), attraction)) {
+						Reward reward = 
+								new Reward(visitedLocation, attraction, 
+										getRewardPoints(attraction.getAttractionId(), userId));
+						rewardRepository.save(reward);
 					}
-				});
+				}
 			}
 		}
 	}
