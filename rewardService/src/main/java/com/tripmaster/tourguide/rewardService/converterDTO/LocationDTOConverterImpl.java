@@ -41,4 +41,23 @@ public class LocationDTOConverterImpl implements ILocationConverterDTO {
 		return locationDTO;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Location convertDTOToEntity(LocationDTO dto) throws ConverterException {
+		Location location = new Location();
+		
+		try {
+			location.setLatitude(dto.getLatitude());
+			location.setLongitude(dto.getLongitude());
+		} catch (Exception e) {
+			LOGGER.debug("convertDTOToEntity: exception: " + e.getClass().getSimpleName() 
+					+ ", error: " + e.getMessage());
+			throw new ConverterException(e.getMessage());
+		}
+		
+		return location;
+	}
+
 }

@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +21,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.tripmaster.tourguide.rewardService.converterDTO.IAttractionConverterDTO;
 import com.tripmaster.tourguide.rewardService.converterDTO.IRewardConverterDTO;
+import com.tripmaster.tourguide.rewardService.converterDTO.IVisitedLocationConverterDTO;
+import com.tripmaster.tourguide.rewardService.dto.AttractionDTO;
+import com.tripmaster.tourguide.rewardService.dto.NewVisitedLocationsAndAttractionsDTO;
 import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
+import com.tripmaster.tourguide.rewardService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
 import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
@@ -30,7 +36,6 @@ import com.tripmaster.tourguide.rewardService.model.Location;
 import com.tripmaster.tourguide.rewardService.model.Reward;
 import com.tripmaster.tourguide.rewardService.model.User;
 import com.tripmaster.tourguide.rewardService.model.VisitedLocation;
-import com.tripmaster.tourguide.rewardService.remoteServices.IGpsService;
 import com.tripmaster.tourguide.rewardService.remoteServices.IUserService;
 import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
 import com.tripmaster.tourguide.rewardService.service.RewardServiceServiceImpl;
@@ -48,13 +53,16 @@ class RewardServiceServiceTest {
 	private RewardCentral rewardCentral;
 	
 	@Mock
-	private IRewardConverterDTO rewardConverter;
+	private IRewardConverterDTO rewardConverterDTO;
+	
+	@Mock
+	private IAttractionConverterDTO attractionConverterDTO;
+	
+	@Mock
+	private IVisitedLocationConverterDTO visitedLocationConverterDTO;
 	
 	@Mock
 	private IUserService userService;
-	
-	@Mock
-	private IGpsService gpsService;
 	
 	@Mock
 	private IHelper helper;
@@ -97,14 +105,18 @@ class RewardServiceServiceTest {
 	}
 	
 	@Test
-	void calculateRewardsWhenOk() throws HttpException {
-		List<Attraction> attractions = new ArrayList<>();
-		attractions.add(attraction);
-		List<VisitedLocation> visitedLocations = new ArrayList<>();
-		visitedLocations.add(visitedLocation);
-		when(gpsService.getAttractions()).thenReturn(attractions);
-		when(gpsService.getUserVisitedLocations(any(UUID.class))).thenReturn(visitedLocations);
-		rewardService.calculateRewards(userId);
+	void calculateRewardsWhenOk() throws HttpException, ConverterException {
+		List<AttractionDTO> attractionDTOs = Arrays.asList(new AttractionDTO());
+		List<VisitedLocationDTO> visitedLocationDTOs = Arrays.asList(new VisitedLocationDTO());
+		NewVisitedLocationsAndAttractionsDTO visitedLocationsAndAttractionsDTO 
+			= new NewVisitedLocationsAndAttractionsDTO();
+		visitedLocationsAndAttractionsDTO.setAttractions(attractionDTOs);
+		visitedLocationsAndAttractionsDTO.setVisitedLocations(visitedLocationDTOs);
+		when(attractionConverterDTO.convertDTOsToEntities(anyList()))
+			.thenReturn(Arrays.asList(new  Attraction()));
+		when(visitedLocationConverterDTO.convertDTOsToEntities(anyList()))
+			.thenReturn(Arrays.asList(new VisitedLocation()));
+		rewardService.calculateRewards(userId, visitedLocationsAndAttractionsDTO);
 		Mockito.verify(rewardRepository).save(any(Reward.class));
 	}
 	
@@ -117,7 +129,7 @@ class RewardServiceServiceTest {
 		rewardDTOs.add(new RewardDTO());
 		when(userService.getUserId(anyString())).thenReturn(userId);
 		when(rewardRepository.findByUserId(any(UUID.class))).thenReturn(Optional.of(rewards));
-		when(rewardConverter.converterRewardsToDTOs(anyList())).thenReturn(rewardDTOs);
+		when(rewardConverterDTO.converterRewardsToDTOs(anyList())).thenReturn(rewardDTOs);
 		assertEquals(1, rewardService.getUserRewards(userName).size());
 	}
 	

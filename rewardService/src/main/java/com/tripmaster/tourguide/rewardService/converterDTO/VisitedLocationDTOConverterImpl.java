@@ -49,12 +49,17 @@ public class VisitedLocationDTOConverterImpl implements IVisitedLocationConverte
 		return visitedLocationDTO;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public VisitedLocation convertDTOToEntity(VisitedLocationDTO dto) throws ConverterException {
 		VisitedLocation visitedLocation = new VisitedLocation();
 		
 		try {
-			
+			visitedLocation.setLocation(locationConverter.convertDTOToEntity(dto.getLocation()));
+			visitedLocation.setTimeVisited(dto.getTimeVisited());
+			visitedLocation.setUserId(dto.getUserId());
 		} catch (Exception e) {
 			LOGGER.debug("convertDTOToEntity: exception: " + e.getClass().getSimpleName() 
 					+ ", error: " + e.getMessage());
@@ -64,6 +69,9 @@ public class VisitedLocationDTOConverterImpl implements IVisitedLocationConverte
 		return visitedLocation;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<VisitedLocation> convertDTOsToEntities(List<VisitedLocationDTO> visitedLocationDTOs) 
 			throws ConverterException {

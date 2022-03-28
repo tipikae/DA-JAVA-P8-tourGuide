@@ -6,6 +6,11 @@ package com.tripmaster.tourguide.rewardService.dto;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * VisitedLocation DTO.
  * @author tipikae
@@ -14,8 +19,13 @@ import java.util.UUID;
  */
 public class VisitedLocationDTO {
 
+	@NotNull
 	private UUID userId;
+	@NotNull
 	private LocationDTO location;
+	@NotNull
+	@Past
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
 	private Date timeVisited;
 	
 	public VisitedLocationDTO() {

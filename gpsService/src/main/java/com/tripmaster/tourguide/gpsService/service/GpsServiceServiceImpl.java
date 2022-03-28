@@ -7,13 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.function.Supplier;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,6 +26,7 @@ import com.tripmaster.tourguide.gpsService.converters.IConverterDTOVisitedLocati
 import com.tripmaster.tourguide.gpsService.converters.IConverterLibAttraction;
 import com.tripmaster.tourguide.gpsService.converters.IConverterLibVisitedLocation;
 import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
+import com.tripmaster.tourguide.gpsService.dto.AttractionsAndVisitedLocationsDTO;
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
 import com.tripmaster.tourguide.gpsService.dto.NearByAttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
@@ -44,7 +42,6 @@ import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository
 import com.tripmaster.tourguide.gpsService.util.INearByAttractionOperation;
 
 import gpsUtil.GpsUtil;
-import gpsUtil.location.VisitedLocation;
 
 /**
  * GpsService service.
@@ -217,18 +214,34 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 			return mVisitedLocation;
 		}, executorService)
 		
-				// save current location
+		// save current location
 		.thenApplyAsync(visitedLocation -> {
 			 return visitedLocationRepository.save(visitedLocation);
 		}, executorService)
 		
 		// call calculateRewards
 		.thenApplyAsync(visitedLocation -> {
-			/*try {
-				rewardService.calculateRewards(userId);
+			AttractionsAndVisitedLocationsDTO attractionsAndVisitedLocationsDTO = 
+					new AttractionsAndVisitedLocationsDTO();
+			try {
+				attractionsAndVisitedLocationsDTO.setAttractions(getAttractions());
+			} catch (ConverterDTOException | ConverterLibException e) {
+				LOGGER.error("trackUserLocation: setAttractions error: " + e.getMessage());
+			}
+			
+			try {
+				List<VisitedLocationDTO> visitedLocationDTOs = getUserVisitedLocations(userId);
+				attractionsAndVisitedLocationsDTO.setVisitedLocations(visitedLocationDTOs);
+				visitedLocationDTOs.stream().forEach(dto -> LOGGER.debug("date=" + dto.getTimeVisited().toString()));
+			} catch (UserNotFoundException | ConverterDTOException e) {
+				LOGGER.error("trackUserLocation: setVisitedLocations error: " + e.getMessage());
+			}
+			
+			try {
+				rewardService.calculateRewards(userId, attractionsAndVisitedLocationsDTO);
 			} catch (HttpException e) {
 				LOGGER.error("trackUserLocation: call calculateRewards error: " + e.getMessage());
-			}*/
+			}
 			return visitedLocation;
 		}, executorService);
 		

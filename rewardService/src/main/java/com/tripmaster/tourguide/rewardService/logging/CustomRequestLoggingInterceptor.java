@@ -1,5 +1,7 @@
 package com.tripmaster.tourguide.rewardService.logging;
 
+import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,7 +27,11 @@ public class CustomRequestLoggingInterceptor implements HandlerInterceptor {
 		String method = request.getMethod();
     	StringBuffer requestURL = request.getRequestURL();
     	String query = request.getQueryString();
-        LOGGER.debug("preHandle => Method: {}, Request URL: {}, Parameters: {}", method, requestURL, query);
+    	String parameters = request.getParameterMap().keySet().stream()
+    			.map(k -> k + ": " + request.getParameterMap().get(k))
+    			.collect(Collectors.joining(",", "{", "}"));
+        LOGGER.debug("preHandle => Method: {}, Request URL: {}, Query: {}, Parameters: {}", 
+        		method, requestURL, query, parameters);
         return true;
 	}
 

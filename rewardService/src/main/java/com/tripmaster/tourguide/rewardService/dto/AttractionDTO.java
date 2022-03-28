@@ -5,6 +5,8 @@ package com.tripmaster.tourguide.rewardService.dto;
 
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Attraction DTO.
  * @author tipikae
@@ -13,9 +15,13 @@ import java.util.UUID;
  */
 public class AttractionDTO extends LocationDTO {
 
+	@NotNull
 	private UUID attractionId;
+	@NotNull
 	private String attractionName;
+	@NotNull
 	private String city;
+	@NotNull
 	private String state;
 	
 	public AttractionDTO() {

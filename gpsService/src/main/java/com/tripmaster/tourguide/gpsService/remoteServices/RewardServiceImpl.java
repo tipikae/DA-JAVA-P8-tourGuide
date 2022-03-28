@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.tripmaster.tourguide.gpsService.clients.IRewardServiceClient;
+import com.tripmaster.tourguide.gpsService.dto.AttractionsAndVisitedLocationsDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 
 /**
@@ -49,9 +50,10 @@ public class RewardServiceImpl implements IRewardService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void calculateRewards(UUID userId) throws HttpException {
+	public void calculateRewards(UUID userId, 
+			AttractionsAndVisitedLocationsDTO attractionsAndVisitedLocationsDTO) throws HttpException {
 		try {
-			rewardClient.calculateRewards(userId);
+			rewardClient.calculateRewards(userId, attractionsAndVisitedLocationsDTO);
 		} catch (Exception e) {
 			LOGGER.debug("calculateRewards: rewardClient error: " + e.getClass().getSimpleName() 
 					+ ": " + e.getMessage());

@@ -17,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.tripmaster.tourguide.rewardService.converterDTO.IAttractionConverterDTO;
 import com.tripmaster.tourguide.rewardService.converterDTO.IRewardConverterDTO;
+import com.tripmaster.tourguide.rewardService.converterDTO.IVisitedLocationConverterDTO;
 import com.tripmaster.tourguide.rewardService.dto.NewVisitedLocationsAndAttractionsDTO;
 import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
 import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
@@ -27,7 +29,6 @@ import com.tripmaster.tourguide.rewardService.model.Attraction;
 import com.tripmaster.tourguide.rewardService.model.Location;
 import com.tripmaster.tourguide.rewardService.model.Reward;
 import com.tripmaster.tourguide.rewardService.model.VisitedLocation;
-import com.tripmaster.tourguide.rewardService.model.VisitedLocationsAndAttractions;
 import com.tripmaster.tourguide.rewardService.remoteServices.IUserService;
 import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
 import com.tripmaster.tourguide.rewardService.util.IHelper;
@@ -54,7 +55,13 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	private RewardCentral rewardCentral;
 	
 	@Autowired
-	private IRewardConverterDTO rewardConverter;
+	private IRewardConverterDTO rewardConverterDTO;
+	
+	@Autowired
+	private IAttractionConverterDTO attractionConverterDTO;
+	
+	@Autowired
+	private IVisitedLocationConverterDTO visitedLocationConverterDTO;
 	
 	@Autowired
 	private IUserService userService;
@@ -74,11 +81,13 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	 */
 	@Override
 	public void calculateRewards(UUID userId, NewVisitedLocationsAndAttractionsDTO 
-			newVisitedLocationsAndAttractionsDTO) throws HttpException {
+			newVisitedLocationsAndAttractionsDTO) throws HttpException, ConverterException {
 		LOGGER.debug("calculateRewards: userId=" + userId);
 
-		List<VisitedLocation> visitedLocations = newVisitedLocationsAndAttractionsDTO.getVisitedLocations();
-		List<Attraction> attractions = newVisitedLocationsAndAttractionsDTO.getAttractions();
+		List<VisitedLocation> visitedLocations = 
+				visitedLocationConverterDTO.convertDTOsToEntities(newVisitedLocationsAndAttractionsDTO.getVisitedLocations());
+		List<Attraction> attractions = 
+				attractionConverterDTO.convertDTOsToEntities(newVisitedLocationsAndAttractionsDTO.getAttractions());
 		
 		Optional<List<Reward>> optional = rewardRepository.findByUserId(userId);
 		List<Reward> rewards = (optional.isPresent() ? optional.get() : new ArrayList<>());
@@ -123,7 +132,7 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 		
 		LOGGER.debug("getUserRewards: returns " + optional.get().size() + " items.");
 		
-		return rewardConverter.converterRewardsToDTOs(optional.get());
+		return rewardConverterDTO.converterRewardsToDTOs(optional.get());
 	}
 
 	/**

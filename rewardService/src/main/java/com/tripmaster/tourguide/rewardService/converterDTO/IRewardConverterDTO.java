@@ -15,7 +15,7 @@ import com.tripmaster.tourguide.rewardService.model.Reward;
  * @version 1.0
  *
  */
-public interface IRewardConverterDTO extends IConverter<Reward, RewardDTO> {
+public interface IRewardConverterDTO extends IConverterEntityToDTO<Reward, RewardDTO> {
 
 	/**
 	 * Convert Reward list to RewardDTO list.

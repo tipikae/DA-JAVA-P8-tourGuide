@@ -12,6 +12,6 @@ import com.tripmaster.tourguide.rewardService.model.Location;
  * @version 1.0
  *
  */
-public interface ILocationConverterDTO extends IConverter<Location, LocationDTO> {
+public interface ILocationConverterDTO extends IConverter2Ways<Location, LocationDTO> {
 
 }
