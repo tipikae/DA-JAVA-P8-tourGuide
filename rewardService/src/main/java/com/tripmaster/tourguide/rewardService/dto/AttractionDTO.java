@@ -27,6 +27,14 @@ public class AttractionDTO extends LocationDTO {
 	public AttractionDTO() {
 	}
 
+	public AttractionDTO(@NotNull UUID attractionId, @NotNull String attractionName, @NotNull String city,
+			@NotNull String state) {
+		this.attractionId = attractionId;
+		this.attractionName = attractionName;
+		this.city = city;
+		this.state = state;
+	}
+
 	/**
 	 * @return the attractionId
 	 */

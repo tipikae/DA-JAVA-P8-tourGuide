@@ -1,7 +1,10 @@
 package com.tripmaster.tourguide.rewardService;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -31,6 +34,11 @@ public class RewardServiceApplication implements CommandLineRunner {
 	
 	@Autowired
 	private IRewardRepository rewardRepository;
+	
+	@PostConstruct
+	public void init() {
+		Locale.setDefault(Locale.UK);
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(RewardServiceApplication.class, args);

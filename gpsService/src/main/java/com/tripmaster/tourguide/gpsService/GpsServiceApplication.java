@@ -20,7 +20,7 @@ public class GpsServiceApplication {
 	
 	@PostConstruct
 	public void init() {
-		Locale.setDefault(Locale.UK);
+		Locale.setDefault(Locale.US);
 	}
 
 	public static void main(String[] args) {

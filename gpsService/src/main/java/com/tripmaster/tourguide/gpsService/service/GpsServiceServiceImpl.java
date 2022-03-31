@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,6 +34,7 @@ import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
+import com.tripmaster.tourguide.gpsService.exceptions.TrackLocationException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
@@ -112,7 +114,7 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	 */
 	@Override
 	public VisitedLocationDTO getUserLocation(String userName) 
-			throws HttpException, ConverterDTOException, ConverterLibException {
+			throws HttpException, ConverterDTOException, ConverterLibException, TrackLocationException {
 		LOGGER.debug("getUserLocation: userName=" + userName);
 		
 		UUID userId = userService.getUserId(userName);
@@ -198,7 +200,7 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	 */
 	@Override
 	public MVisitedLocation trackUserLocation(UUID userId) 
-			throws ConverterLibException, HttpException {
+			throws ConverterLibException, HttpException, TrackLocationException {
 		LOGGER.debug("trackUserLocation: userId=" + userId);
 		
 		CompletableFuture<MVisitedLocation> futureLocation = CompletableFuture.supplyAsync(() -> {
@@ -227,20 +229,22 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 				attractionsAndVisitedLocationsDTO.setAttractions(getAttractions());
 			} catch (ConverterDTOException | ConverterLibException e) {
 				LOGGER.error("trackUserLocation: setAttractions error: " + e.getMessage());
+				throw new CompletionException(e);
 			}
 			
 			try {
 				List<VisitedLocationDTO> visitedLocationDTOs = getUserVisitedLocations(userId);
 				attractionsAndVisitedLocationsDTO.setVisitedLocations(visitedLocationDTOs);
-				visitedLocationDTOs.stream().forEach(dto -> LOGGER.debug("date=" + dto.getTimeVisited().toString()));
 			} catch (UserNotFoundException | ConverterDTOException e) {
 				LOGGER.error("trackUserLocation: setVisitedLocations error: " + e.getMessage());
+				throw new CompletionException(e);
 			}
 			
 			try {
 				rewardService.calculateRewards(userId, attractionsAndVisitedLocationsDTO);
 			} catch (HttpException e) {
 				LOGGER.error("trackUserLocation: call calculateRewards error: " + e.getMessage());
+				throw new CompletionException(e);
 			}
 			return visitedLocation;
 		}, executorService);
@@ -249,7 +253,7 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 			return futureLocation.get();
 		} catch (InterruptedException | ExecutionException e) {
 			LOGGER.error("trackUserLocation: get future error: " + e.getMessage());
-			throw new ConverterLibException(e.getMessage());
+			throw new TrackLocationException(e.getMessage());
 		}
 	}
 	

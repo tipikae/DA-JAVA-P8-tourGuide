@@ -28,7 +28,7 @@ class TestPerformance {
 	@Autowired
 	private Tracker tracker;
 	
-	private int userNumber = 5000;
+	private int userNumber = 100000;
 
 	@Test
 	public void highVolumeTrackLocation() 
@@ -55,7 +55,6 @@ class TestPerformance {
 		System.out.println("highVolumeTrackLocation: Time Elapsed: " 
 				+ TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds."); 
 		assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
-		assertTrue(gpsService.getAllUsersLastLocation().size() > 0);
 	}
 
 }

@@ -9,8 +9,6 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 /**
  * VisitedLocation DTO.
  * @author tipikae
@@ -25,10 +23,15 @@ public class VisitedLocationDTO {
 	private LocationDTO location;
 	@NotNull
 	@Past
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
 	private Date timeVisited;
 	
 	public VisitedLocationDTO() {
+	}
+
+	public VisitedLocationDTO(@NotNull UUID userId, @NotNull LocationDTO location, @NotNull @Past Date timeVisited) {
+		this.userId = userId;
+		this.location = location;
+		this.timeVisited = timeVisited;
 	}
 
 	/**

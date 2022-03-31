@@ -3,6 +3,7 @@
  */
 package com.tripmaster.tourguide.gpsService.converters;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,8 @@ public class ConverterDTOVisitedLocationImpl implements IConverterDTOVisitedLoca
 		
 		try {
 			visitedLocationDTO.setLocation(locationDTOConverter.convertEntityToDTO(entity.getLocation()));
-			visitedLocationDTO.setTimeVisited(entity.getTimeVisited());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+			visitedLocationDTO.setTimeVisited(sdf.format(entity.getTimeVisited()));
 			visitedLocationDTO.setUserId(entity.getUserId());
 		} catch (Exception e) {
 			LOGGER.debug("converterEntityToDTO: exception: " + e.getClass().getSimpleName() 

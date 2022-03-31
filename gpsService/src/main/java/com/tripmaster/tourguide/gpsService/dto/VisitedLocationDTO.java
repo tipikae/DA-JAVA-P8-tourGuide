@@ -3,13 +3,9 @@
  */
 package com.tripmaster.tourguide.gpsService.dto;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * VisitedLocation DTO.
@@ -24,9 +20,7 @@ public class VisitedLocationDTO {
 	@NotNull
 	private LocationDTO location;
 	@NotNull
-	@Past
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
-	private Date timeVisited;
+	private String timeVisited;
 	
 	public VisitedLocationDTO() {
 	}
@@ -62,14 +56,14 @@ public class VisitedLocationDTO {
 	/**
 	 * @return the timeVisited
 	 */
-	public Date getTimeVisited() {
+	public String getTimeVisited() {
 		return timeVisited;
 	}
 
 	/**
 	 * @param timeVisited the timeVisited to set
 	 */
-	public void setTimeVisited(Date timeVisited) {
+	public void setTimeVisited(String timeVisited) {
 		this.timeVisited = timeVisited;
 	}
 	

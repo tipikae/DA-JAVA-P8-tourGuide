@@ -14,6 +14,7 @@ import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
+import com.tripmaster.tourguide.gpsService.exceptions.TrackLocationException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 
@@ -40,8 +41,11 @@ public interface IGpsServiceService {
 	 * @throws HttpException 
 	 * @throws ConverterLibException 
 	 * @throws ConverterDTOException 
+	 * @throws TrackLocationException 
 	 */
-	VisitedLocationDTO getUserLocation(String username) throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException;
+	VisitedLocationDTO getUserLocation(String username) 
+			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException, 
+				TrackLocationException;
 	
 	/**
 	 * Get all users' last visited location.
@@ -78,7 +82,8 @@ public interface IGpsServiceService {
 	 * @return MVisitedLocation
 	 * @throws ConverterLibException
 	 * @throws HttpException
+	 * @throws TrackLocationException 
 	 */
 	MVisitedLocation trackUserLocation(UUID userId) 
-			throws ConverterLibException, HttpException;
+			throws ConverterLibException, HttpException, TrackLocationException;
 }

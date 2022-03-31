@@ -28,6 +28,7 @@ import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
+import com.tripmaster.tourguide.gpsService.exceptions.TrackLocationException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.service.IGpsServiceService;
 
@@ -68,10 +69,12 @@ public class GpsServiceController {
 	 * @throws HttpException 
 	 * @throws ConverterLibException 
 	 * @throws ConverterDTOException 
+	 * @throws TrackLocationException 
 	 */
 	@GetMapping("/location/{userName}")
 	public ResponseEntity<Object> getUserLocation(@PathVariable("userName") @NotBlank String userName) 
-			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException {
+			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException, 
+				TrackLocationException {
 		LOGGER.info("getUserLocation: userName=" + userName);
 		VisitedLocationDTO visitedLocation = gpsService.getUserLocation(userName);
 		return new ResponseEntity<Object>(visitedLocation, HttpStatus.OK);

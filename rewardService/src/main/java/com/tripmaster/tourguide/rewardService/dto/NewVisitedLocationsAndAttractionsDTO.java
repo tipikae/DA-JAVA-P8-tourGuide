@@ -19,6 +19,12 @@ public class NewVisitedLocationsAndAttractionsDTO {
 	public NewVisitedLocationsAndAttractionsDTO() {
 	}
 
+	public NewVisitedLocationsAndAttractionsDTO(List<VisitedLocationDTO> visitedLocations,
+			List<AttractionDTO> attractions) {
+		this.visitedLocations = visitedLocations;
+		this.attractions = attractions;
+	}
+
 	/**
 	 * @return the visitedLocations
 	 */

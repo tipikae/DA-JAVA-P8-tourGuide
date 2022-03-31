@@ -36,6 +36,7 @@ import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
+import com.tripmaster.tourguide.gpsService.exceptions.TrackLocationException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.model.MAttraction;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
@@ -146,7 +147,7 @@ class GpsServiceServiceTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	void getUserLocationReturnsVisitedLocationWhenNotFound() 
-			throws HttpException, ConverterLibException, ConverterDTOException {
+			throws HttpException, ConverterLibException, ConverterDTOException, TrackLocationException {
 		VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(10d, 20d), timeVisited);
 		VisitedLocationDTO visitedLocationDTO = new VisitedLocationDTO();
 		visitedLocationDTO.setUserId(userId);
@@ -163,7 +164,7 @@ class GpsServiceServiceTest {
 
 	@Test
 	void getUserLocationReturnsVisitedLocationWhenFound() 
-			throws HttpException, ConverterDTOException, ConverterLibException {
+			throws HttpException, ConverterDTOException, ConverterLibException, TrackLocationException {
 		VisitedLocationDTO visitedLocationDTO = new VisitedLocationDTO();
 		visitedLocationDTO.setUserId(userId);
 		when(userService.getUserId(anyString())).thenReturn(userId);
@@ -238,7 +239,7 @@ class GpsServiceServiceTest {
 	
 	@Test
 	void trackUserLocationReturnsMVisitedLocationWhenOk() 
-			throws ConverterLibException, ConverterDTOException, HttpException {
+			throws ConverterLibException, ConverterDTOException, HttpException, TrackLocationException {
 		VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(10d, 20d), timeVisited);
 		when(gpsUtil.getUserLocation(any(UUID.class))).thenReturn(visitedLocation);
 		when(visitedLocationLibConverter.convertLibModelToModel(any(VisitedLocation.class)))
