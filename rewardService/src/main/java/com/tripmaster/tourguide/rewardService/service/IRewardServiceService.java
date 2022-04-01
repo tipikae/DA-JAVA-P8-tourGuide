@@ -33,7 +33,7 @@ public interface IRewardServiceService {
 	/**
 	 * Get a user's rewards.
 	 * @param userName String
-	 * @return List<RewardDTO>
+	 * @return List
 	 * @throws UserNotFoundException
 	 * @throws HttpException 
 	 * @throws ConverterException 

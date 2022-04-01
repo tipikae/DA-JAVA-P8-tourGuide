@@ -50,7 +50,7 @@ public class GpsServiceController {
 	
 	/**
 	 * Get all attractions.
-	 * @return ResponseEntity<List<AttractionDTO>>
+	 * @return ResponseEntity
 	 * @throws ConverterLibException 
 	 * @throws ConverterDTOException 
 	 */
@@ -64,7 +64,7 @@ public class GpsServiceController {
 	/**
 	 * Get a user's location.
 	 * @param userName String
-	 * @return ResponseEntity<VisitedLocationDTO>
+	 * @return ResponseEntity
 	 * @throws UserNotFoundException 
 	 * @throws HttpException 
 	 * @throws ConverterLibException 
@@ -82,7 +82,7 @@ public class GpsServiceController {
 	
 	/**
 	 * Get all users' last location.
-	 * @return ResponseEntity<Map<UUID, LocationDTO>>
+	 * @return ResponseEntity
 	 * @throws ConverterDTOException 
 	 */
 	@GetMapping("/lastlocations")
@@ -95,7 +95,7 @@ public class GpsServiceController {
 	/**
 	 * Get a user's all visited locations.
 	 * @param userId - UUID
-	 * @return ResponseEntity<List<VisitedLocationDTO>>
+	 * @return ResponseEntity
 	 * @throws UserNotFoundException 
 	 * @throws ConverterDTOException 
 	 */
@@ -110,7 +110,7 @@ public class GpsServiceController {
 	/**
 	 * Get nearby attractions.
 	 * @param userName String
-	 * @return ResponseEntity<List<NearByAttractionDTO>>
+	 * @return ResponseEntity
 	 * @throws UserNotFoundException 
 	 * @throws HttpException 
 	 * @throws ConverterLibException 

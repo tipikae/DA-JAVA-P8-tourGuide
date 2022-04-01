@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,7 +41,7 @@ class ConverterDTOVisitedLocationTest {
 	private static void setUp() {
 		userId = UUID.randomUUID();
 		location = new MLocation(10d, 20d);
-		visitedLocation = new MVisitedLocation(userId, location, null);
+		visitedLocation = new MVisitedLocation(userId, location, new Date());
 		locationDTO = new LocationDTO();
 		locationDTO.setLatitude(10d);
 		locationDTO.setLongitude(20d);

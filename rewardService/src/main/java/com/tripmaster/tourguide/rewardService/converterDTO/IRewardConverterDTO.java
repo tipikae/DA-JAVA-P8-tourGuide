@@ -19,8 +19,8 @@ public interface IRewardConverterDTO extends IConverterEntityToDTO<Reward, Rewar
 
 	/**
 	 * Convert Reward list to RewardDTO list.
-	 * @param rewards List<Reward>
-	 * @return List<RewardDTO>
+	 * @param rewards List
+	 * @return List
 	 * @throws ConverterException 
 	 */
 	List<RewardDTO> converterRewardsToDTOs(List<Reward> rewards) throws ConverterException;

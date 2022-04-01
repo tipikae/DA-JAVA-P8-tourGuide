@@ -51,10 +51,9 @@ public class RewardServiceController {
 	 * Calculate rewards.
 	 * @param userId UUID
 	 * @param newVisitedLocationsAndAttractionsDTO NewVisitedLocationsAndAttractionsDTO
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 * @throws HttpException 
-	 * @throws ConverterException 
-	 * @throws UserNotFoundException 
+	 * @throws ConverterException
 	 */
 	@PostMapping(value = "/calculate/{userId}", consumes = {"application/json"})
 	public ResponseEntity<Object> calculate(
@@ -69,7 +68,7 @@ public class RewardServiceController {
 	/**
 	 * Get an user's rewards.
 	 * @param userName String
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 * @throws UserNotFoundException 
 	 * @throws ConverterException 
 	 * @throws HttpException 
@@ -85,7 +84,7 @@ public class RewardServiceController {
 	/**
 	 * Get an user's rewards points sum.
 	 * @param userId UUID
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 * @throws UserNotFoundException 
 	 */
 	@GetMapping("/points/{userId}")
@@ -100,7 +99,7 @@ public class RewardServiceController {
 	 * Get an attraction's reward points.
 	 * @param attractionId UUID
 	 * @param userId UUID
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	@GetMapping("/reward")
 	public ResponseEntity<Object> getAttractionRewardPoints(

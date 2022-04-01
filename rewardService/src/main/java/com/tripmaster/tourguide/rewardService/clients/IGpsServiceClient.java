@@ -22,7 +22,7 @@ public interface IGpsServiceClient {
 
 	/**
 	 * Get attractions.
-	 * @return List<Attraction>
+	 * @return List
 	 */
 	@RequestLine("GET /attractions")
 	List<Attraction> getAttractions();
@@ -30,7 +30,7 @@ public interface IGpsServiceClient {
 	/**
 	 * Get an user's visitedLocations.
 	 * @param userId UUID
-	 * @return List<VisitedLocation>
+	 * @return List
 	 */
 	@RequestLine("GET /locations/{userId}")
 	List<VisitedLocation> getUserVisitedLocations(@Param("userId") UUID userId);

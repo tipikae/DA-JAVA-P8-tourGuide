@@ -19,8 +19,8 @@ public interface IConverterDTOAttraction extends IConverterDTO<MAttraction, Attr
 
 	/**
 	 * Convert Attraction List to DTO List.
-	 * @param attractions List<Attraction>
-	 * @return List<AttractionDTO>
+	 * @param attractions List
+	 * @return List
 	 * @throws ConverterDTOException
 	 */
 	List<AttractionDTO> convertAttractionsToDTos(List<MAttraction> attractions) throws ConverterDTOException;

@@ -20,8 +20,8 @@ public interface IConverterLibAttraction extends IConverterLib<Attraction, MAttr
 
 	/**
 	 * Convert library attractions list to model attractions list.
-	 * @param attractions List<Attraction>
-	 * @return List<MAttraction>
+	 * @param attractions List
+	 * @return List
 	 * @throws ConverterLibException 
 	 */
 	List<MAttraction> convertLibAttractionsToMAttractions(List<Attraction> attractions) 

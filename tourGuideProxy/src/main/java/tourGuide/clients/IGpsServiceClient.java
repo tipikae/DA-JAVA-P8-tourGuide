@@ -28,7 +28,7 @@ public interface IGpsServiceClient {
 
 	/**
 	 * Get all attractions.
-	 * @return List<Attraction>
+	 * @return List
 	 * @throws FeignException
 	 */
 	@GetMapping("/attractions")
@@ -36,7 +36,7 @@ public interface IGpsServiceClient {
 	
 	/**
 	 * Get an user location.
-	 * @param userId UUID
+	 * @param userName String
 	 * @return VisitedLocation
 	 * @throws FeignException
 	 */
@@ -45,7 +45,7 @@ public interface IGpsServiceClient {
 	
 	/**
 	 * Get all users last location.
-	 * @return Map<UUID, Location>
+	 * @return Map
 	 * @throws FeignException
 	 */
 	@GetMapping("/lastlocations")
@@ -54,7 +54,7 @@ public interface IGpsServiceClient {
 	/**
 	 * Get NearByAttractions of a user.
 	 * @param userName String
-	 * @return List<NearByAttraction>
+	 * @return List
 	 * @throws FeignException
 	 */
 	@GetMapping("/nearbyattractions/{userName}")

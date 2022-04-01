@@ -28,7 +28,7 @@ public interface IGpsServiceService {
 
 	/**
 	 * Get all attractions.
-	 * @return List<AttractionDTO>
+	 * @return List
 	 * @throws ConverterLibException 
 	 * @throws ConverterDTOException 
 	 */
@@ -49,7 +49,7 @@ public interface IGpsServiceService {
 	
 	/**
 	 * Get all users' last visited location.
-	 * @return Map<UUID, LocationDTO>
+	 * @return Map
 	 * @throws ConverterDTOException 
 	 */
 	Map<UUID, LocationDTO> getAllUsersLastLocation() throws ConverterDTOException;
@@ -57,7 +57,7 @@ public interface IGpsServiceService {
 	/**
 	 * Get a list of user's visited locations.
 	 * @param userId - UUID
-	 * @return List<VisitedLocationDTO>
+	 * @return List
 	 * @throws UserNotFoundException
 	 * @throws ConverterDTOException 
 	 */
@@ -67,7 +67,7 @@ public interface IGpsServiceService {
 	/**
 	 * Get an users's nearby attractions.
 	 * @param username String
-	 * @return List<NearByAttractionDTO>
+	 * @return List
 	 * @throws UserNotFoundException
 	 * @throws HttpException 
 	 * @throws ConverterLibException 

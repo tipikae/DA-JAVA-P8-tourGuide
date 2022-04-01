@@ -26,7 +26,7 @@ public interface IRewardServiceClient {
 	/**
 	 * Get an user's rewards.
 	 * @param userName String
-	 * @return List<Reward>
+	 * @return List
 	 * @throws FeignException
 	 */
 	@GetMapping("/rewards/{userName}")

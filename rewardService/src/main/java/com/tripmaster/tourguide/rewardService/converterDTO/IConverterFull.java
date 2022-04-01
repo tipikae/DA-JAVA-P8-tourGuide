@@ -17,8 +17,8 @@ public interface IConverterFull<E, D> extends IConverter2Ways<E, D> {
 
 	/**
 	 * Convert DTOs list to entities list.
-	 * @param dtos List<D>
-	 * @return List<E>
+	 * @param dtos List
+	 * @return List
 	 * @throws ConverterException 
 	 */
 	List<E> convertDTOsToEntities(List<D> dtos) throws ConverterException;

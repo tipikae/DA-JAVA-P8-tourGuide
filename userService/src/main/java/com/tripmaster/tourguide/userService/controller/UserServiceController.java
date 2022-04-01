@@ -53,7 +53,7 @@ public class UserServiceController {
 	/**
 	 * Add a user.
 	 * @param newUserDTO NewUserDTO
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 * @throws ConverterException 
 	 * @throws UserAlreadyExistsException 
 	 */
@@ -68,7 +68,7 @@ public class UserServiceController {
 	/**
 	 * Get a user.
 	 * @param userName String
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 * @throws UserNotFoundException 
 	 * @throws ConverterException 
 	 */
@@ -82,7 +82,7 @@ public class UserServiceController {
 	
 	/**
 	 * Get all users.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 * @throws ConverterException 
 	 */
 	@GetMapping("/users")
@@ -96,7 +96,7 @@ public class UserServiceController {
 	 * Update an user's preferences.
 	 * @param userName String
 	 * @param newPreferenceDTO NewPreferenceDTO
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 * @throws ConverterException 
 	 * @throws UserNotFoundException 
 	 */
@@ -113,7 +113,7 @@ public class UserServiceController {
 	/**
 	 * Get an user's trip deals.
 	 * @param username String
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 * @throws HttpClientException 
 	 * @throws UserNotFoundException 
 	 */
@@ -128,7 +128,7 @@ public class UserServiceController {
 	/**
 	 * Get an user's id.
 	 * @param userName String
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 * @throws UserNotFoundException
 	 */
 	@GetMapping("/user")
@@ -141,7 +141,7 @@ public class UserServiceController {
 	
 	/**
 	 * Get all userIds.
-	 * @return ResponseEntity<Object>
+	 * @return ResponseEntity
 	 */
 	@GetMapping("/userIds")
 	public ResponseEntity<Object> getAllUserIds() {

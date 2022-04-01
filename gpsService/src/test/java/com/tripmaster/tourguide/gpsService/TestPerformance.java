@@ -28,7 +28,7 @@ class TestPerformance {
 	@Autowired
 	private Tracker tracker;
 	
-	private int userNumber = 100000;
+	private int userNumber = 100;
 
 	@Test
 	public void highVolumeTrackLocation() 

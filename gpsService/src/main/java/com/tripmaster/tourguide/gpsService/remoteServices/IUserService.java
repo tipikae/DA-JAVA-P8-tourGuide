@@ -35,7 +35,7 @@ public interface IUserService {
 
 	/**
 	 * Get all userIds.
-	 * @return List<UUID>
+	 * @return List
 	 * @throws HttpException 
 	 */
 	List<UUID> getAllUserIds() throws HttpException;

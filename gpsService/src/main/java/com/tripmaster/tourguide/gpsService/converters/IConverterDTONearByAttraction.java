@@ -20,8 +20,8 @@ public interface IConverterDTONearByAttraction
 
 	/**
 	 * Converter NearByAttraction List to DTO List.
-	 * @param nearByAttractions List<NearByAttraction>
-	 * @return List<NearByAttractionDTO>
+	 * @param nearByAttractions List
+	 * @return List
 	 * @throws ConverterDTOException
 	 */
 	List<NearByAttractionDTO> convertNearByAttractionsToDTOs(List<NearByAttraction> nearByAttractions) 

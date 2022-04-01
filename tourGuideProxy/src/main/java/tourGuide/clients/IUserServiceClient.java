@@ -30,7 +30,7 @@ public interface IUserServiceClient {
 	/**
 	 * Get an users's trip deals.
 	 * @param username String
-	 * @return List<Provider>
+	 * @return List
 	 * @throws FeignException
 	 */
 	@GetMapping("/trips/{username}")

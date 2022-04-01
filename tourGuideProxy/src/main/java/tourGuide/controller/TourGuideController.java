@@ -163,7 +163,7 @@ public class TourGuideController {
     
     /**
      * Add an user.
-     * @param user User
+     * @param newUserDTO NewUserDTO
      * @return Object
      */
 	@ApiOperation("Add an user.")

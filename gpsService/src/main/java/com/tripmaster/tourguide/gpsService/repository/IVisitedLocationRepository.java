@@ -28,13 +28,13 @@ public interface IVisitedLocationRepository {
 	/**
 	 * Find all visitedLocations by userId.
 	 * @param userId
-	 * @return Optional<List<VisitedLocation>>
+	 * @return Optional
 	 */
 	Optional<List<MVisitedLocation>> findByUserId(UUID userId);
 	
 	/**
 	 * Find all visitedLocations.
-	 * @return Map<UUID, List<VisitedLocation>>
+	 * @return Map
 	 */
 	Map<UUID, List<MVisitedLocation>> findAll();
 }
