@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
+import feign.FeignException;
 import tourGuide.model.Attraction;
 import tourGuide.model.Location;
 import tourGuide.model.NearByAttraction;
@@ -27,32 +27,37 @@ import tourGuide.model.VisitedLocation;
 public interface IGpsServiceClient {
 
 	/**
-	 * Mapping for getAttractions.
+	 * Get all attractions.
 	 * @return List<Attraction>
+	 * @throws FeignException
 	 */
-	@RequestMapping(value = "/attractions", method = RequestMethod.GET)
-	List<Attraction> getAttractions();
+	@GetMapping("/attractions")
+	List<Attraction> getAttractions() throws FeignException;
 	
 	/**
-	 * Mapping for getUserLocation.
+	 * Get an user location.
 	 * @param userId UUID
 	 * @return VisitedLocation
+	 * @throws FeignException
 	 */
-	@RequestMapping(value = "/location/{userName}", method = RequestMethod.GET)
-	VisitedLocation getUserLocation(@PathVariable("userName") String userName);
+	@GetMapping("/location/{userName}")
+	VisitedLocation getUserLocation(@PathVariable("userName") String userName) throws FeignException;
 	
 	/**
 	 * Get all users last location.
 	 * @return Map<UUID, Location>
+	 * @throws FeignException
 	 */
-	@RequestMapping(value = "/lastlocations", method = RequestMethod.GET)
-	Map<UUID, Location> getAllUsersLastLocation();
+	@GetMapping("/lastlocations")
+	Map<UUID, Location> getAllUsersLastLocation() throws FeignException;
 	
 	/**
 	 * Get NearByAttractions of a user.
 	 * @param userName String
 	 * @return List<NearByAttraction>
+	 * @throws FeignException
 	 */
-	@RequestMapping(value = "/nearbyattractions/{userName}", method = RequestMethod.GET)
-	List<NearByAttraction> getNearByAttractions(@PathVariable("userName") String userName);
+	@GetMapping("/nearbyattractions/{userName}")
+	List<NearByAttraction> getNearByAttractions(@PathVariable("userName") String userName) 
+			throws FeignException;
 }

@@ -22,9 +22,6 @@ bootJar {
 
 repositories {
     mavenCentral()
-    flatDir {
-        dirs 'libs'
-    }
 }
 
 ext {
@@ -44,10 +41,6 @@ dependencies {
 	implementation 'io.github.openfeign:feign-okhttp'
     implementation group: 'org.javamoney', name: 'moneta', version: '1.4.2'
 	implementation group: 'com.jsoniter', name: 'jsoniter', version: '0.9.23'
-	
-    implementation(name:'gpsUtil', ext:'jar')
-    implementation(name:'RewardCentral', ext:'jar')
-    implementation(name:'TripPricer', ext:'jar')
     
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

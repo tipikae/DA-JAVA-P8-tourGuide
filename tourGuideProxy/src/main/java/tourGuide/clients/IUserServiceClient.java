@@ -31,14 +31,16 @@ public interface IUserServiceClient {
 	 * Get an users's trip deals.
 	 * @param username String
 	 * @return List<Provider>
+	 * @throws FeignException
 	 */
 	@GetMapping("/trips/{username}")
-	List<Provider> getTripDeals(@PathVariable("username") String username);
+	List<Provider> getTripDeals(@PathVariable("username") String username) throws FeignException;
 	
 	/**
-	 * Add a user.
+	 * Add an user.
 	 * @param newUserDTO NewUserDTO
-	 * @return ResponseEntity<Object>
+	 * @return User
+	 * @throws FeignException
 	 */
 	@PostMapping("/user")
 	User addUser(@RequestBody NewUserDTO newUserDTO) throws FeignException;
@@ -47,10 +49,11 @@ public interface IUserServiceClient {
 	 * Update an user's preferences.
 	 * @param userName String
 	 * @param newPreferenceDTO NewPreferenceDTO
+	 * @throws FeignException
 	 */
 	@PutMapping("/user/{userName}")
 	void updatePreferences(
 			@PathVariable("userName") String userName, 
-			@RequestBody NewPreferenceDTO newPreferenceDTO);
+			@RequestBody NewPreferenceDTO newPreferenceDTO) throws FeignException;
 	
 }
