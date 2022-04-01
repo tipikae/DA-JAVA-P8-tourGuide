@@ -51,7 +51,7 @@ public class TourGuideController {
 	 */
 	@ApiOperation("Get home.")
 	@ApiResponses({
-		@ApiResponse(code = 200, message = "Operation succeed", response = String.class)
+		@ApiResponse(code = 200, message = "OK", response = String.class)
 	})
 	@GetMapping("/")
     public String index() {
@@ -66,6 +66,7 @@ public class TourGuideController {
 	@ApiOperation("Get an user's location.")
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "OK", response = VisitedLocation.class),
+		@ApiResponse(code = 400, message = "Bad request."),
 		@ApiResponse(code = 404, message = "User not found.")
 	})
     @GetMapping("/getLocation") 
@@ -86,6 +87,7 @@ public class TourGuideController {
 	@ApiOperation("Get an user's nearby attractions.")
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "OK", response = List.class),
+		@ApiResponse(code = 400, message = "Bad request."),
 		@ApiResponse(code = 404, message = "User not found.")
 	})
     @GetMapping("/getNearbyAttractions") 
@@ -106,6 +108,7 @@ public class TourGuideController {
 	@ApiOperation("Get an user's rewards.")
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "OK", response = List.class),
+		@ApiResponse(code = 400, message = "Bad request."),
 		@ApiResponse(code = 404, message = "User not found.")
 	})
     @GetMapping("/getRewards") 
@@ -124,7 +127,8 @@ public class TourGuideController {
      */
 	@ApiOperation("Get all current users' location.")
 	@ApiResponses({
-		@ApiResponse(code = 200, message = "OK", response = Map.class)
+		@ApiResponse(code = 200, message = "OK", response = Map.class),
+		@ApiResponse(code = 400, message = "Bad request.")
 	})
     @GetMapping("/getAllCurrentLocations")
     public Object getAllCurrentLocations() {
@@ -144,6 +148,7 @@ public class TourGuideController {
 	@ApiOperation("Get an user's trip deals.")
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "OK", response = List.class),
+		@ApiResponse(code = 400, message = "Bad request."),
 		@ApiResponse(code = 404, message = "User not found.")
 	})
     @GetMapping("/getTripDeals")
@@ -164,6 +169,7 @@ public class TourGuideController {
 	@ApiOperation("Add an user.")
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "OK", response = User.class),
+		@ApiResponse(code = 400, message = "Bad request."),
 		@ApiResponse(code = 405, message = "User already exists.")
 	})
     @PostMapping(value = "/addUser", consumes = {"application/json"})
@@ -185,7 +191,8 @@ public class TourGuideController {
 	@ApiOperation("Update an user's preferences.")
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "OK"),
-		@ApiResponse(code = 400, message = "User not found.")
+		@ApiResponse(code = 400, message = "Bad request."),
+		@ApiResponse(code = 404, message = "User not found.")
 	})
     @PutMapping(value = "/updateUserPreferences/{userName}", consumes = {"application/json"})
     public Object updateUserPreferences(
