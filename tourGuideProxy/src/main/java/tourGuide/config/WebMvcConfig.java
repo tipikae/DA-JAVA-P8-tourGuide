@@ -1,7 +1,4 @@
-/**
- * 
- */
-package com.tripmaster.tourguide.gpsService.config;
+package tourGuide.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

@@ -1,5 +1,8 @@
 package tourGuide.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +14,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import tourGuide.clients.IGpsServiceClient;
 import tourGuide.clients.IRewardServiceClient;
 import tourGuide.clients.IUserServiceClient;
 import tourGuide.dto.NewPreferenceDTO;
 import tourGuide.dto.NewUserDTO;
+import tourGuide.model.User;
+import tourGuide.model.VisitedLocation;
 
 /**
  * Proxy controller for TourGuide application.
@@ -41,6 +49,10 @@ public class TourGuideController {
 	 * Get home.
 	 * @return String
 	 */
+	@ApiOperation("Get home.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "Operation succeed", response = String.class)
+	})
 	@GetMapping("/")
     public String index() {
         return "Greetings from TourGuide!";
@@ -51,6 +63,11 @@ public class TourGuideController {
 	 * @param userName String
 	 * @return Object
 	 */
+	@ApiOperation("Get an user's location.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "OK", response = VisitedLocation.class),
+		@ApiResponse(code = 404, message = "User not found.")
+	})
     @GetMapping("/getLocation") 
     public Object getLocation(@RequestParam String userName) {
     	LOGGER.info("getLocation: userName=" + userName);
@@ -66,6 +83,11 @@ public class TourGuideController {
      * @param userName String
      * @return Object
      */
+	@ApiOperation("Get an user's nearby attractions.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "OK", response = List.class),
+		@ApiResponse(code = 404, message = "User not found.")
+	})
     @GetMapping("/getNearbyAttractions") 
     public Object getNearbyAttractions(@RequestParam String userName) {
     	LOGGER.info("getNearbyAttractions: userName=" + userName);
@@ -81,6 +103,11 @@ public class TourGuideController {
      * @param userName String
      * @return Object
      */
+	@ApiOperation("Get an user's rewards.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "OK", response = List.class),
+		@ApiResponse(code = 404, message = "User not found.")
+	})
     @GetMapping("/getRewards") 
     public Object getRewards(@RequestParam String userName) {
     	LOGGER.info("getRewards: userName=" + userName);
@@ -95,6 +122,10 @@ public class TourGuideController {
      * Get all current users' location.
      * @return Object
      */
+	@ApiOperation("Get all current users' location.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "OK", response = Map.class)
+	})
     @GetMapping("/getAllCurrentLocations")
     public Object getAllCurrentLocations() {
     	LOGGER.info("getAllCurrentLocations");
@@ -110,6 +141,11 @@ public class TourGuideController {
      * @param userName String
      * @return Object
      */
+	@ApiOperation("Get an user's trip deals.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "OK", response = List.class),
+		@ApiResponse(code = 404, message = "User not found.")
+	})
     @GetMapping("/getTripDeals")
     public Object getTripDeals(@RequestParam String userName) {
     	LOGGER.info("getTripDeals: userName=" + userName);
@@ -125,6 +161,11 @@ public class TourGuideController {
      * @param user User
      * @return Object
      */
+	@ApiOperation("Add an user.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "OK", response = User.class),
+		@ApiResponse(code = 405, message = "User already exists.")
+	})
     @PostMapping(value = "/addUser", consumes = {"application/json"})
     public Object addUser(@RequestBody NewUserDTO newUserDTO) {
     	LOGGER.info("addUser: userName=" + newUserDTO.getUserName());
@@ -141,6 +182,11 @@ public class TourGuideController {
      * @param newPreferenceDTO NewPreferenceDTO
      * @return Object
      */
+	@ApiOperation("Update an user's preferences.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "OK"),
+		@ApiResponse(code = 400, message = "User not found.")
+	})
     @PutMapping(value = "/updateUserPreferences/{userName}", consumes = {"application/json"})
     public Object updateUserPreferences(
     		@PathVariable String userName,

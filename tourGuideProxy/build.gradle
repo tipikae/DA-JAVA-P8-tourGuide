@@ -39,6 +39,9 @@ dependencies {
 	implementation 'io.github.openfeign:feign-gson'
 	implementation 'io.github.openfeign:feign-slf4j'
 	implementation 'io.github.openfeign:feign-okhttp'
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
     implementation group: 'org.javamoney', name: 'moneta', version: '1.4.2'
 	implementation group: 'com.jsoniter', name: 'jsoniter', version: '0.9.23'
     
