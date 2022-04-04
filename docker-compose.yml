@@ -1,0 +1,80 @@
+version: "3.8"
+
+services:
+        
+  user:
+    container_name: userService
+    build: ./userService
+    image: userservice
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - "8082:8082"
+      - "9002:9002"
+    healthcheck:
+      test: "curl --fail --silent localhost:8082/actuator/health | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+      
+  reward:
+    container_name: rewardService
+    build: ./rewardService
+    image: rewardservice
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - "8083:8083"
+      - "9003:9003"
+    healthcheck:
+      test: "curl --fail --silent localhost:8083/actuator/health | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    depends_on:
+      user:
+        condition: service_healthy
+      
+  gps:
+    container_name: gpsService
+    build: ./gpsService
+    image: gpsservice
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - "8081:8081"
+      - "9001:9001"
+    healthcheck:
+      test: "curl --fail --silent localhost:8081/actuator/health | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    depends_on:
+      user:
+        condition: service_healthy
+      
+  proxy:
+    container_name: tourGuideProxy
+    build: ./tourGuideProxy
+    image: tourguideproxy
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - "8080:8080"
+      - "9000:9000"
+    depends_on:
+      user:
+        condition: service_healthy
+      reward:
+        condition: service_healthy
+      gps:
+        condition: service_healthy
+    
+    
