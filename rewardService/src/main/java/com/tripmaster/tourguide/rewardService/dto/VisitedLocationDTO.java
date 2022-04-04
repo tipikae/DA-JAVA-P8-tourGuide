@@ -6,6 +6,9 @@ package com.tripmaster.tourguide.rewardService.dto;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+
 /**
  * VisitedLocation DTO.
  * @author tipikae
@@ -14,11 +17,21 @@ import java.util.UUID;
  */
 public class VisitedLocationDTO {
 
+	@NotNull
 	private UUID userId;
+	@NotNull
 	private LocationDTO location;
+	@NotNull
+	@Past
 	private Date timeVisited;
 	
 	public VisitedLocationDTO() {
+	}
+
+	public VisitedLocationDTO(@NotNull UUID userId, @NotNull LocationDTO location, @NotNull @Past Date timeVisited) {
+		this.userId = userId;
+		this.location = location;
+		this.timeVisited = timeVisited;
 	}
 
 	/**

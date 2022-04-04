@@ -44,7 +44,7 @@ public interface IUserServiceService {
 	
 	/**
 	 * Get all users.
-	 * @return List<UserDTO>
+	 * @return List
 	 * @throws ConverterException 
 	 */
 	List<UserDTO> getAllUsers() throws ConverterException;
@@ -61,7 +61,7 @@ public interface IUserServiceService {
 	/**
 	 * Get an user's trip deals.
 	 * @param userName String
-	 * @return List<Provider>
+	 * @return List
 	 * @throws UserNotFoundException
 	 * @throws HttpException 
 	 */
@@ -78,7 +78,7 @@ public interface IUserServiceService {
 
 	/**
 	 * Get all userIds.
-	 * @return List<UUID>
+	 * @return List
 	 */
 	List<UUID> getAllUserIds();
 	

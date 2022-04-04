@@ -3,8 +3,9 @@
  */
 package com.tripmaster.tourguide.gpsService.dto;
 
-import java.util.Date;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * VisitedLocation DTO.
@@ -14,9 +15,12 @@ import java.util.UUID;
  */
 public class VisitedLocationDTO {
 
+	@NotNull
 	private UUID userId;
+	@NotNull
 	private LocationDTO location;
-	private Date timeVisited;
+	@NotNull
+	private String timeVisited;
 	
 	public VisitedLocationDTO() {
 	}
@@ -52,14 +56,14 @@ public class VisitedLocationDTO {
 	/**
 	 * @return the timeVisited
 	 */
-	public Date getTimeVisited() {
+	public String getTimeVisited() {
 		return timeVisited;
 	}
 
 	/**
 	 * @param timeVisited the timeVisited to set
 	 */
-	public void setTimeVisited(Date timeVisited) {
+	public void setTimeVisited(String timeVisited) {
 		this.timeVisited = timeVisited;
 	}
 	

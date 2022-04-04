@@ -14,6 +14,7 @@ import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
+import com.tripmaster.tourguide.gpsService.exceptions.TrackLocationException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 
@@ -27,7 +28,7 @@ public interface IGpsServiceService {
 
 	/**
 	 * Get all attractions.
-	 * @return List<AttractionDTO>
+	 * @return List
 	 * @throws ConverterLibException 
 	 * @throws ConverterDTOException 
 	 */
@@ -36,16 +37,19 @@ public interface IGpsServiceService {
 	/**
 	 * Get user current location.
 	 * @param username String
-	 * @return LocationDTO
+	 * @return VisitedLocationDTO
 	 * @throws HttpException 
 	 * @throws ConverterLibException 
 	 * @throws ConverterDTOException 
+	 * @throws TrackLocationException 
 	 */
-	LocationDTO getUserLocation(String username) throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException;
+	VisitedLocationDTO getUserLocation(String username) 
+			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException, 
+				TrackLocationException;
 	
 	/**
 	 * Get all users' last visited location.
-	 * @return Map<UUID, LocationDTO>
+	 * @return Map
 	 * @throws ConverterDTOException 
 	 */
 	Map<UUID, LocationDTO> getAllUsersLastLocation() throws ConverterDTOException;
@@ -53,7 +57,7 @@ public interface IGpsServiceService {
 	/**
 	 * Get a list of user's visited locations.
 	 * @param userId - UUID
-	 * @return List<VisitedLocationDTO>
+	 * @return List
 	 * @throws UserNotFoundException
 	 * @throws ConverterDTOException 
 	 */
@@ -63,7 +67,7 @@ public interface IGpsServiceService {
 	/**
 	 * Get an users's nearby attractions.
 	 * @param username String
-	 * @return List<NearByAttractionDTO>
+	 * @return List
 	 * @throws UserNotFoundException
 	 * @throws HttpException 
 	 * @throws ConverterLibException 
@@ -78,7 +82,8 @@ public interface IGpsServiceService {
 	 * @return MVisitedLocation
 	 * @throws ConverterLibException
 	 * @throws HttpException
+	 * @throws TrackLocationException 
 	 */
 	MVisitedLocation trackUserLocation(UUID userId) 
-			throws ConverterLibException, HttpException;
+			throws ConverterLibException, HttpException, TrackLocationException;
 }

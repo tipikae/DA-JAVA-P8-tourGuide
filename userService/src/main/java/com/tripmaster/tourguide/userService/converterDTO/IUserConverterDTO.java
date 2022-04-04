@@ -20,8 +20,8 @@ public interface IUserConverterDTO extends IConverterDTO<User, UserDTO, NewUserD
 
 	/**
 	 * Convert an User list to UserDTO list.
-	 * @param entities List<User>
-	 * @return List<UserDTO>
+	 * @param users List
+	 * @return List
 	 * @throws ConverterException
 	 */
 	List<UserDTO> converterEntitiesToDTOs(List<User> users) throws ConverterException;

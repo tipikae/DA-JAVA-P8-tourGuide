@@ -20,7 +20,7 @@ public interface IGpsService {
 
 	/**
 	 * Get attractions.
-	 * @return List<Attraction>
+	 * @return List
 	 * @throws HttpException 
 	 */
 	List<Attraction> getAttractions() throws HttpException;
@@ -28,7 +28,7 @@ public interface IGpsService {
 	/**
 	 * Get an user's visitedLocations.
 	 * @param userId UUID
-	 * @return List<VisitedLocation>
+	 * @return List
 	 * @throws HttpException 
 	 */
 	List<VisitedLocation> getUserVisitedLocations(UUID userId) throws HttpException;

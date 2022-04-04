@@ -5,8 +5,12 @@ plugins {
 	id 'jacoco'
 }
 
+bootJar {
+    baseName = 'UserService'
+    version =  '1.0.0'
+}
+
 group = 'com.tripmaster.tourguide'
-version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -36,7 +40,6 @@ dependencies {
 	implementation 'io.github.openfeign:feign-slf4j'
 	implementation 'io.github.openfeign:feign-okhttp'
     implementation group: 'org.javamoney', name: 'moneta', version: '1.4.2'
-	implementation group: 'com.jsoniter', name: 'jsoniter', version: '0.9.23'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

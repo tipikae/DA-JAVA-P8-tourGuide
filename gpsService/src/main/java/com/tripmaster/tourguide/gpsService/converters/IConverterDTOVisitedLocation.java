@@ -19,8 +19,8 @@ public interface IConverterDTOVisitedLocation extends IConverterDTO<MVisitedLoca
 
 	/**
 	 * Convert VisitedLocation List to DTO List.
-	 * @param visitedLocations List<MVisitedLocation>
-	 * @return List<VisitedLocationDTO>
+	 * @param visitedLocations List
+	 * @return List
 	 * @throws ConverterDTOException
 	 */
 	List<VisitedLocationDTO> convertVisitedLocationsToDTOs(List<MVisitedLocation> visitedLocations) 

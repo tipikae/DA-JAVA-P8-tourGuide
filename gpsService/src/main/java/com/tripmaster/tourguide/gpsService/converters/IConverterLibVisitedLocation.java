@@ -21,8 +21,8 @@ public interface IConverterLibVisitedLocation extends IConverterLib<VisitedLocat
 	
 	/**
 	 * Convert library VisitedLocation list to model VisitedLocation list.
-	 * @param libModels List<VisitedLocation>
-	 * @return List<MVisitedLocation>
+	 * @param visitedLocations List
+	 * @return List
 	 * @throws ConverterLibException 
 	 */
 	List<MVisitedLocation> convertLibVisitedLocationsToMVisitedLocations(

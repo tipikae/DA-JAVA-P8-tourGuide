@@ -12,6 +12,6 @@ import com.tripmaster.tourguide.rewardService.model.VisitedLocation;
  * @version 1.0
  *
  */
-public interface IVisitedLocationConverterDTO extends IConverter<VisitedLocation, VisitedLocationDTO> {
+public interface IVisitedLocationConverterDTO extends IConverterFull<VisitedLocation, VisitedLocationDTO> {
 
 }

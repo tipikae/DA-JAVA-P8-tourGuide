@@ -3,6 +3,9 @@
  */
 package com.tripmaster.tourguide.rewardService.converterDTO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -43,6 +46,43 @@ public class AttractionDTOConverterImpl implements IAttractionConverterDTO {
 		}
 		
 		return attractionDTO;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Attraction convertDTOToEntity(AttractionDTO dto) throws ConverterException {
+		Attraction attraction = new Attraction();
+		
+		try {
+			attraction.setAttractionId(dto.getAttractionId());
+			attraction.setAttractionName(dto.getAttractionName());
+			attraction.setCity(dto.getCity());
+			attraction.setLatitude(dto.getLatitude());
+			attraction.setLongitude(dto.getLongitude());
+			attraction.setState(dto.getState());
+		} catch (Exception e) {
+			LOGGER.debug("convertDTOToEntity: exception: " + e.getClass().getSimpleName() 
+					+ ", error: " + e.getMessage());
+			throw new ConverterException(e.getMessage());
+		}
+		
+		return attraction;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Attraction> convertDTOsToEntities(List<AttractionDTO> dtos) throws ConverterException {
+		List<Attraction> attractions = new ArrayList<>();
+		
+		for(AttractionDTO attractionDTO: dtos) {
+			attractions.add(convertDTOToEntity(attractionDTO));
+		}
+		
+		return attractions;
 	}
 
 }

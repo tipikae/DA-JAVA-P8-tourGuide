@@ -27,7 +27,7 @@ public interface IRewardRepository {
 	/**
 	 * Find user's rewards.
 	 * @param userId
-	 * @return Optional<List<Reward>>
+	 * @return Optional
 	 */
 	Optional<List<Reward>> findByUserId(UUID userId);
 }

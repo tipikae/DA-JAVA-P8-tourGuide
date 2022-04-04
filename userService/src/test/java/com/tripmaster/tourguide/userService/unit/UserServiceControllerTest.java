@@ -31,6 +31,7 @@ import com.tripmaster.tourguide.userService.dto.NewUserDTO;
 import com.tripmaster.tourguide.userService.dto.UserDTO;
 import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsException;
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
+import com.tripmaster.tourguide.userService.repository.IUserRepository;
 import com.tripmaster.tourguide.userService.service.IUserServiceService;
 
 import tripPricer.Provider;
@@ -41,6 +42,12 @@ class UserServiceControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 	
+	@MockBean
+	private IUserServiceService userService;
+	
+	@MockBean
+	private IUserRepository userRepository;
+	
 	private static String root;
 	private static String username;
 	private static UUID userId;
@@ -50,9 +57,6 @@ class UserServiceControllerTest {
 	private static Provider provider;
 	private static List<Provider> providers;
 	private static List<UserDTO> userDTOs;
-	
-	@MockBean
-	private IUserServiceService userService;
 	
 	@BeforeAll
 	private static void setUp() {

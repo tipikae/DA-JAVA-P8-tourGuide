@@ -25,14 +25,14 @@ public interface IUserRepository {
 	
 	/**
 	 * Find all users.
-	 * @return List<User>
+	 * @return List
 	 */
 	List<User> findAll();
 
 	/**
 	 * Find a user by username.
 	 * @param username String
-	 * @return Optional<User>
+	 * @return Optional
 	 */
 	Optional<User> findByUsername(String username);
 }

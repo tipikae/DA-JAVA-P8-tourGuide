@@ -3,6 +3,9 @@
  */
 package com.tripmaster.tourguide.rewardService.converterDTO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +47,41 @@ public class VisitedLocationDTOConverterImpl implements IVisitedLocationConverte
 		}
 		
 		return visitedLocationDTO;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public VisitedLocation convertDTOToEntity(VisitedLocationDTO dto) throws ConverterException {
+		VisitedLocation visitedLocation = new VisitedLocation();
+		
+		try {
+			visitedLocation.setLocation(locationConverter.convertDTOToEntity(dto.getLocation()));
+			visitedLocation.setTimeVisited(dto.getTimeVisited());
+			visitedLocation.setUserId(dto.getUserId());
+		} catch (Exception e) {
+			LOGGER.debug("convertDTOToEntity: exception: " + e.getClass().getSimpleName() 
+					+ ", error: " + e.getMessage());
+			throw new ConverterException(e.getMessage());
+		}
+		
+		return visitedLocation;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<VisitedLocation> convertDTOsToEntities(List<VisitedLocationDTO> visitedLocationDTOs) 
+			throws ConverterException {
+		List<VisitedLocation> visitedLocations = new ArrayList<>();
+		
+		for(VisitedLocationDTO visitedLocationDTO: visitedLocationDTOs) {
+			visitedLocations.add(convertDTOToEntity(visitedLocationDTO));
+		}
+		
+		return visitedLocations;
 	}
 
 }

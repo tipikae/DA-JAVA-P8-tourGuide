@@ -11,6 +11,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import feign.FeignException;
 import tourGuide.model.Reward;
 
 /**
@@ -23,10 +24,11 @@ import tourGuide.model.Reward;
 public interface IRewardServiceClient {
 
 	/**
-	 * Get attraction reward points.
+	 * Get an user's rewards.
 	 * @param userName String
-	 * @return List<Reward>
+	 * @return List
+	 * @throws FeignException
 	 */
 	@GetMapping("/rewards/{userName}")
-	List<Reward> getUserRewards(@PathVariable("userName") @NotBlank String userName);
+	List<Reward> getUserRewards(@PathVariable("userName") @NotBlank String userName) throws FeignException;
 }

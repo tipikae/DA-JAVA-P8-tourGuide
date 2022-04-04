@@ -34,7 +34,7 @@ public interface IUserServiceClient {
 
 	/**
 	 * Get all userIds.
-	 * @return List<UUID>
+	 * @return List
 	 */
 	@RequestLine("GET /userIds")
 	List<UUID> getAllUserIds();

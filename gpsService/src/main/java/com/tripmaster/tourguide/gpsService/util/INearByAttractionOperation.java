@@ -21,7 +21,7 @@ public interface INearByAttractionOperation {
 	/**
 	 * Get nearby attractions. 
 	 * @param userId UUID
-	 * @return List<NearByAttraction>
+	 * @return List
 	 * @throws ConverterLibException 
 	 * @throws HttpException 
 	 */

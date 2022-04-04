@@ -3,6 +3,8 @@
  */
 package com.tripmaster.tourguide.rewardService.dto;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Location DTO.
  * @author tipikae
@@ -11,10 +13,17 @@ package com.tripmaster.tourguide.rewardService.dto;
  */
 public class LocationDTO {
 
+	@NotNull
 	double latitude;
+	@NotNull
 	double longitude;
 	
 	public LocationDTO() {	
+	}
+
+	public LocationDTO(@NotNull double latitude, @NotNull double longitude) {
+		this.latitude = latitude;
+		this.longitude = longitude;
 	}
 
 	/**

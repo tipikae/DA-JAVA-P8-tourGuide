@@ -12,7 +12,6 @@ import com.tripmaster.tourguide.userService.exceptions.MyFeignErrorDecoder;
 import feign.Feign;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
-import feign.okhttp.OkHttpClient;
 
 /**
  * Configuration for Http clients.
@@ -29,7 +28,6 @@ public class HttpClientConfig {
 				.encoder(new GsonEncoder())
 				.decoder(new GsonDecoder())
 				.errorDecoder(new MyFeignErrorDecoder())
-				.client(new OkHttpClient())
 				.target(IRewardServiceClient.class, "http://localhost:8083/rewardservice");
 	}
 }

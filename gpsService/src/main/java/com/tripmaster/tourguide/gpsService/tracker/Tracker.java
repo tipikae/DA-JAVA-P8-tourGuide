@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
+import com.tripmaster.tourguide.gpsService.exceptions.TrackLocationException;
 import com.tripmaster.tourguide.gpsService.remoteServices.IUserService;
 import com.tripmaster.tourguide.gpsService.service.IGpsServiceService;
 
@@ -80,7 +81,7 @@ public class Tracker extends Thread {
 			userIds.forEach(userId -> {
 				try {
 					gpsService.trackUserLocation(userId);
-				} catch (ConverterLibException | HttpException e) {
+				} catch (ConverterLibException | HttpException | TrackLocationException e) {
 					LOGGER.debug("Tracker: run: gpsService failed to track user location: userId=" + userId);
 				}
 			});

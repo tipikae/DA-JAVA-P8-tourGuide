@@ -28,6 +28,7 @@ import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
+import com.tripmaster.tourguide.gpsService.exceptions.TrackLocationException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.service.IGpsServiceService;
 
@@ -49,7 +50,7 @@ public class GpsServiceController {
 	
 	/**
 	 * Get all attractions.
-	 * @return ResponseEntity<List<AttractionDTO>>
+	 * @return ResponseEntity
 	 * @throws ConverterLibException 
 	 * @throws ConverterDTOException 
 	 */
@@ -63,23 +64,25 @@ public class GpsServiceController {
 	/**
 	 * Get a user's location.
 	 * @param userName String
-	 * @return ResponseEntity<LocationDTO>
+	 * @return ResponseEntity
 	 * @throws UserNotFoundException 
 	 * @throws HttpException 
 	 * @throws ConverterLibException 
 	 * @throws ConverterDTOException 
+	 * @throws TrackLocationException 
 	 */
 	@GetMapping("/location/{userName}")
 	public ResponseEntity<Object> getUserLocation(@PathVariable("userName") @NotBlank String userName) 
-			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException {
+			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException, 
+				TrackLocationException {
 		LOGGER.info("getUserLocation: userName=" + userName);
-		LocationDTO visitedLocation = gpsService.getUserLocation(userName);
+		VisitedLocationDTO visitedLocation = gpsService.getUserLocation(userName);
 		return new ResponseEntity<Object>(visitedLocation, HttpStatus.OK);
 	}
 	
 	/**
 	 * Get all users' last location.
-	 * @return ResponseEntity<Map<UUID, LocationDTO>>
+	 * @return ResponseEntity
 	 * @throws ConverterDTOException 
 	 */
 	@GetMapping("/lastlocations")
@@ -92,7 +95,7 @@ public class GpsServiceController {
 	/**
 	 * Get a user's all visited locations.
 	 * @param userId - UUID
-	 * @return ResponseEntity<List<VisitedLocationDTO>>
+	 * @return ResponseEntity
 	 * @throws UserNotFoundException 
 	 * @throws ConverterDTOException 
 	 */
@@ -107,7 +110,7 @@ public class GpsServiceController {
 	/**
 	 * Get nearby attractions.
 	 * @param userName String
-	 * @return ResponseEntity<List<NearByAttractionDTO>>
+	 * @return ResponseEntity
 	 * @throws UserNotFoundException 
 	 * @throws HttpException 
 	 * @throws ConverterLibException 

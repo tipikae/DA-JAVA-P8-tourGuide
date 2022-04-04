@@ -11,7 +11,7 @@ import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
  * @version 1.0
  *
  */
-public interface IConverter<E, D> {
+public interface IConverterEntityToDTO<E, D> {
 
 	/**
 	 * Converter Entity to DTO.

@@ -12,6 +12,6 @@ import com.tripmaster.tourguide.rewardService.model.Attraction;
  * @version 1.0
  *
  */
-public interface IAttractionConverterDTO extends IConverter<Attraction, AttractionDTO> {
+public interface IAttractionConverterDTO extends IConverterFull<Attraction, AttractionDTO> {
 
 }
