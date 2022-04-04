@@ -25,12 +25,13 @@ import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
 import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.rewardService.service.IRewardServiceService;
+import com.tripmaster.tourguide.rewardService.service.RewardServiceServiceImpl;
 
 @SpringBootTest
 class TestPerformance {
 	
 	@Autowired
-	private IRewardServiceService rewardService;
+	private RewardServiceServiceImpl rewardService;
 	
 	private int userNumber = 100;
 
@@ -59,7 +60,7 @@ class TestPerformance {
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 		
-		userIds.parallelStream().forEach(id -> {
+		userIds.forEach(id -> {
 			try {
 				rewardService.calculateRewards(id, map.get(id));
 			} catch (HttpException | ConverterException e) {
@@ -67,7 +68,9 @@ class TestPerformance {
 			}
 		});
 		
-		userIds.parallelStream().forEach(id -> {
+		rewardService.futures.forEach(future -> future.join());
+		
+		userIds.forEach(id -> {
 			try {
 				assertTrue(rewardService.getUserRewardsPoints(id) > 0);
 			} catch (UserNotFoundException e) {

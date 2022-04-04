@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -48,7 +46,9 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RewardServiceServiceImpl.class);
 	
-	private static ExecutorService executorService = Executors.newFixedThreadPool(100);
+	private static ExecutorService executorService = Executors.newFixedThreadPool(10000);
+    
+    public static List<CompletableFuture<Void>> futures = new ArrayList<>();
 	
 	@Autowired
 	private IRewardRepository rewardRepository;
@@ -95,28 +95,22 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 		
 		Optional<List<Reward>> optional = rewardRepository.findByUserId(userId);
 		List<Reward> rewards = (optional.isPresent() ? optional.get() : new ArrayList<>());
-		
-		visitedLocations.parallelStream().forEach(visitedLocation -> {
-			attractions.parallelStream().forEach(attraction -> {
-				CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-					if(rewards.stream().filter(r -> 
-								r.getAttraction().getAttractionName()
-									.equals(attraction.getAttractionName()))
-									.count() == 0) {
-						if(nearAttraction(visitedLocation.getLocation(), attraction)) {
+
+		visitedLocations.forEach(visitedLocation -> {
+			attractions.forEach(attraction -> {
+				if(rewards.stream().filter(r -> 
+							r.getAttraction().getAttractionName()
+								.equals(attraction.getAttractionName()))
+								.count() == 0) {
+					if(nearAttraction(visitedLocation.getLocation(), attraction)) {
+						CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
 							Reward reward = 
 									new Reward(visitedLocation, attraction, 
 											getRewardPoints(attraction.getAttractionId(), userId));
 							rewardRepository.save(reward);
-						}
+						}, executorService);
+						futures.add(future);
 					}
-				}, executorService);
-				
-				try {
-					future.get();
-				} catch (InterruptedException | ExecutionException e) {
-					LOGGER.error("calculateRewards: get future error: " + e.getMessage());
-					throw new CompletionException(e);
 				}
 			});
 		});
