@@ -75,7 +75,7 @@ public class Tracker extends Thread {
 				LOGGER.debug("Tracker: run: userService failed to retrieve all userIds.");
 			}
 			
-			LOGGER.debug("Tracker: run: Begin Tracker. Tracking " + userIds.size() + " users.");
+			LOGGER.info("Tracker: run: Begin Tracker. Tracking " + userIds.size() + " users.");
 			
 			stopWatch.start();
 			userIds.forEach(userId -> {
@@ -92,7 +92,7 @@ public class Tracker extends Thread {
 			stopWatch.reset();
 			
 			try {
-				LOGGER.debug("Tracker: run: Tracker sleeping");
+				LOGGER.info("Tracker: run: Tracker sleeping");
 				TimeUnit.SECONDS.sleep(TRACKING_POLLING_INTERVAL);
 			} catch (InterruptedException e) {
 				break;

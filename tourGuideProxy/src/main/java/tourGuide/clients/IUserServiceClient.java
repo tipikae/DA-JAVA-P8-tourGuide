@@ -5,14 +5,10 @@ package tourGuide.clients;
 
 import java.util.List;
 
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import feign.FeignException;
+import feign.Headers;
+import feign.Param;
+import feign.RequestLine;
 import tourGuide.dto.NewPreferenceDTO;
 import tourGuide.dto.NewUserDTO;
 import tourGuide.model.Provider;
@@ -24,7 +20,6 @@ import tourGuide.model.User;
  * @version 1.0
  *
  */
-@FeignClient(name = "UserService", url = "http://localhost:8082/userservice")
 public interface IUserServiceClient {
 
 	/**
@@ -33,8 +28,8 @@ public interface IUserServiceClient {
 	 * @return List
 	 * @throws FeignException
 	 */
-	@GetMapping("/trips/{username}")
-	List<Provider> getTripDeals(@PathVariable("username") String username) throws FeignException;
+	@RequestLine("GET /trips/{username}")
+	List<Provider> getTripDeals(@Param("username") String username) throws FeignException;
 	
 	/**
 	 * Add an user.
@@ -42,8 +37,9 @@ public interface IUserServiceClient {
 	 * @return User
 	 * @throws FeignException
 	 */
-	@PostMapping("/user")
-	User addUser(@RequestBody NewUserDTO newUserDTO) throws FeignException;
+	@RequestLine("POST /user")
+    @Headers("Content-Type: application/json")
+	User addUser(NewUserDTO newUserDTO) throws FeignException;
 	
 	/**
 	 * Update an user's preferences.
@@ -51,9 +47,10 @@ public interface IUserServiceClient {
 	 * @param newPreferenceDTO NewPreferenceDTO
 	 * @throws FeignException
 	 */
-	@PutMapping("/user/{userName}")
+	@RequestLine("PUT /user/{userName}")
+    @Headers("Content-Type: application/json")
 	void updatePreferences(
-			@PathVariable("userName") String userName, 
-			@RequestBody NewPreferenceDTO newPreferenceDTO) throws FeignException;
+			@Param("userName") String userName, 
+			NewPreferenceDTO newPreferenceDTO) throws FeignException;
 	
 }

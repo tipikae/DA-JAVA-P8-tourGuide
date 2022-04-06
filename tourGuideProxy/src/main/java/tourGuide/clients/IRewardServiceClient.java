@@ -7,11 +7,9 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import feign.FeignException;
+import feign.Param;
+import feign.RequestLine;
 import tourGuide.model.Reward;
 
 /**
@@ -20,7 +18,6 @@ import tourGuide.model.Reward;
  * @version 1.0
  *
  */
-@FeignClient(name = "RewardService", url = "http://localhost:8083/rewardservice")
 public interface IRewardServiceClient {
 
 	/**
@@ -29,6 +26,6 @@ public interface IRewardServiceClient {
 	 * @return List
 	 * @throws FeignException
 	 */
-	@GetMapping("/rewards/{userName}")
-	List<Reward> getUserRewards(@PathVariable("userName") @NotBlank String userName) throws FeignException;
+	@RequestLine("GET /rewards/{userName}")
+	List<Reward> getUserRewards(@Param("userName") @NotBlank String userName) throws FeignException;
 }
