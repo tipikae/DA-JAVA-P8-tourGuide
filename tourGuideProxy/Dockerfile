@@ -11,6 +11,7 @@ RUN gradle --no-daemon bootJar
 FROM openjdk:8-jdk-alpine
 ARG BUILD_HOME
 ENV APP_HOME=$BUILD_HOME
+RUN apk --no-cache add curl
 COPY --from=build-image $APP_HOME/build/libs/TourGuideProxy-*.jar app.jar
 ENTRYPOINT [ "java", "-jar", "app.jar" ]
 EXPOSE 8080 9000
