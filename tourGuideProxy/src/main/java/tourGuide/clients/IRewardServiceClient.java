@@ -3,14 +3,11 @@
  */
 package tourGuide.clients;
 
-import java.util.List;
-
 import javax.validation.constraints.NotBlank;
 
 import feign.FeignException;
 import feign.Param;
 import feign.RequestLine;
-import tourGuide.model.Reward;
 
 /**
  * Feign client for RewardService.
@@ -23,9 +20,9 @@ public interface IRewardServiceClient {
 	/**
 	 * Get an user's rewards.
 	 * @param userName String
-	 * @return List
+	 * @return Object
 	 * @throws FeignException
 	 */
 	@RequestLine("GET /rewards/{userName}")
-	List<Reward> getUserRewards(@Param("userName") @NotBlank String userName) throws FeignException;
+	Object getUserRewards(@Param("userName") @NotBlank String userName) throws FeignException;
 }

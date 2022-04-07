@@ -43,7 +43,7 @@ import com.tripmaster.tourguide.rewardService.service.IRewardServiceService;
 public class RewardServiceController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RewardServiceController.class);
-	
+
 	@Autowired
 	private IRewardServiceService rewardService;
 	

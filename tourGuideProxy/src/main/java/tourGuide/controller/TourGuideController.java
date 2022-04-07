@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +36,9 @@ import tourGuide.model.VisitedLocation;
 public class TourGuideController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(TourGuideController.class);
+	
+	@Value(value = "${client.userService.url:prout}")
+	private String userServiceUrl;
 	
 	@Autowired
 	private IUserServiceClient userClient;
@@ -175,6 +179,7 @@ public class TourGuideController {
     @PostMapping(value = "/addUser", consumes = {"application/json"})
     public Object addUser(@RequestBody NewUserDTO newUserDTO) {
     	LOGGER.info("addUser: userName=" + newUserDTO.getUserName());
+    	LOGGER.info("userServiceUrl=" + userServiceUrl);
     	try {
     		return userClient.addUser(newUserDTO);
 		} catch (Exception e) {

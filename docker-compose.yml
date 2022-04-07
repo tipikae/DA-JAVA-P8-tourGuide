@@ -3,7 +3,7 @@ version: "3.8"
 services:
         
   user:
-    container_name: userService
+    container_name: user
     build: ./userService
     image: userservice
     restart: always
@@ -13,14 +13,14 @@ services:
       - "8082:8082"
       - "9002:9002"
     healthcheck:
-      test: "curl --fail --silent localhost:8082/actuator/health | grep UP || exit 1"
+      test: "curl --fail --silent localhost:9002/actuator/health | grep UP || exit 1"
       interval: 20s
       timeout: 5s
       retries: 5
       start_period: 40s
       
   reward:
-    container_name: rewardService
+    container_name: reward
     build: ./rewardService
     image: rewardservice
     restart: always
@@ -30,7 +30,7 @@ services:
       - "8083:8083"
       - "9003:9003"
     healthcheck:
-      test: "curl --fail --silent localhost:8083/actuator/health | grep UP || exit 1"
+      test: "curl --fail --silent localhost:9003/actuator/health | grep UP || exit 1"
       interval: 20s
       timeout: 5s
       retries: 5
@@ -40,7 +40,7 @@ services:
         condition: service_healthy
       
   gps:
-    container_name: gpsService
+    container_name: gps
     build: ./gpsService
     image: gpsservice
     restart: always
@@ -50,7 +50,7 @@ services:
       - "8081:8081"
       - "9001:9001"
     healthcheck:
-      test: "curl --fail --silent localhost:8081/actuator/health | grep UP || exit 1"
+      test: "curl --fail --silent localhost:9001/actuator/health | grep UP || exit 1"
       interval: 20s
       timeout: 5s
       retries: 5
@@ -60,7 +60,7 @@ services:
         condition: service_healthy
       
   proxy:
-    container_name: tourGuideProxy
+    container_name: proxy
     build: ./tourGuideProxy
     image: tourguideproxy
     restart: always
