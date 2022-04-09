@@ -46,9 +46,7 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RewardServiceServiceImpl.class);
 	
-	private static ExecutorService executorService = Executors.newFixedThreadPool(10000);
-    
-    public static List<CompletableFuture<Void>> futures = new ArrayList<>();
+	public static ExecutorService executorService = Executors.newCachedThreadPool();
 	
 	@Autowired
 	private IRewardRepository rewardRepository;
@@ -86,34 +84,45 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 			newVisitedLocationsAndAttractionsDTO) throws HttpException, ConverterException {
 		LOGGER.debug("calculateRewards: userId=" + userId);
 
-		List<VisitedLocation> visitedLocations = 
-				visitedLocationConverterDTO.convertDTOsToEntities(
+		CompletableFuture.runAsync(() -> {
+			// get visitedLocations
+			List<VisitedLocation> visitedLocations = new ArrayList<>();
+			try {
+				visitedLocations = visitedLocationConverterDTO.convertDTOsToEntities(
 						newVisitedLocationsAndAttractionsDTO.getVisitedLocations());
-		List<Attraction> attractions = 
-				attractionConverterDTO.convertDTOsToEntities(
-						newVisitedLocationsAndAttractionsDTO.getAttractions());
-		
-		Optional<List<Reward>> optional = rewardRepository.findByUserId(userId);
-		List<Reward> rewards = (optional.isPresent() ? optional.get() : new ArrayList<>());
+			} catch (ConverterException e) {
+				LOGGER.debug("calculateRewards: visitedLocations ConverterException: " + e.getMessage());
+			}
+			
+			// get user's rewards
+			Optional<List<Reward>> optional = rewardRepository.findByUserId(userId);
+			List<Reward> rewards = (optional.isPresent() ? optional.get() : new ArrayList<>());
 
-		visitedLocations.forEach(visitedLocation -> {
-			attractions.forEach(attraction -> {
-				if(rewards.stream().filter(r -> 
-							r.getAttraction().getAttractionName()
-								.equals(attraction.getAttractionName()))
-								.count() == 0) {
-					if(nearAttraction(visitedLocation.getLocation(), attraction)) {
-						CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+			visitedLocations.forEach(visitedLocation -> {
+				// get attractions
+				List<Attraction> attractions = new ArrayList<>();
+				try {
+					attractions = attractionConverterDTO.convertDTOsToEntities(
+							newVisitedLocationsAndAttractionsDTO.getAttractions());
+				} catch (ConverterException e) {
+					LOGGER.debug("calculateRewards: attractions ConverterException: " + e.getMessage());
+				}
+				
+				attractions.forEach(attraction -> {
+					if(rewards.stream().filter(r -> 
+								r.getAttraction().getAttractionName()
+									.equals(attraction.getAttractionName()))
+									.count() == 0) {
+						if(nearAttraction(visitedLocation.getLocation(), attraction)) {
 							Reward reward = 
 									new Reward(visitedLocation, attraction, 
 											getRewardPoints(attraction.getAttractionId(), userId));
 							rewardRepository.save(reward);
-						}, executorService);
-						futures.add(future);
+						}
 					}
-				}
+				});
 			});
-		});
+		}, executorService);
 	}
 
 	/**
@@ -150,11 +159,10 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 			throw new UserNotFoundException("user with userId=" + userId + " not found.");
 		}
 		
-		int sum = 0;
 		List<Reward> rewards = optional.get();
-		for(Reward reward: rewards) {
-			sum += reward.getRewardPoints();
-		}
+		int sum = rewards.stream()
+				.map(r -> r.getRewardPoints())
+				.reduce(0, Integer::sum);
 		
 		return sum;
 	}
@@ -176,7 +184,8 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	}
 
 	private int getRewardPoints(UUID attractionId, UUID userId) {
-		return rewardCentral.getAttractionRewardPoints(attractionId, userId);
+		 int points = rewardCentral.getAttractionRewardPoints(attractionId, userId);
+		return points;
 	}
 	
 	private void addShutDownHook() {
@@ -186,7 +195,7 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 			
 			@Override
 			public void run() {
-				LOGGER.debug("calculateRewards: stopTracking");
+				LOGGER.debug("calculateRewards: shutdownNow");
 				executorService.shutdownNow();
 		      } 
 		    }); 
