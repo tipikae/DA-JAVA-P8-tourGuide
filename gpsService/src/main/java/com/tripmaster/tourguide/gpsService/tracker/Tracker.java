@@ -82,7 +82,8 @@ public class Tracker extends Thread {
 				try {
 					gpsService.trackUserLocation(userId);
 				} catch (ConverterLibException | HttpException | TrackLocationException e) {
-					LOGGER.debug("Tracker: run: gpsService failed to track user location: userId=" + userId);
+					LOGGER.debug("Tracker: run: gpsService failed to track user location: userId=" + userId 
+							+ ", exception:" + e.getMessage());
 				}
 			});
 			stopWatch.stop();

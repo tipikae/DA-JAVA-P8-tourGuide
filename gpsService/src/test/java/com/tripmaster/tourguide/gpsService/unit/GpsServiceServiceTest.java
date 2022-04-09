@@ -233,7 +233,7 @@ class GpsServiceServiceTest {
 			.thenReturn(Optional.of(mVisitedLocations));
 		doNothing().when(rewardService).calculateRewards(any(UUID.class), 
 				any(AttractionsAndVisitedLocationsDTO.class));
-		assertEquals(visitedLocation.userId, gpsService.trackUserLocation(userId).getUserId());
+		assertEquals(visitedLocation.userId, gpsService.trackUserLocation(userId).join().getUserId());
 	}
 
 }
