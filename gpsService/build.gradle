@@ -59,6 +59,15 @@ jacoco {
 }
 
 jacocoTestReport {
+	afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                "com/tripmaster/tourguide/gpsService/dto/*",
+                "com/tripmaster/tourguide/gpsService/model/*"
+            ])
+        }))
+    }
+    
     reports {
         xml.enabled true
         csv.enabled false
