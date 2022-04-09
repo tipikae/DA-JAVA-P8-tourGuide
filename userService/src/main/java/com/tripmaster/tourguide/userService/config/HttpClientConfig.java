@@ -3,6 +3,7 @@
  */
 package com.tripmaster.tourguide.userService.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,6 +22,9 @@ import feign.gson.GsonEncoder;
  */
 @Configuration
 public class HttpClientConfig {
+	
+	@Value(value = "${client.rewardService.url:}")
+	private String url;
 
 	@Bean
 	public IRewardServiceClient getRewardServiceClient() {
@@ -28,6 +32,6 @@ public class HttpClientConfig {
 				.encoder(new GsonEncoder())
 				.decoder(new GsonDecoder())
 				.errorDecoder(new MyFeignErrorDecoder())
-				.target(IRewardServiceClient.class, "http://localhost:8083/rewardservice");
+				.target(IRewardServiceClient.class, url);
 	}
 }

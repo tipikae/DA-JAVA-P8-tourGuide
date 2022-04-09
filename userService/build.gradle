@@ -65,6 +65,15 @@ jacoco {
 }
 
 jacocoTestReport {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                "com/tripmaster/tourguide/userService/dto/*",
+                "com/tripmaster/tourguide/userService/model/*"
+            ])
+        }))
+    }
+    
     reports {
         xml.enabled true
         csv.enabled false

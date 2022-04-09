@@ -17,6 +17,11 @@ public class LocationDTO {
 	public LocationDTO() {	
 	}
 
+	public LocationDTO(double latitude, double longitude) {
+		this.latitude = latitude;
+		this.longitude = longitude;
+	}
+
 	/**
 	 * @return the latitude
 	 */

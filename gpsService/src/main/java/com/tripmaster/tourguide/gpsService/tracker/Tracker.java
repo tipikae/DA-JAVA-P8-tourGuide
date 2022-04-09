@@ -75,14 +75,15 @@ public class Tracker extends Thread {
 				LOGGER.debug("Tracker: run: userService failed to retrieve all userIds.");
 			}
 			
-			LOGGER.debug("Tracker: run: Begin Tracker. Tracking " + userIds.size() + " users.");
+			LOGGER.info("Tracker: run: Begin Tracker. Tracking " + userIds.size() + " users.");
 			
 			stopWatch.start();
 			userIds.forEach(userId -> {
 				try {
 					gpsService.trackUserLocation(userId);
 				} catch (ConverterLibException | HttpException | TrackLocationException e) {
-					LOGGER.debug("Tracker: run: gpsService failed to track user location: userId=" + userId);
+					LOGGER.debug("Tracker: run: gpsService failed to track user location: userId=" + userId 
+							+ ", exception:" + e.getMessage());
 				}
 			});
 			stopWatch.stop();
@@ -92,7 +93,7 @@ public class Tracker extends Thread {
 			stopWatch.reset();
 			
 			try {
-				LOGGER.debug("Tracker: run: Tracker sleeping");
+				LOGGER.info("Tracker: run: Tracker sleeping");
 				TimeUnit.SECONDS.sleep(TRACKING_POLLING_INTERVAL);
 			} catch (InterruptedException e) {
 				break;

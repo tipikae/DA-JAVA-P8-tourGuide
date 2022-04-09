@@ -70,7 +70,7 @@ class GpsServiceIT {
 			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException, 
 			TrackLocationException {
 		UUID userId = userService.getUserId(username);
-		assertEquals(userId, gpsService.trackUserLocation(userId).getUserId());
+		assertEquals(userId, gpsService.trackUserLocation(userId).join().getUserId());
 	}
 
 }

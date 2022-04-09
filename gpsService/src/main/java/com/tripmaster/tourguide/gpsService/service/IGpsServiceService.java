@@ -6,6 +6,7 @@ package com.tripmaster.tourguide.gpsService.service;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
@@ -79,11 +80,11 @@ public interface IGpsServiceService {
 	/**
 	 * Track user location
 	 * @param userId UUID
-	 * @return MVisitedLocation
+	 * @return CompletableFuture
 	 * @throws ConverterLibException
 	 * @throws HttpException
 	 * @throws TrackLocationException 
 	 */
-	MVisitedLocation trackUserLocation(UUID userId) 
+	CompletableFuture<MVisitedLocation> trackUserLocation(UUID userId) 
 			throws ConverterLibException, HttpException, TrackLocationException;
 }
