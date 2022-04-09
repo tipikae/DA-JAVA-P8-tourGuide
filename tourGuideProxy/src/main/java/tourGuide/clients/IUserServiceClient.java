@@ -3,12 +3,12 @@
  */
 package tourGuide.clients;
 
-import feign.FeignException;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 import tourGuide.dto.NewPreferenceDTO;
 import tourGuide.dto.NewUserDTO;
+import tourGuide.exception.HttpException;
 
 /**
  * Feign client for UserService
@@ -22,31 +22,31 @@ public interface IUserServiceClient {
 	 * Get an users's trip deals.
 	 * @param username String
 	 * @return Object
-	 * @throws FeignException
+	 * @throws HttpException
 	 */
 	@RequestLine("GET /trips/{username}")
-	Object getTripDeals(@Param("username") String username) throws FeignException;
+	Object getTripDeals(@Param("username") String username) throws HttpException;
 	
 	/**
 	 * Add an user.
 	 * @param newUserDTO NewUserDTO
 	 * @return Object
-	 * @throws FeignException
+	 * @throws HttpException
 	 */
 	@RequestLine("POST /user")
     @Headers("Content-Type: application/json")
-	Object addUser(NewUserDTO newUserDTO) throws FeignException;
+	Object addUser(NewUserDTO newUserDTO) throws HttpException;
 	
 	/**
 	 * Update an user's preferences.
 	 * @param userName String
 	 * @param newPreferenceDTO NewPreferenceDTO
-	 * @throws FeignException
+	 * @throws HttpException
 	 */
 	@RequestLine("PUT /user/{userName}")
     @Headers("Content-Type: application/json")
 	void updatePreferences(
 			@Param("userName") String userName, 
-			NewPreferenceDTO newPreferenceDTO) throws FeignException;
+			NewPreferenceDTO newPreferenceDTO) throws HttpException;
 	
 }

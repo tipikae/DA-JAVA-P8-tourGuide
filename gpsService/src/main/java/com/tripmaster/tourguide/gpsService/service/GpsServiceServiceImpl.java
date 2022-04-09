@@ -33,7 +33,6 @@ import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
-import com.tripmaster.tourguide.gpsService.exceptions.TrackLocationException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
@@ -113,7 +112,7 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	 */
 	@Override
 	public VisitedLocationDTO getUserLocation(String userName) 
-			throws HttpException, ConverterDTOException, ConverterLibException, TrackLocationException {
+			throws HttpException, ConverterDTOException, ConverterLibException {
 		LOGGER.debug("getUserLocation: userName=" + userName);
 		
 		UUID userId = userService.getUserId(userName);

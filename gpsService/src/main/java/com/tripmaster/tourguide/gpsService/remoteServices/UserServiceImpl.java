@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.tripmaster.tourguide.gpsService.clients.IUserServiceClient;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
+import com.tripmaster.tourguide.gpsService.exceptions.HttpUserNotFoundException;
 import com.tripmaster.tourguide.gpsService.model.User;
 
 /**

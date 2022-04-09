@@ -25,6 +25,7 @@ import com.tripmaster.tourguide.rewardService.converterDTO.IAttractionConverterD
 import com.tripmaster.tourguide.rewardService.converterDTO.IRewardConverterDTO;
 import com.tripmaster.tourguide.rewardService.converterDTO.IVisitedLocationConverterDTO;
 import com.tripmaster.tourguide.rewardService.dto.AttractionDTO;
+import com.tripmaster.tourguide.rewardService.dto.LocationDTO;
 import com.tripmaster.tourguide.rewardService.dto.NewVisitedLocationsAndAttractionsDTO;
 import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
 import com.tripmaster.tourguide.rewardService.dto.VisitedLocationDTO;
@@ -106,16 +107,19 @@ class RewardServiceServiceTest {
 	
 	@Test
 	void calculateRewardsWhenOk() throws HttpException, ConverterException {
-		List<AttractionDTO> attractionDTOs = Arrays.asList(new AttractionDTO());
-		List<VisitedLocationDTO> visitedLocationDTOs = Arrays.asList(new VisitedLocationDTO());
+		LocationDTO locationDTO = new LocationDTO(latitude, longitude);
+		List<AttractionDTO> attractionDTOs = Arrays.asList(
+				new AttractionDTO(attractionId, attractionName, city, state, latitude, longitude));
+		List<VisitedLocationDTO> visitedLocationDTOs = Arrays.asList(
+				new VisitedLocationDTO(userId, locationDTO, new Date()));
 		NewVisitedLocationsAndAttractionsDTO visitedLocationsAndAttractionsDTO 
 			= new NewVisitedLocationsAndAttractionsDTO();
 		visitedLocationsAndAttractionsDTO.setAttractions(attractionDTOs);
 		visitedLocationsAndAttractionsDTO.setVisitedLocations(visitedLocationDTOs);
-		when(attractionConverterDTO.convertDTOsToEntities(anyList()))
-			.thenReturn(Arrays.asList(new  Attraction()));
 		when(visitedLocationConverterDTO.convertDTOsToEntities(anyList()))
-			.thenReturn(Arrays.asList(new VisitedLocation()));
+			.thenReturn(Arrays.asList(visitedLocation));
+		when(attractionConverterDTO.convertDTOsToEntities(anyList()))
+			.thenReturn(Arrays.asList(attraction));
 		rewardService.calculateRewards(userId, visitedLocationsAndAttractionsDTO);
 		Mockito.verify(rewardRepository).save(any(Reward.class));
 	}

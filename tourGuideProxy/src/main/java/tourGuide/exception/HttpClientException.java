@@ -1,12 +1,11 @@
 /**
  * 
  */
-package com.tripmaster.tourguide.gpsService.exceptions;
+package tourGuide.exception;
 
 /**
- * Http Client side exception.
+ * Http client exception
  * @author tipikae
- * @version 1.0
  *
  */
 public class HttpClientException extends HttpException {

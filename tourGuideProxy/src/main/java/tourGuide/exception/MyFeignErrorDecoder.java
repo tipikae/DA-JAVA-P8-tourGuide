@@ -1,7 +1,4 @@
-/**
- * 
- */
-package com.tripmaster.tourguide.rewardService.exceptions;
+package tourGuide.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,15 +20,16 @@ public class MyFeignErrorDecoder implements ErrorDecoder {
 	public Exception decode(String methodKey, Response response) {
 		LOGGER.debug("decode: error: methodKey=" + methodKey + ", status=" + response.status());
 		
-		int code = response.status();
-        switch (code) {
-	        case 400:
-	        	return new HttpBadRequestException(response.status() + ": " + response.reason());
-	        case 404:
-	        	return new HttpUserNotFoundException(response.status() + ": " + response.reason());
-	        default:
-	        	return new HttpException(response.status() + ": " + response.reason());
-        }
+		switch (response.status()) {
+			case 400:
+				return new BadRequestException(response.status() + ": " + response.reason());
+			case 404:
+				return new NotFoundException(response.status() + ": " + response.reason());
+			case 405:
+				return new AlreadyExistException(response.status() + ": " + response.reason());
+			default:
+				return new HttpClientException(response.status() + ": " + response.reason());
+		}
 	}
 
 }

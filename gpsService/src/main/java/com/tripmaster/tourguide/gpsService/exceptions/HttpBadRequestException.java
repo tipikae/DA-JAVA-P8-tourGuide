@@ -4,16 +4,16 @@
 package com.tripmaster.tourguide.gpsService.exceptions;
 
 /**
- * Http server side exception.
+ * Http bad request exception.
  * @author tipikae
  * @version 1.0
  *
  */
-public class HttpServerException extends HttpException {
+public class HttpBadRequestException extends HttpException {
 
 	private static final long serialVersionUID = 1L;
 
-	public HttpServerException(String arg0) {
+	public HttpBadRequestException(String arg0) {
 		super(arg0);
 	}
 

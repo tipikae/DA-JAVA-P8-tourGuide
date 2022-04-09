@@ -42,11 +42,9 @@ public interface IGpsServiceService {
 	 * @throws HttpException 
 	 * @throws ConverterLibException 
 	 * @throws ConverterDTOException 
-	 * @throws TrackLocationException 
 	 */
 	VisitedLocationDTO getUserLocation(String username) 
-			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException, 
-				TrackLocationException;
+			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException;
 	
 	/**
 	 * Get all users' last visited location.
