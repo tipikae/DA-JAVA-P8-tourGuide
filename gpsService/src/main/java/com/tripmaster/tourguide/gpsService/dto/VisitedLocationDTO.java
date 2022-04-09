@@ -25,6 +25,12 @@ public class VisitedLocationDTO {
 	public VisitedLocationDTO() {
 	}
 
+	public VisitedLocationDTO(@NotNull UUID userId, @NotNull LocationDTO location, @NotNull String timeVisited) {
+		this.userId = userId;
+		this.location = location;
+		this.timeVisited = timeVisited;
+	}
+
 	/**
 	 * @return the userId
 	 */
