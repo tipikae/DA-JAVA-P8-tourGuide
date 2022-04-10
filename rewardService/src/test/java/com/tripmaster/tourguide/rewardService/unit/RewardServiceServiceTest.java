@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.tripmaster.tourguide.rewardService.clients.IUserServiceClient;
 import com.tripmaster.tourguide.rewardService.converterDTO.IAttractionConverterDTO;
 import com.tripmaster.tourguide.rewardService.converterDTO.IRewardConverterDTO;
 import com.tripmaster.tourguide.rewardService.converterDTO.IVisitedLocationConverterDTO;
@@ -37,7 +38,6 @@ import com.tripmaster.tourguide.rewardService.model.Location;
 import com.tripmaster.tourguide.rewardService.model.Reward;
 import com.tripmaster.tourguide.rewardService.model.User;
 import com.tripmaster.tourguide.rewardService.model.VisitedLocation;
-import com.tripmaster.tourguide.rewardService.remoteServices.IUserService;
 import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
 import com.tripmaster.tourguide.rewardService.service.RewardServiceServiceImpl;
 import com.tripmaster.tourguide.rewardService.util.IHelper;
@@ -63,7 +63,7 @@ class RewardServiceServiceTest {
 	private IVisitedLocationConverterDTO visitedLocationConverterDTO;
 	
 	@Mock
-	private IUserService userService;
+	private IUserServiceClient userService;
 	
 	@Mock
 	private IHelper helper;

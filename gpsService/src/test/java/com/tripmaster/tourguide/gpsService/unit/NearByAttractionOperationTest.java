@@ -18,13 +18,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.tripmaster.tourguide.gpsService.clients.IRewardServiceClient;
 import com.tripmaster.tourguide.gpsService.converters.IConverterLibAttraction;
 import com.tripmaster.tourguide.gpsService.converters.IConverterLibLocation;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 import com.tripmaster.tourguide.gpsService.model.MAttraction;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
-import com.tripmaster.tourguide.gpsService.remoteServices.IRewardService;
 import com.tripmaster.tourguide.gpsService.util.IHelper;
 import com.tripmaster.tourguide.gpsService.util.INearByAttractionOperation;
 import com.tripmaster.tourguide.gpsService.util.NearByAttractionOperationImpl;
@@ -50,7 +50,7 @@ class NearByAttractionOperationTest {
 	private IConverterLibLocation locationConverter;
 	
 	@Mock
-	private IRewardService rewardService;
+	private IRewardServiceClient rewardService;
 	
 	@InjectMocks
 	private INearByAttractionOperation nearByAttractionOperation = new NearByAttractionOperationImpl();

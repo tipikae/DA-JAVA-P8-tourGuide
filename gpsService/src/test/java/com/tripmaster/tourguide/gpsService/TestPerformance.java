@@ -21,7 +21,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
-import com.tripmaster.tourguide.gpsService.exceptions.TrackLocationException;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
@@ -63,7 +62,7 @@ class TestPerformance {
 		userIds.forEach(userId -> {
 			try {
 				gpsService.trackUserLocation(userId);
-			} catch (ConverterLibException | HttpException | TrackLocationException e) {
+			} catch (ConverterLibException | HttpException e) {
 				fail(e.getMessage());
 			}
 		});

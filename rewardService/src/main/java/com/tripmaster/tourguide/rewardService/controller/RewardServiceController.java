@@ -59,7 +59,7 @@ public class RewardServiceController {
 	public ResponseEntity<Object> calculate(
 			@PathVariable("userId") @NotNull UUID userId,
 			@RequestBody @Valid NewVisitedLocationsAndAttractionsDTO newVisitedLocationsAndAttractionsDTO) 
-			throws HttpException, ConverterException {
+					throws ConverterException {
 		LOGGER.info("calculate");
 		rewardService.calculateRewards(userId, newVisitedLocationsAndAttractionsDTO);
 		return new ResponseEntity<>(HttpStatus.OK);

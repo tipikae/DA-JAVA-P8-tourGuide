@@ -20,13 +20,15 @@ public class MyFeignErrorDecoder implements ErrorDecoder {
 	public Exception decode(String methodKey, Response response) {
 		LOGGER.debug("decode: error: methodKey=" + methodKey + ", status=" + response.status());
 		
-		int code = response.status();
-        switch (code) {
+		switch (response.status()) {
 	        case 400:
+	        	LOGGER.debug("decode: return HttpBadRequestException");
 	        	return new HttpBadRequestException(response.status() + ": " + response.reason());
 	        case 404:
+	        	LOGGER.debug("decode: return HttpUserNotFoundException");
 	        	return new HttpUserNotFoundException(response.status() + ": " + response.reason());
 	        default:
+	        	LOGGER.debug("decode: return HttpException");
 	        	return new HttpException(response.status() + ": " + response.reason());
         }
 	}

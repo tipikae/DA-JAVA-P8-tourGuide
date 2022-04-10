@@ -5,7 +5,7 @@ package com.tripmaster.tourguide.rewardService.clients;
 
 import java.util.UUID;
 
-import com.tripmaster.tourguide.rewardService.model.User;
+import com.tripmaster.tourguide.rewardService.exceptions.HttpUserNotFoundException;
 
 import feign.Param;
 import feign.RequestLine;
@@ -19,18 +19,11 @@ import feign.RequestLine;
 public interface IUserServiceClient {
 
 	/**
-	 * Get a user.
-	 * @param userName String
-	 * @return User
-	 */
-	@RequestLine("GET /user/{userName}")
-	User getUser(@Param("userName") String userName);
-	
-	/**
 	 * Get a user id.
 	 * @param userName String
 	 * @return UUID
+	 * @throws HttpUserNotFoundException
 	 */
 	@RequestLine("GET /user?userName={userName}")
-	UUID getUserId(@Param("userName") String userName);
+	UUID getUserId(@Param("userName") String userName) throws HttpUserNotFoundException;
 }

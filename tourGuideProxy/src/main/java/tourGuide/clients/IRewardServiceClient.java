@@ -7,7 +7,9 @@ import javax.validation.constraints.NotBlank;
 
 import feign.Param;
 import feign.RequestLine;
+import tourGuide.exception.BadRequestException;
 import tourGuide.exception.HttpException;
+import tourGuide.exception.NotFoundException;
 
 /**
  * Feign client for RewardService.
@@ -21,8 +23,11 @@ public interface IRewardServiceClient {
 	 * Get an user's rewards.
 	 * @param userName String
 	 * @return Object
+	 * @throws NotFoundException
+	 * @throws BadRequestException
 	 * @throws HttpException
 	 */
 	@RequestLine("GET /rewards/{userName}")
-	Object getUserRewards(@Param("userName") @NotBlank String userName) throws HttpException;
+	Object getUserRewards(@Param("userName") @NotBlank String userName) 
+			throws NotFoundException, BadRequestException, HttpException;
 }

@@ -15,7 +15,6 @@ import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
-import com.tripmaster.tourguide.gpsService.exceptions.TrackLocationException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 
@@ -81,8 +80,7 @@ public interface IGpsServiceService {
 	 * @return CompletableFuture
 	 * @throws ConverterLibException
 	 * @throws HttpException
-	 * @throws TrackLocationException 
 	 */
 	CompletableFuture<MVisitedLocation> trackUserLocation(UUID userId) 
-			throws ConverterLibException, HttpException, TrackLocationException;
+			throws ConverterLibException, HttpException;
 }

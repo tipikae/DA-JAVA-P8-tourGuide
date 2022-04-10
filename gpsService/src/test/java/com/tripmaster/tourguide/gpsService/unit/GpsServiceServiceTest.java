@@ -24,6 +24,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.tripmaster.tourguide.gpsService.clients.IRewardServiceClient;
+import com.tripmaster.tourguide.gpsService.clients.IUserServiceClient;
 import com.tripmaster.tourguide.gpsService.converters.IConverterDTOAttraction;
 import com.tripmaster.tourguide.gpsService.converters.IConverterDTOLocation;
 import com.tripmaster.tourguide.gpsService.converters.IConverterDTONearByAttraction;
@@ -38,14 +40,11 @@ import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
-import com.tripmaster.tourguide.gpsService.exceptions.TrackLocationException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.model.MAttraction;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
 import com.tripmaster.tourguide.gpsService.model.NearByAttraction;
-import com.tripmaster.tourguide.gpsService.remoteServices.IRewardService;
-import com.tripmaster.tourguide.gpsService.remoteServices.IUserService;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
 import com.tripmaster.tourguide.gpsService.service.GpsServiceServiceImpl;
 import com.tripmaster.tourguide.gpsService.tracker.Tracker;
@@ -87,10 +86,10 @@ class GpsServiceServiceTest {
 	private IConverterDTONearByAttraction nearByAttractionDTOConverter;
 	
 	@Mock
-	private IUserService userService;
+	private IUserServiceClient userService;
 	
 	@Mock
-	private IRewardService rewardService;
+	private IRewardServiceClient rewardService;
 	
 	@Mock
 	private Tracker tracker;
@@ -148,7 +147,7 @@ class GpsServiceServiceTest {
 
 	@Test
 	void getUserLocationReturnsVisitedLocationWhenFound() 
-			throws HttpException, ConverterDTOException, ConverterLibException, TrackLocationException {
+			throws HttpException, ConverterDTOException, ConverterLibException {
 		VisitedLocationDTO visitedLocationDTO = new VisitedLocationDTO();
 		visitedLocationDTO.setUserId(userId);
 		when(userService.getUserId(anyString())).thenReturn(userId);
@@ -223,7 +222,7 @@ class GpsServiceServiceTest {
 	
 	@Test
 	void trackUserLocationReturnsMVisitedLocationWhenOk() 
-			throws ConverterLibException, ConverterDTOException, HttpException, TrackLocationException {
+			throws ConverterLibException, ConverterDTOException, HttpException {
 		VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(10d, 20d), timeVisited);
 		when(gpsUtil.getUserLocation(any(UUID.class))).thenReturn(visitedLocation);
 		when(visitedLocationLibConverter.convertLibModelToModel(any(VisitedLocation.class)))

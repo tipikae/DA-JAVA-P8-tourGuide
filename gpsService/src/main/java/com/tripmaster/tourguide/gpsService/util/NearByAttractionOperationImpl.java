@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.tripmaster.tourguide.gpsService.clients.IRewardServiceClient;
 import com.tripmaster.tourguide.gpsService.converters.IConverterLibAttraction;
 import com.tripmaster.tourguide.gpsService.converters.IConverterLibLocation;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
@@ -22,7 +23,6 @@ import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 import com.tripmaster.tourguide.gpsService.model.MAttraction;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
 import com.tripmaster.tourguide.gpsService.model.NearByAttraction;
-import com.tripmaster.tourguide.gpsService.remoteServices.IRewardService;
 
 import gpsUtil.GpsUtil;
 
@@ -51,7 +51,7 @@ public class NearByAttractionOperationImpl implements INearByAttractionOperation
 	private IHelper helper;
 	
 	@Autowired
-	private IRewardService rewardService;
+	private IRewardServiceClient rewardService;
 
 	/**
 	 * {@inheritDoc}

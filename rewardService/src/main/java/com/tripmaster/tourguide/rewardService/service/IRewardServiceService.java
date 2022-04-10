@@ -24,11 +24,10 @@ public interface IRewardServiceService {
 	 * Calculate rewards.
 	 * @param userId UUID
 	 * @param newVisitedLocationsAndAttractionsDTO NewVisitedLocationsAndAttractionsDTO
-	 * @throws HttpException 
 	 * @throws ConverterException 
 	 */
 	void calculateRewards(UUID userId, NewVisitedLocationsAndAttractionsDTO 
-			newVisitedLocationsAndAttractionsDTO) throws HttpException, ConverterException;
+			newVisitedLocationsAndAttractionsDTO) throws ConverterException;
 	
 	/**
 	 * Get a user's rewards.
