@@ -3,7 +3,9 @@ package com.tripmaster.tourguide.gpsService;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.UUID;
+import java.util.concurrent.Executors;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +15,7 @@ import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
+import com.tripmaster.tourguide.gpsService.service.GpsServiceServiceImpl;
 import com.tripmaster.tourguide.gpsService.service.IGpsServiceService;
 
 @SpringBootTest
@@ -25,6 +28,13 @@ class GpsServiceIT {
 	private IUserServiceClient userService;
 	
 	private final String username = "jon";
+	
+	@BeforeAll
+	private static void setUp() {
+		if(GpsServiceServiceImpl.executorService.isTerminated()) {
+			GpsServiceServiceImpl.executorService = Executors.newFixedThreadPool(1000);
+		}
+	}
 
 	@Test
 	void getAttractions() throws ConverterDTOException, ConverterLibException {

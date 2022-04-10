@@ -167,8 +167,10 @@ public class UserServiceServiceImpl implements IUserServiceService {
 			throw new UserNotFoundException(
 					"user with username=" + userName + " not found.");
 		}
+		UUID userId = optional.get().getUserId();
+		LOGGER.debug(userName + " => " + userId);
 		
-		return optional.get().getUserId();
+		return userId;
 	}
 
 	/**

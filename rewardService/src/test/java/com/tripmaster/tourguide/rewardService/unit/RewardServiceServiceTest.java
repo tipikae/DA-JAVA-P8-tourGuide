@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Executors;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -103,10 +105,15 @@ class RewardServiceServiceTest {
 		reward = new Reward(visitedLocation, attraction, points);
 		rewards = new ArrayList<>();
 		rewards.add(reward);
+		
+		if(RewardServiceServiceImpl.executorService.isTerminated()) {
+			RewardServiceServiceImpl.executorService = Executors.newFixedThreadPool(1000);
+		}
 	}
 	
 	@Test
 	void calculateRewardsWhenOk() throws HttpException, ConverterException {
+		rewardService.proximityBuffer = 10.0;
 		LocationDTO locationDTO = new LocationDTO(latitude, longitude);
 		List<AttractionDTO> attractionDTOs = Arrays.asList(
 				new AttractionDTO(attractionId, attractionName, city, state, latitude, longitude));
@@ -121,7 +128,7 @@ class RewardServiceServiceTest {
 		when(attractionConverterDTO.convertDTOsToEntities(anyList()))
 			.thenReturn(Arrays.asList(attraction));
 		rewardService.calculateRewards(userId, visitedLocationsAndAttractionsDTO);
-		Mockito.verify(rewardRepository).save(any(Reward.class));
+		Mockito.verify(rewardRepository, timeout(Long.MAX_VALUE)).save(any(Reward.class));
 	}
 	
 	@Test

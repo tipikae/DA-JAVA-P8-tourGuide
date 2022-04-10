@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executors;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -129,6 +130,10 @@ class GpsServiceServiceTest {
 		attractionDTO.setAttractionName("name");
 		attractionDTOs = new ArrayList<>();
 		attractionDTOs.add(attractionDTO);
+		
+		if(GpsServiceServiceImpl.executorService.isTerminated()) {
+			GpsServiceServiceImpl.executorService = Executors.newFixedThreadPool(1000);
+		}
 	}
 	
 	@BeforeEach

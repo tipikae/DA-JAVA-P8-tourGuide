@@ -114,6 +114,7 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 									.equals(attraction.getAttractionName()))
 									.count() == 0) {
 						if(nearAttraction(visitedLocation.getLocation(), attraction)) {
+							LOGGER.debug("calculateRewards: save reward");
 							Reward reward = 
 									new Reward(visitedLocation, attraction, 
 											getRewardPoints(attraction.getAttractionId(), userId));

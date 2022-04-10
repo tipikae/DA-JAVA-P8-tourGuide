@@ -29,7 +29,7 @@ import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.rewardService.service.IRewardServiceService;
 import com.tripmaster.tourguide.rewardService.service.RewardServiceServiceImpl;
 
-@SpringBootTest
+@SpringBootTest(properties = { "reward.proximityBuffer=10.0" })
 class TestPerformance {
 	
 	@Autowired

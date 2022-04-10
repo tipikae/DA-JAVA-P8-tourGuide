@@ -1,7 +1,6 @@
 package com.tripmaster.tourguide.gpsService.unit;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -66,15 +65,6 @@ class GpsServiceControllerTest {
 		attractionDTOs = new ArrayList<>();
 		attractionDTOs.add(attractionDTO);
 	}
-
-	@Test
-	void getAttractionsReturnsJsonListWhenOk() throws Exception {
-		when(gpsService.getAttractions()).thenReturn(attractionDTOs);
-		mockMvc.perform(get(root + "/attractions"))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.[0].city", is("city")));
-			
-	}
 	
 	@Test
 	void getUserLocationReturnsLocationWhenOk() throws Exception {
@@ -105,27 +95,6 @@ class GpsServiceControllerTest {
 		mockMvc.perform(get(root + "/lastlocations"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$." + userId.toString() + ".latitude", is(10d)));
-	}
-	
-	@Test
-	void getUserVisitedLocationsReturnsListWhenOk() throws UserNotFoundException, Exception {
-		when(gpsService.getUserVisitedLocations(any(UUID.class))).thenReturn(visitedLocationDTOs);
-		mockMvc.perform(get(root + "/locations/" + userId))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.[0].location.longitude", is(20d)));
-	}
-	
-	@Test
-	void getUserVisitedLocationsThrowsExceptionWhenUserNotFound() throws UserNotFoundException, Exception {
-		doThrow(UserNotFoundException.class).when(gpsService).getUserVisitedLocations(any(UUID.class));
-		mockMvc.perform(get(root + "/locations/" + userId))
-			.andExpect(status().is(404));
-	}
-	
-	@Test
-	void getUserVisitedLocationsThrowsExceptionWhenArgInvalid() throws Exception {
-		mockMvc.perform(get(root + "/locations/ "))
-			.andExpect(status().is(400));
 	}
 	
 	@Test
