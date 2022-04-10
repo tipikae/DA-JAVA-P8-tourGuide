@@ -38,7 +38,7 @@ public class TourGuideController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(TourGuideController.class);
 	
-	@Value(value = "${client.userService.url:prout}")
+	@Value(value = "${client.userService.url:}")
 	private String userServiceUrl;
 	
 	@Autowired
