@@ -15,22 +15,25 @@ import feign.codec.ErrorDecoder;
 public class MyFeignErrorDecoder implements ErrorDecoder {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(MyFeignErrorDecoder.class);
+	
+	private final ErrorDecoder defaultErrorDecoder = new Default();
 
 	@Override
 	public Exception decode(String methodKey, Response response) {
 		LOGGER.debug("decode: error: methodKey=" + methodKey + ", status=" + response.status());
 		
-		switch (response.status()) {
-	        case 400:
-	        	LOGGER.debug("decode: return HttpBadRequestException");
-	        	return new HttpBadRequestException(response.status() + ": " + response.reason());
-	        case 404:
-	        	LOGGER.debug("decode: return HttpUserNotFoundException");
-	        	return new HttpUserNotFoundException(response.status() + ": " + response.reason());
-	        default:
-	        	LOGGER.debug("decode: return HttpException");
-	        	return new HttpException(response.status() + ": " + response.reason());
-        }
+		if (response.status() >= 400 && response.status() <= 599) {
+			switch (response.status()) {
+			case 400:
+				return new HttpBadRequestException(response.status() + ": " + response.reason());
+			case 404:
+				return new HttpUserNotFoundException(response.status() + ": " + response.reason());
+			default:
+				return new HttpException(response.status() + ": " + response.reason());
+			}
+		}
+		
+		return defaultErrorDecoder.decode(methodKey, response);
 	}
 
 }
