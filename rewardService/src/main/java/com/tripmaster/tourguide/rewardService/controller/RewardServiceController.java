@@ -52,7 +52,6 @@ public class RewardServiceController {
 	 * @param userId UUID
 	 * @param newVisitedLocationsAndAttractionsDTO NewVisitedLocationsAndAttractionsDTO
 	 * @return ResponseEntity
-	 * @throws HttpException 
 	 * @throws ConverterException
 	 */
 	@PostMapping(value = "/calculate/{userId}", consumes = {"application/json"})
