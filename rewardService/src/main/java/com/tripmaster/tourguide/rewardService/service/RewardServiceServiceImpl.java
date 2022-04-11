@@ -46,7 +46,7 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RewardServiceServiceImpl.class);
 	
-	public static ExecutorService executorService = Executors.newCachedThreadPool();
+	public static ExecutorService executorService = Executors.newFixedThreadPool(1000);
 	
 	@Autowired
 	private IRewardRepository rewardRepository;
