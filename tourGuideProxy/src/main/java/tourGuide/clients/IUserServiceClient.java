@@ -3,6 +3,8 @@
  */
 package tourGuide.clients;
 
+import java.util.List;
+
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
@@ -12,6 +14,8 @@ import tourGuide.exception.AlreadyExistException;
 import tourGuide.exception.BadRequestException;
 import tourGuide.exception.HttpException;
 import tourGuide.exception.NotFoundException;
+import tourGuide.model.Provider;
+import tourGuide.model.User;
 
 /**
  * Feign client for UserService
@@ -24,26 +28,26 @@ public interface IUserServiceClient {
 	/**
 	 * Get an users's trip deals.
 	 * @param username String
-	 * @return Object
+	 * @return List
 	 * @throws NotFoundException
 	 * @throws BadRequestException
 	 * @throws HttpException
 	 */
 	@RequestLine("GET /trips/{username}")
-	Object getTripDeals(@Param("username") String username) 
+	List<Provider> getTripDeals(@Param("username") String username) 
 			throws NotFoundException, BadRequestException, HttpException;
 	
 	/**
 	 * Add an user.
 	 * @param newUserDTO NewUserDTO
-	 * @return Object
+	 * @return User
 	 * @throws AlreadyExistException
 	 * @throws BadRequestException
 	 * @throws HttpException
 	 */
 	@RequestLine("POST /user")
     @Headers("Content-Type: application/json")
-	Object addUser(NewUserDTO newUserDTO) 
+	User addUser(NewUserDTO newUserDTO) 
 			throws AlreadyExistException, BadRequestException, HttpException;
 	
 	/**

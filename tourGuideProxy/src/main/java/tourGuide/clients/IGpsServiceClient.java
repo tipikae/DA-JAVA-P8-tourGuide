@@ -3,11 +3,18 @@
  */
 package tourGuide.clients;
 
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import feign.Param;
 import feign.RequestLine;
 import tourGuide.exception.BadRequestException;
 import tourGuide.exception.HttpException;
 import tourGuide.exception.NotFoundException;
+import tourGuide.model.Location;
+import tourGuide.model.NearByAttraction;
+import tourGuide.model.VisitedLocation;
 
 /**
  * Feign client for GpsService.
@@ -20,32 +27,32 @@ public interface IGpsServiceClient {
 	/**
 	 * Get an user location.
 	 * @param userName String
-	 * @return Object
+	 * @return VisitedLocation
 	 * @throws NotFoundException
 	 * @throws BadRequestException
 	 * @throws HttpException
 	 */
 	@RequestLine("GET /location/{userName}")
-	Object getUserLocation(@Param("userName") String userName) 
+	VisitedLocation getUserLocation(@Param("userName") String userName) 
 			throws NotFoundException, BadRequestException, HttpException;
 	
 	/**
 	 * Get all users last location.
-	 * @return Object
+	 * @return Map
 	 * @throws HttpException
 	 */
 	@RequestLine("GET /lastlocations")
-	Object getAllUsersLastLocation() throws HttpException;
+	Map<UUID, Location> getAllUsersLastLocation() throws HttpException;
 	
 	/**
 	 * Get NearByAttractions of a user.
 	 * @param userName String
-	 * @return Object
+	 * @return List
 	 * @throws NotFoundException
 	 * @throws BadRequestException
 	 * @throws HttpException
 	 */
 	@RequestLine("GET /nearbyattractions/{userName}")
-	Object getNearByAttractions(@Param("userName") String userName) 
+	List<NearByAttraction> getNearByAttractions(@Param("userName") String userName) 
 			throws NotFoundException, BadRequestException, HttpException;
 }
