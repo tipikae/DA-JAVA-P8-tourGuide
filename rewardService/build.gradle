@@ -1,0 +1,91 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.4'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'jacoco'
+}
+
+bootJar {
+    baseName = 'RewardService'
+    version =  '1.0.0'
+}
+
+group = 'com.tripmaster.tourguide'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+ext {
+	set('springCloudVersion', "2021.0.1")
+}
+
+dependencies {
+    implementation(name:'RewardCentral', ext:'jar')
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+  	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation 'io.github.openfeign:feign-gson'
+	implementation 'io.github.openfeign:feign-slf4j'
+	implementation 'io.github.openfeign:feign-okhttp'
+    implementation group: 'org.javamoney', name: 'moneta', version: '1.4.2'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+test {
+    reports {
+        junitXml.enabled = false
+        html.enabled = true
+    }               
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                "com/tripmaster/tourguide/rewardService/dto/*",
+                "com/tripmaster/tourguide/rewardService/model/*"
+            ])
+        }))
+    }
+    
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
+test.finalizedBy jacocoTestReport
+check.dependsOn jacocoTestCoverageVerification
+
+jacocoTestCoverageVerification {
+  violationRules {
+    rule {
+      limit {
+        counter = 'LINE'
+        value = 'COVEREDRATIO'
+        minimum = 0.5
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+rootProject.name = 'TourGuide'
+include 'gpsService'
+include 'rewardService'
+include 'userService'
+include 'tourGuideProxy'

@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package com.tripmaster.tourguide.gpsService.exceptions;
+
+/**
+ * Parent exception for all exceptions.
+ * @author tipikae
+ * @version 1.0
+ *
+ */
+public class GpsServiceException extends Exception {
+
+	private static final long serialVersionUID = 1L;
+
+	public GpsServiceException(String arg0) {
+		super(arg0);
+	}
+}
