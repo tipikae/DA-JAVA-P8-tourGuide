@@ -2,8 +2,6 @@ package tourGuide;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -23,12 +21,6 @@ import tourGuide.exception.AlreadyExistException;
 import tourGuide.exception.BadRequestException;
 import tourGuide.exception.HttpException;
 import tourGuide.exception.NotFoundException;
-import tourGuide.model.User;
-import tourGuide.model.VisitedLocation;
-import tourGuide.model.Location;
-import tourGuide.model.NearByAttraction;
-import tourGuide.model.Provider;
-import tourGuide.model.Reward;
 
 @SpringBootTest
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
@@ -97,7 +89,7 @@ class TourGuideIT {
 	@Test
 	@Order(6)
 	void addUserReturnsUserWhenOk() throws AlreadyExistException, BadRequestException, HttpException {
-		assertEquals(userName, ((User) userClient.addUser(newUserDTO)).getUserName());
+		assertEquals(userName, userClient.addUser(newUserDTO).getUserName());
 	}
 
 	@Test
@@ -117,34 +109,34 @@ class TourGuideIT {
 	@Order(9)
 	void getUserLocationReturnsVisitedLocationWhenOk() 
 			throws NotFoundException, BadRequestException, HttpException {
-		assertTrue(((VisitedLocation) gpsClient.getUserLocation(userName)).getUserId() == userId);
+		assertTrue(gpsClient.getUserLocation(userName).getUserId().equals(userId));
 	}
 
 	@Test
 	@Order(10)
 	void getAllUsersLastLocationReturnsListWhenOk() throws HttpException {
-		assertTrue(((Map<UUID, Location>) gpsClient.getAllUsersLastLocation()).size() > 0);
+		assertTrue(gpsClient.getAllUsersLastLocation().size() > 0);
 	}
 
 	@Test
 	@Order(11)
 	void getNearByAttractionsReturnsListWhenOk() 
 			throws NotFoundException, BadRequestException, HttpException {
-		assertTrue(((List<NearByAttraction>) gpsClient.getNearByAttractions(userName)).size() > 0);
+		assertTrue(gpsClient.getNearByAttractions(userName).size() > 0);
 	}
 
 	@Test
 	@Order(12)
 	void getUserRewardsReturnsListWhenOk() 
 			throws NotFoundException, BadRequestException, HttpException {
-		assertTrue(((List<Reward>) rewardClient.getUserRewards(userName)).size() > 0);
+		assertTrue(rewardClient.getUserRewards(userName).size() > 0);
 	}
 
 	@Test
 	@Order(13)
 	void getTripDealsReturnsListWhenOk() 
 			throws NotFoundException, BadRequestException, HttpException {
-		assertTrue(((List<Provider>) userClient.getTripDeals(userName)).size() > 0);
+		assertTrue(userClient.getTripDeals(userName).size() > 0);
 	}
 
 }

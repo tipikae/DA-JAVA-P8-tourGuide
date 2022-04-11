@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +106,7 @@ class TourGuideControllerTest {
 
 	@Test
 	void getAllCurrentLocationsReturnsListWhenOk() throws Exception {
-		when(gpsClient.getAllUsersLastLocation()).thenReturn(new ArrayList<>());
+		when(gpsClient.getAllUsersLastLocation()).thenReturn(new HashMap<>());
 		mockMvc.perform(get("/getAllCurrentLocations"))
 			.andExpect(status().isOk());
 	}
