@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -29,6 +31,8 @@ import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
 @EnableFeignClients
 public class RewardServiceApplication implements CommandLineRunner {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(RewardServiceApplication.class);
+	
 	@Autowired
 	private Environment env;
 	
@@ -38,6 +42,7 @@ public class RewardServiceApplication implements CommandLineRunner {
 	@PostConstruct
 	public void init() {
 		Locale.setDefault(Locale.UK);
+		LOGGER.debug("environment reward.proximityBuffer = " + env.getProperty("reward.proximityBuffer"));
 	}
 
 	public static void main(String[] args) {
