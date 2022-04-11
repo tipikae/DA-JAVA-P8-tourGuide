@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.tripmaster.tourguide.rewardService.clients.IUserServiceClient;
 import com.tripmaster.tourguide.rewardService.converterDTO.IAttractionConverterDTO;
 import com.tripmaster.tourguide.rewardService.converterDTO.IRewardConverterDTO;
 import com.tripmaster.tourguide.rewardService.converterDTO.IVisitedLocationConverterDTO;
@@ -29,7 +30,6 @@ import com.tripmaster.tourguide.rewardService.model.Attraction;
 import com.tripmaster.tourguide.rewardService.model.Location;
 import com.tripmaster.tourguide.rewardService.model.Reward;
 import com.tripmaster.tourguide.rewardService.model.VisitedLocation;
-import com.tripmaster.tourguide.rewardService.remoteServices.IUserService;
 import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
 import com.tripmaster.tourguide.rewardService.util.IHelper;
 
@@ -46,7 +46,7 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RewardServiceServiceImpl.class);
 	
-	public static ExecutorService executorService = Executors.newCachedThreadPool();
+	public static ExecutorService executorService = Executors.newFixedThreadPool(1000);
 	
 	@Autowired
 	private IRewardRepository rewardRepository;
@@ -64,7 +64,7 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	private IVisitedLocationConverterDTO visitedLocationConverterDTO;
 	
 	@Autowired
-	private IUserService userService;
+	private IUserServiceClient userService;
 	
 	@Autowired
 	private IHelper helper;
@@ -81,7 +81,7 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 	 */
 	@Override
 	public void calculateRewards(UUID userId, NewVisitedLocationsAndAttractionsDTO 
-			newVisitedLocationsAndAttractionsDTO) throws HttpException, ConverterException {
+			newVisitedLocationsAndAttractionsDTO) throws ConverterException {
 		LOGGER.debug("calculateRewards: userId=" + userId);
 
 		CompletableFuture.runAsync(() -> {
@@ -114,6 +114,7 @@ public class RewardServiceServiceImpl implements IRewardServiceService {
 									.equals(attraction.getAttractionName()))
 									.count() == 0) {
 						if(nearAttraction(visitedLocation.getLocation(), attraction)) {
+							LOGGER.debug("calculateRewards: save reward");
 							Reward reward = 
 									new Reward(visitedLocation, attraction, 
 											getRewardPoints(attraction.getAttractionId(), userId));

@@ -13,6 +13,7 @@ import feign.gson.GsonEncoder;
 import tourGuide.clients.IGpsServiceClient;
 import tourGuide.clients.IRewardServiceClient;
 import tourGuide.clients.IUserServiceClient;
+import tourGuide.exception.MyFeignErrorDecoder;
 
 /**
  * Http clients configuration for feign
@@ -37,6 +38,7 @@ public class HttpClientConfig {
 		return Feign.builder()
 				.encoder(new GsonEncoder())
 				.decoder(new GsonDecoder())
+				.errorDecoder(new MyFeignErrorDecoder())
 				.target(IRewardServiceClient.class, rewardServiceUrl);
 	}
 
@@ -45,6 +47,7 @@ public class HttpClientConfig {
 		return Feign.builder()
 				.encoder(new GsonEncoder())
 				.decoder(new GsonDecoder())
+				.errorDecoder(new MyFeignErrorDecoder())
 				.target(IUserServiceClient.class, userServiceUrl);
 	}
 
@@ -53,6 +56,7 @@ public class HttpClientConfig {
 		return Feign.builder()
 				.encoder(new GsonEncoder())
 				.decoder(new GsonDecoder())
+				.errorDecoder(new MyFeignErrorDecoder())
 				.target(IGpsServiceClient.class, gpsServiceUrl);
 	}
 

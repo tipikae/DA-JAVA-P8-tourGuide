@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import java.util.concurrent.Executors;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +22,9 @@ import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
 import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.rewardService.service.IRewardServiceService;
+import com.tripmaster.tourguide.rewardService.service.RewardServiceServiceImpl;
 
-@SpringBootTest
+@SpringBootTest(properties = { "reward.proximityBuffer=10.0" })
 class RewardServiceIT {
 	
 	@Autowired
@@ -34,6 +37,10 @@ class RewardServiceIT {
 	private static void setUp() {
 		userId = UUID.fromString("7894208e-d299-4485-85dc-07f19308c1ea");
 		userName = "jon";
+		
+		if(RewardServiceServiceImpl.executorService.isTerminated()) {
+			RewardServiceServiceImpl.executorService = Executors.newFixedThreadPool(1000);
+		}
 	}
 
 	@Test
@@ -58,6 +65,7 @@ class RewardServiceIT {
 				new NewVisitedLocationsAndAttractionsDTO();
 		newVisitedLocationsAndAttractionsDTO.setAttractions(attractionDTOs);
 		newVisitedLocationsAndAttractionsDTO.setVisitedLocations(visitedLocationDTOs);
+		
 		rewardService.calculateRewards(userId, newVisitedLocationsAndAttractionsDTO);
 		assertTrue(rewardService.getUserRewards(userName).size() > 0);
 	}

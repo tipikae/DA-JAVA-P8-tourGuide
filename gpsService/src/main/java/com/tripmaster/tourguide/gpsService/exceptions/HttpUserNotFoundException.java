@@ -4,16 +4,16 @@
 package com.tripmaster.tourguide.gpsService.exceptions;
 
 /**
- * TrackUserLocation exception.
+ * Http user not found exception.
  * @author tipikae
  * @version 1.0
  *
  */
-public class TrackLocationException extends GpsServiceException {
+public class HttpUserNotFoundException extends HttpException {
 
 	private static final long serialVersionUID = 1L;
 
-	public TrackLocationException(String arg0) {
+	public HttpUserNotFoundException(String arg0) {
 		super(arg0);
 	}
 

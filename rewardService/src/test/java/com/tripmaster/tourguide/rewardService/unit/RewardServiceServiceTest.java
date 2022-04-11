@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Executors;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -21,10 +23,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.tripmaster.tourguide.rewardService.clients.IUserServiceClient;
 import com.tripmaster.tourguide.rewardService.converterDTO.IAttractionConverterDTO;
 import com.tripmaster.tourguide.rewardService.converterDTO.IRewardConverterDTO;
 import com.tripmaster.tourguide.rewardService.converterDTO.IVisitedLocationConverterDTO;
 import com.tripmaster.tourguide.rewardService.dto.AttractionDTO;
+import com.tripmaster.tourguide.rewardService.dto.LocationDTO;
 import com.tripmaster.tourguide.rewardService.dto.NewVisitedLocationsAndAttractionsDTO;
 import com.tripmaster.tourguide.rewardService.dto.RewardDTO;
 import com.tripmaster.tourguide.rewardService.dto.VisitedLocationDTO;
@@ -36,7 +40,6 @@ import com.tripmaster.tourguide.rewardService.model.Location;
 import com.tripmaster.tourguide.rewardService.model.Reward;
 import com.tripmaster.tourguide.rewardService.model.User;
 import com.tripmaster.tourguide.rewardService.model.VisitedLocation;
-import com.tripmaster.tourguide.rewardService.remoteServices.IUserService;
 import com.tripmaster.tourguide.rewardService.repository.IRewardRepository;
 import com.tripmaster.tourguide.rewardService.service.RewardServiceServiceImpl;
 import com.tripmaster.tourguide.rewardService.util.IHelper;
@@ -62,7 +65,7 @@ class RewardServiceServiceTest {
 	private IVisitedLocationConverterDTO visitedLocationConverterDTO;
 	
 	@Mock
-	private IUserService userService;
+	private IUserServiceClient userService;
 	
 	@Mock
 	private IHelper helper;
@@ -102,22 +105,30 @@ class RewardServiceServiceTest {
 		reward = new Reward(visitedLocation, attraction, points);
 		rewards = new ArrayList<>();
 		rewards.add(reward);
+		
+		if(RewardServiceServiceImpl.executorService.isTerminated()) {
+			RewardServiceServiceImpl.executorService = Executors.newFixedThreadPool(1000);
+		}
 	}
 	
 	@Test
 	void calculateRewardsWhenOk() throws HttpException, ConverterException {
-		List<AttractionDTO> attractionDTOs = Arrays.asList(new AttractionDTO());
-		List<VisitedLocationDTO> visitedLocationDTOs = Arrays.asList(new VisitedLocationDTO());
+		rewardService.proximityBuffer = 10.0;
+		LocationDTO locationDTO = new LocationDTO(latitude, longitude);
+		List<AttractionDTO> attractionDTOs = Arrays.asList(
+				new AttractionDTO(attractionId, attractionName, city, state, latitude, longitude));
+		List<VisitedLocationDTO> visitedLocationDTOs = Arrays.asList(
+				new VisitedLocationDTO(userId, locationDTO, new Date()));
 		NewVisitedLocationsAndAttractionsDTO visitedLocationsAndAttractionsDTO 
 			= new NewVisitedLocationsAndAttractionsDTO();
 		visitedLocationsAndAttractionsDTO.setAttractions(attractionDTOs);
 		visitedLocationsAndAttractionsDTO.setVisitedLocations(visitedLocationDTOs);
-		when(attractionConverterDTO.convertDTOsToEntities(anyList()))
-			.thenReturn(Arrays.asList(new  Attraction()));
 		when(visitedLocationConverterDTO.convertDTOsToEntities(anyList()))
-			.thenReturn(Arrays.asList(new VisitedLocation()));
+			.thenReturn(Arrays.asList(visitedLocation));
+		when(attractionConverterDTO.convertDTOsToEntities(anyList()))
+			.thenReturn(Arrays.asList(attraction));
 		rewardService.calculateRewards(userId, visitedLocationsAndAttractionsDTO);
-		Mockito.verify(rewardRepository).save(any(Reward.class));
+		Mockito.verify(rewardRepository, timeout(Long.MAX_VALUE)).save(any(Reward.class));
 	}
 	
 	@Test

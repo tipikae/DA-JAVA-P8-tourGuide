@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tripmaster.tourguide.gpsService.clients.IRewardServiceClient;
+import com.tripmaster.tourguide.gpsService.clients.IUserServiceClient;
 import com.tripmaster.tourguide.gpsService.converters.IConverterDTOAttraction;
 import com.tripmaster.tourguide.gpsService.converters.IConverterDTOLocation;
 import com.tripmaster.tourguide.gpsService.converters.IConverterDTONearByAttraction;
@@ -33,12 +35,9 @@ import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
-import com.tripmaster.tourguide.gpsService.exceptions.TrackLocationException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.model.MLocation;
 import com.tripmaster.tourguide.gpsService.model.MVisitedLocation;
-import com.tripmaster.tourguide.gpsService.remoteServices.IRewardService;
-import com.tripmaster.tourguide.gpsService.remoteServices.IUserService;
 import com.tripmaster.tourguide.gpsService.repository.IVisitedLocationRepository;
 import com.tripmaster.tourguide.gpsService.util.INearByAttractionOperation;
 
@@ -64,10 +63,10 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	private GpsUtil gpsUtil;
 	
 	@Autowired
-	private IUserService userService;
+	private IUserServiceClient userService;
 	
 	@Autowired
-	private IRewardService rewardService;
+	private IRewardServiceClient rewardService;
 	
 	@Autowired
 	private IConverterDTOAttraction attractionDTOConverter;
@@ -113,10 +112,11 @@ public class GpsServiceServiceImpl implements IGpsServiceService {
 	 */
 	@Override
 	public VisitedLocationDTO getUserLocation(String userName) 
-			throws HttpException, ConverterDTOException, ConverterLibException, TrackLocationException {
+			throws ConverterDTOException, ConverterLibException, HttpException {
 		LOGGER.debug("getUserLocation: userName=" + userName);
 		
 		UUID userId = userService.getUserId(userName);
+		
 		Optional<List<MVisitedLocation>> optional = visitedLocationRepository.findByUserId(userId);
 		if(!optional.isPresent()) {
 			// if not present -> trackUserLocation

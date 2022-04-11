@@ -25,12 +25,11 @@ import com.tripmaster.tourguide.rewardService.dto.LocationDTO;
 import com.tripmaster.tourguide.rewardService.dto.NewVisitedLocationsAndAttractionsDTO;
 import com.tripmaster.tourguide.rewardService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.rewardService.exceptions.ConverterException;
-import com.tripmaster.tourguide.rewardService.exceptions.HttpException;
 import com.tripmaster.tourguide.rewardService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.rewardService.service.IRewardServiceService;
 import com.tripmaster.tourguide.rewardService.service.RewardServiceServiceImpl;
 
-@SpringBootTest
+@SpringBootTest(properties = { "reward.proximityBuffer=10.0" })
 class TestPerformance {
 	
 	@Autowired
@@ -57,7 +56,7 @@ class TestPerformance {
 		userIds.forEach(id -> {
 			try {
 				rewardService.calculateRewards(id, map.get(id));
-			} catch (HttpException | ConverterException e) {
+			} catch (ConverterException e) {
 				fail(e.getMessage());
 			}
 		});

@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,14 +20,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tripmaster.tourguide.gpsService.dto.AttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.LocationDTO;
 import com.tripmaster.tourguide.gpsService.dto.NearByAttractionDTO;
 import com.tripmaster.tourguide.gpsService.dto.VisitedLocationDTO;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterDTOException;
 import com.tripmaster.tourguide.gpsService.exceptions.ConverterLibException;
 import com.tripmaster.tourguide.gpsService.exceptions.HttpException;
-import com.tripmaster.tourguide.gpsService.exceptions.TrackLocationException;
 import com.tripmaster.tourguide.gpsService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.gpsService.service.IGpsServiceService;
 
@@ -49,19 +46,6 @@ public class GpsServiceController {
 	private IGpsServiceService gpsService;
 	
 	/**
-	 * Get all attractions.
-	 * @return ResponseEntity
-	 * @throws ConverterLibException 
-	 * @throws ConverterDTOException 
-	 */
-	@GetMapping("/attractions")
-	public ResponseEntity<Object> getAttractions() throws ConverterDTOException, ConverterLibException {
-		LOGGER.info("getAttractions");
-		List<AttractionDTO> attractions = gpsService.getAttractions();
-		return new ResponseEntity<Object>(attractions, HttpStatus.OK);
-	}
-	
-	/**
 	 * Get a user's location.
 	 * @param userName String
 	 * @return ResponseEntity
@@ -69,12 +53,10 @@ public class GpsServiceController {
 	 * @throws HttpException 
 	 * @throws ConverterLibException 
 	 * @throws ConverterDTOException 
-	 * @throws TrackLocationException 
 	 */
 	@GetMapping("/location/{userName}")
 	public ResponseEntity<Object> getUserLocation(@PathVariable("userName") @NotBlank String userName) 
-			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException, 
-				TrackLocationException {
+			throws UserNotFoundException, HttpException, ConverterDTOException, ConverterLibException {
 		LOGGER.info("getUserLocation: userName=" + userName);
 		VisitedLocationDTO visitedLocation = gpsService.getUserLocation(userName);
 		return new ResponseEntity<Object>(visitedLocation, HttpStatus.OK);
@@ -90,21 +72,6 @@ public class GpsServiceController {
 		LOGGER.info("getAllUsersLastLocation");
 		Map<UUID, LocationDTO> allUsersLastLocation = gpsService.getAllUsersLastLocation();
 		return new ResponseEntity<Object>(allUsersLastLocation, HttpStatus.OK);
-	}
-	
-	/**
-	 * Get a user's all visited locations.
-	 * @param userId - UUID
-	 * @return ResponseEntity
-	 * @throws UserNotFoundException 
-	 * @throws ConverterDTOException 
-	 */
-	@GetMapping("/locations/{userId}")
-	public ResponseEntity<Object> getUserVisitedLocations(@PathVariable("userId") @NotNull UUID userId) 
-			throws UserNotFoundException, ConverterDTOException {
-		LOGGER.info("getUserVisitedLocations: userId=" + userId);
-		List<VisitedLocationDTO> visitedLocations = gpsService.getUserVisitedLocations(userId);
-		return new ResponseEntity<Object>(visitedLocations, HttpStatus.OK);
 	}
 	
 	/**

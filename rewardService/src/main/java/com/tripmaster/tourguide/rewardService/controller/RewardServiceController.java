@@ -52,14 +52,13 @@ public class RewardServiceController {
 	 * @param userId UUID
 	 * @param newVisitedLocationsAndAttractionsDTO NewVisitedLocationsAndAttractionsDTO
 	 * @return ResponseEntity
-	 * @throws HttpException 
 	 * @throws ConverterException
 	 */
 	@PostMapping(value = "/calculate/{userId}", consumes = {"application/json"})
 	public ResponseEntity<Object> calculate(
 			@PathVariable("userId") @NotNull UUID userId,
 			@RequestBody @Valid NewVisitedLocationsAndAttractionsDTO newVisitedLocationsAndAttractionsDTO) 
-			throws HttpException, ConverterException {
+					throws ConverterException {
 		LOGGER.info("calculate");
 		rewardService.calculateRewards(userId, newVisitedLocationsAndAttractionsDTO);
 		return new ResponseEntity<>(HttpStatus.OK);

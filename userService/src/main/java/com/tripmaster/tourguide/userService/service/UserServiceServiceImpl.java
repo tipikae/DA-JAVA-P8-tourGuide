@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.tripmaster.tourguide.userService.clients.IRewardServiceClient;
 import com.tripmaster.tourguide.userService.converterDTO.IPreferenceConverterDTO;
 import com.tripmaster.tourguide.userService.converterDTO.IUserConverterDTO;
 import com.tripmaster.tourguide.userService.dto.NewPreferenceDTO;
@@ -25,7 +26,6 @@ import com.tripmaster.tourguide.userService.exceptions.UserAlreadyExistsExceptio
 import com.tripmaster.tourguide.userService.exceptions.UserNotFoundException;
 import com.tripmaster.tourguide.userService.model.Preference;
 import com.tripmaster.tourguide.userService.model.User;
-import com.tripmaster.tourguide.userService.remoteServices.IRewardService;
 import com.tripmaster.tourguide.userService.repository.IUserRepository;
 
 import tripPricer.Provider;
@@ -49,7 +49,7 @@ public class UserServiceServiceImpl implements IUserServiceService {
 	private TripPricer tripPricer;
 	
 	@Autowired
-	private IRewardService rewardService;
+	private IRewardServiceClient rewardService;
 	
 	@Autowired
 	private IUserConverterDTO userConverter;
@@ -167,8 +167,10 @@ public class UserServiceServiceImpl implements IUserServiceService {
 			throw new UserNotFoundException(
 					"user with username=" + userName + " not found.");
 		}
+		UUID userId = optional.get().getUserId();
+		LOGGER.debug(userName + " => " + userId);
 		
-		return optional.get().getUserId();
+		return userId;
 	}
 
 	/**

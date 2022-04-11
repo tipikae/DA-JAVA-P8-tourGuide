@@ -1,4 +1,4 @@
-package com.tripmaster.tourguide.gpsService.exceptions;
+package tourGuide.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +24,14 @@ public class MyFeignErrorDecoder implements ErrorDecoder {
 		
 		if (response.status() >= 400 && response.status() <= 599) {
 			switch (response.status()) {
-			case 400:
-				return new HttpBadRequestException(response.status() + ": " + response.reason());
-			case 404:
-				return new HttpUserNotFoundException(response.status() + ": " + response.reason());
-			default:
-				return new HttpException(response.status() + ": " + response.reason());
+				case 400:
+					return new BadRequestException(response.status() + ": " + response.reason());
+				case 404:
+					return new NotFoundException(response.status() + ": " + response.reason());
+				case 405:
+					return new AlreadyExistException(response.status() + ": " + response.reason());
+				default:
+					return new HttpClientException(response.status() + ": " + response.reason());
 			}
 		}
 		

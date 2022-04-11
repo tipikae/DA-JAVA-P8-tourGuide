@@ -2,11 +2,11 @@ package tourGuide.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +23,11 @@ import tourGuide.clients.IRewardServiceClient;
 import tourGuide.clients.IUserServiceClient;
 import tourGuide.dto.NewPreferenceDTO;
 import tourGuide.dto.NewUserDTO;
+import tourGuide.exception.HttpException;
+import tourGuide.model.Location;
+import tourGuide.model.NearByAttraction;
+import tourGuide.model.Provider;
+import tourGuide.model.Reward;
 import tourGuide.model.User;
 import tourGuide.model.VisitedLocation;
 
@@ -36,9 +41,6 @@ import tourGuide.model.VisitedLocation;
 public class TourGuideController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(TourGuideController.class);
-	
-	@Value(value = "${client.userService.url:prout}")
-	private String userServiceUrl;
 	
 	@Autowired
 	private IUserServiceClient userClient;
@@ -65,7 +67,8 @@ public class TourGuideController {
 	/**
 	 * Get an user's location.
 	 * @param userName String
-	 * @return Object
+	 * @return VisitedLocation
+	 * @throws HttpException 
 	 */
 	@ApiOperation("Get an user's location.")
 	@ApiResponses({
@@ -74,19 +77,16 @@ public class TourGuideController {
 		@ApiResponse(code = 404, message = "User not found.")
 	})
     @GetMapping("/getLocation") 
-    public Object getLocation(@RequestParam String userName) {
+    public VisitedLocation getLocation(@RequestParam String userName) throws HttpException {
     	LOGGER.info("getLocation: userName=" + userName);
-		try {
-			return gpsClient.getUserLocation(userName);
-		} catch (Exception e) {
-			return e.getMessage();
-		}
+    	return gpsClient.getUserLocation(userName);
     }
    
     /**
      * Get an user's nearby attractions.
      * @param userName String
-     * @return Object
+     * @return List
+     * @throws HttpException 
      */
 	@ApiOperation("Get an user's nearby attractions.")
 	@ApiResponses({
@@ -95,19 +95,16 @@ public class TourGuideController {
 		@ApiResponse(code = 404, message = "User not found.")
 	})
     @GetMapping("/getNearbyAttractions") 
-    public Object getNearbyAttractions(@RequestParam String userName) {
+    public List<NearByAttraction> getNearbyAttractions(@RequestParam String userName) throws HttpException {
     	LOGGER.info("getNearbyAttractions: userName=" + userName);
-    	try {
-			return gpsClient.getNearByAttractions(userName);
-		} catch (Exception e) {
-			return e.getMessage();
-		}
+		return gpsClient.getNearByAttractions(userName);
     }
     
     /**
      * Get an user's rewards.
      * @param userName String
-     * @return Object
+     * @return List
+     * @throws HttpException 
      */
 	@ApiOperation("Get an user's rewards.")
 	@ApiResponses({
@@ -116,18 +113,15 @@ public class TourGuideController {
 		@ApiResponse(code = 404, message = "User not found.")
 	})
     @GetMapping("/getRewards") 
-    public Object getRewards(@RequestParam String userName) {
+    public List<Reward> getRewards(@RequestParam String userName) throws HttpException {
     	LOGGER.info("getRewards: userName=" + userName);
-    	try {
-			return rewardClient.getUserRewards(userName);
-		} catch (Exception e) {
-			return e.getMessage();
-		}
+		return rewardClient.getUserRewards(userName);
     }
     
     /**
      * Get all current users' location.
-     * @return Object
+     * @return Map
+     * @throws HttpException 
      */
 	@ApiOperation("Get all current users' location.")
 	@ApiResponses({
@@ -135,19 +129,16 @@ public class TourGuideController {
 		@ApiResponse(code = 400, message = "Bad request.")
 	})
     @GetMapping("/getAllCurrentLocations")
-    public Object getAllCurrentLocations() {
+    public Map<UUID, Location> getAllCurrentLocations() throws HttpException {
     	LOGGER.info("getAllCurrentLocations");
-    	try {
-			return gpsClient.getAllUsersLastLocation();
-		} catch (Exception e) {
-			return e.getMessage();
-		}
+		return gpsClient.getAllUsersLastLocation();
     }
     
     /**
      * Get an user's trip deals.
      * @param userName String
-     * @return Object
+     * @return List
+     * @throws HttpException 
      */
 	@ApiOperation("Get an user's trip deals.")
 	@ApiResponses({
@@ -156,19 +147,16 @@ public class TourGuideController {
 		@ApiResponse(code = 404, message = "User not found.")
 	})
     @GetMapping("/getTripDeals")
-    public Object getTripDeals(@RequestParam String userName) {
+    public List<Provider> getTripDeals(@RequestParam String userName) throws HttpException {
     	LOGGER.info("getTripDeals: userName=" + userName);
-    	try {
-			return userClient.getTripDeals(userName);
-		} catch (Exception e) {
-			return e.getMessage();
-		}
+		return userClient.getTripDeals(userName);
     }
     
     /**
      * Add an user.
      * @param newUserDTO NewUserDTO
-     * @return Object
+     * @return User
+     * @throws HttpException 
      */
 	@ApiOperation("Add an user.")
 	@ApiResponses({
@@ -177,14 +165,9 @@ public class TourGuideController {
 		@ApiResponse(code = 405, message = "User already exists.")
 	})
     @PostMapping(value = "/addUser", consumes = {"application/json"})
-    public Object addUser(@RequestBody NewUserDTO newUserDTO) {
+    public User addUser(@RequestBody NewUserDTO newUserDTO) throws HttpException {
     	LOGGER.info("addUser: userName=" + newUserDTO.getUserName());
-    	LOGGER.info("userServiceUrl=" + userServiceUrl);
-    	try {
-    		return userClient.addUser(newUserDTO);
-		} catch (Exception e) {
-			return e.getMessage();
-		}
+		return userClient.addUser(newUserDTO);
     }
     
     /**
@@ -192,6 +175,7 @@ public class TourGuideController {
      * @param userName String
      * @param newPreferenceDTO NewPreferenceDTO
      * @return Object
+     * @throws HttpException 
      */
 	@ApiOperation("Update an user's preferences.")
 	@ApiResponses({
@@ -200,16 +184,12 @@ public class TourGuideController {
 		@ApiResponse(code = 404, message = "User not found.")
 	})
     @PutMapping(value = "/updateUserPreferences/{userName}", consumes = {"application/json"})
-    public Object updateUserPreferences(
+    public int updateUserPreferences(
     		@PathVariable String userName,
-    		@RequestBody NewPreferenceDTO newPreferenceDTO) {
+    		@RequestBody NewPreferenceDTO newPreferenceDTO) throws HttpException {
     	LOGGER.info("updateUserPreferences: userName=" + userName);
-    	try {
-			userClient.updatePreferences(userName, newPreferenceDTO);
-	    	return "";
-		} catch (Exception e) {
-			return e.getMessage();
-		}
+		userClient.updatePreferences(userName, newPreferenceDTO);
+    	return 1;
     }
 
 }
