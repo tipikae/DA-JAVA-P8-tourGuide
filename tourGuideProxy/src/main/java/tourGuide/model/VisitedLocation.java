@@ -3,7 +3,6 @@
  */
 package tourGuide.model;
 
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -16,13 +15,13 @@ public class VisitedLocation {
 
 	private UUID userId;
 	private Location location;
-	private Date timeVisited;
+	private String timeVisited;
 	
 	public VisitedLocation() {
 		
 	}
 	
-	public VisitedLocation(UUID userId, Location location, Date timeVisited) {
+	public VisitedLocation(UUID userId, Location location, String timeVisited) {
 		this.userId = userId;
 		this.location = location;
 		this.timeVisited = timeVisited;
@@ -59,14 +58,14 @@ public class VisitedLocation {
 	/**
 	 * @return the timeVisited
 	 */
-	public Date getTimeVisited() {
+	public String getTimeVisited() {
 		return timeVisited;
 	}
 
 	/**
 	 * @param timeVisited the timeVisited to set
 	 */
-	public void setTimeVisited(Date timeVisited) {
+	public void setTimeVisited(String timeVisited) {
 		this.timeVisited = timeVisited;
 	}
 	
