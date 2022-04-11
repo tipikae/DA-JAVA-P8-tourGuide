@@ -52,7 +52,7 @@ public class TourGuideController {
 	private IRewardServiceClient rewardClient;
 
 	/**
-	 * Get home.
+	 * Get application home.
 	 * @return String
 	 */
 	@ApiOperation("Get home.")
