@@ -80,7 +80,8 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
                 "tourGuide/dto/*",
-                "tourGuide/model/*"
+                "tourGuide/model/*",
+                "tourGuide/exception/*"
             ])
         }))
     }

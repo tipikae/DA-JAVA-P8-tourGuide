@@ -69,7 +69,8 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
                 "com/tripmaster/tourguide/userService/dto/*",
-                "com/tripmaster/tourguide/userService/model/*"
+                "com/tripmaster/tourguide/userService/model/*",
+                "com/tripmaster/tourguide/userService/exceptions/*"
             ])
         }))
     }
