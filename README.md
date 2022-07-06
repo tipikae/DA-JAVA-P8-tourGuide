@@ -18,3 +18,7 @@ Execute `docker-compose up` (it may take a few minutes).
 - API with Swagger: in your browser, open `http://localhost:8080/swagger-ui/index.html#/`,
 - Code with Javadoc: in your browser, open `build/docs/javadoc/index.html` of each sub-projects,
 - Tests with Jacoco: in your browser, open `build/jacocoHtml/index.html` of each sub-projects.
+
+## Testing
+Tests in dev profile only.  
+So build the jars for each sub-project, run the 4 jars and execute `gradle check` from root.
